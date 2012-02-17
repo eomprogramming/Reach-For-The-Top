@@ -1,6 +1,5 @@
-package reachForTheTop;
+package gui;
 
-import gui.MainMenu;
 
 public class Launcher {
 	public static void main(String args[]){
