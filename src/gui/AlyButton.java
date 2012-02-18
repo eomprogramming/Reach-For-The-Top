@@ -15,6 +15,7 @@ public class AlyButton extends JButton{
 		setBackground(ColorScheme.DEFAULT_MAIN);
 		setForeground(ColorScheme.DEFAULT_SECONDARY);
 		setFocusable(false);
+		setFont(new Font("Mangal",Font.PLAIN,20));
 		setBorder(null);
 	}
 	
