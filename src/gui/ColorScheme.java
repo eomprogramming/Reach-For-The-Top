@@ -18,7 +18,7 @@ public class ColorScheme {
 	 */
 	public final static Color DEFAULT_SECONDARY = new Color(181,45,45);
 	
-	public final static Color DEFAULT_ROLLOVER = DEFAULT_SECONDARY;	
-	public final static Color DEFAULT_ROLLOVER_TEXT =  DEFAULT_MAIN;
+	public final static Color DEFAULT_ROLLOVER =  new Color(230,184,184);
+	public final static Color DEFAULT_ROLLOVER_TEXT =  DEFAULT_SECONDARY;
 	
 }

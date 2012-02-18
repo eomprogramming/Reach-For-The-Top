@@ -9,6 +9,7 @@ import java.awt.*;
  */
 public class AlyButton extends JButton{
 	
+	private boolean flipped = false;
 	
 	public AlyButton(String text){
 		super(text);
@@ -17,6 +18,18 @@ public class AlyButton extends JButton{
 		setFocusable(false);
 		setFont(new Font("Mangal",Font.PLAIN,20));
 		setBorder(null);
+		addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mouseEntered(java.awt.event.MouseEvent evt) {
+		        setBackground(ColorScheme.DEFAULT_ROLLOVER);
+		        setForeground(ColorScheme.DEFAULT_ROLLOVER_TEXT);
+		    }
+		    public void mouseExited(java.awt.event.MouseEvent evt) {
+		    	setBackground(ColorScheme.DEFAULT_MAIN);
+		    	setForeground(ColorScheme.DEFAULT_SECONDARY);
+		    	if(flipped)
+		    		flipColors();
+		    }
+		});
 	}
 	
 	public AlyButton(){
@@ -24,6 +37,7 @@ public class AlyButton extends JButton{
 	}
 	
 	public void flipColors(){
+		flipped=true;
 		Color c = getBackground();
 		setBackground(getForeground());
 		setForeground(c);
