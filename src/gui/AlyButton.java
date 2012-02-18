@@ -14,12 +14,18 @@ public class AlyButton extends JButton{
 		super(text);
 		setBackground(ColorScheme.DEFAULT_MAIN);
 		setForeground(ColorScheme.DEFAULT_SECONDARY);
-		setRolloverEnabled(false);
+		setFocusable(false);
 		setBorder(null);
 	}
 	
 	public AlyButton(){
 		this("");
+	}
+	
+	public void flipColors(){
+		Color c = getBackground();
+		setBackground(getForeground());
+		setForeground(c);
 	}
 
 }
