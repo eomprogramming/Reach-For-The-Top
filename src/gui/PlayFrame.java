@@ -19,7 +19,8 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		setLayout(new GridLayout(1,3));
 		createComponents();
 		pack();
-		repaint();		
+		repaint();	
+		
 	}
 
 	private void createComponents() {
