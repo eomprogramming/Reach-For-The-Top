@@ -12,7 +12,7 @@ import javax.swing.*;
  */
 public class PlayFrame extends DefaultFrame implements ActionListener{
 	
-	private AlyButton scoreButtonRight[][];
+	private AlyButton scoreButtonRight[][],scoreButtonLeft[][], plusButtonRight[], plusButtonLeft[];
 	private GridLayout mainLayout = new GridLayout(6,1);
 	
 	public PlayFrame(){
@@ -95,6 +95,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			playerNames[i].setBackground(ColorScheme.DEFAULT_SECONDARY);
 			playerNames[i].setForeground(ColorScheme.DEFAULT_MAIN);
 			playerNames[i].setOpaque(true);
+			playerNames[i].setVisible(false);
 			playerNames[i].setVerticalAlignment(JLabel.TOP);
 			playerNames[i].setFont(new Font("Mangal",Font.PLAIN,16));
 			
@@ -112,6 +113,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			GridLayout g = new GridLayout(1,4);
 			g.setHgap(5);
 			rightSuperSubPanel[i].setLayout(g);
+			rightSuperSubPanel[i].setVisible(false);
 			rightSuperSubPanel[i].setBackground(ColorScheme.DEFAULT_SECONDARY);						
 			
 			rightSubLayout[i+1].putConstraint(SpringLayout.NORTH, rightSuperSubPanel[i],
@@ -133,6 +135,25 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 				scoreButtonRight[i][j] = new AlyButton((j+1)*10+"");
 				rightSuperSubPanel[i].add(scoreButtonRight[i][j]);
 			}			
+		
+		//add the "+" buttons
+		plusButtonRight = new AlyButton[4];
+		for(int i=0;i<plusButtonRight.length;i++){
+			 plusButtonRight[i] = new AlyButton("+");
+			 plusButtonRight[i].flipColors();
+			 plusButtonRight[i].setFont(new Font("Mangal",Font.PLAIN,40));
+			 
+			 rightSubLayout[i+1].putConstraint(SpringLayout.NORTH, plusButtonRight[i],
+					0, SpringLayout.NORTH,rightSubPanel[i+1]);
+			 rightSubLayout[i+1].putConstraint(SpringLayout.WEST, plusButtonRight[i],
+					15, SpringLayout.WEST,rightSubPanel[i+1]);
+			 rightSubLayout[i+1].putConstraint(SpringLayout.EAST, plusButtonRight[i],
+					-15, SpringLayout.EAST,rightSubPanel[i+1]);
+			 rightSubLayout[i+1].putConstraint(SpringLayout.SOUTH,plusButtonRight[i],
+					0, SpringLayout.SOUTH,rightSubPanel[i+1]);
+			 
+			 rightSubPanel[i+1].add(plusButtonRight[i]);
+		}
 	}
 
 	private void createLeftPanel(){
@@ -170,16 +191,17 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	
 		leftSubPanel[0].add(teamOneLabel);
 		
-		scoreButtonRight = new AlyButton[4][4];
+		scoreButtonLeft = new AlyButton[4][4];
 		JLabel[] playerNames = new JLabel[4];
 		JPanel[] leftSuperSubPanel = new JPanel[4];		
 		
-		for(int i=0;i<scoreButtonRight.length;i++){
+		for(int i=0;i<scoreButtonLeft.length;i++){
 						
 			playerNames[i] = new JLabel("   Player");
 			playerNames[i].setBackground(ColorScheme.DEFAULT_SECONDARY);
 			playerNames[i].setForeground(ColorScheme.DEFAULT_MAIN);
 			playerNames[i].setOpaque(true);
+			playerNames[i].setVisible(false);
 			playerNames[i].setVerticalAlignment(JLabel.TOP);
 			playerNames[i].setFont(new Font("Mangal",Font.PLAIN,16));
 			
@@ -197,6 +219,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			GridLayout g = new GridLayout(1,4);
 			g.setHgap(5);
 			leftSuperSubPanel[i].setLayout(g);
+			leftSuperSubPanel[i].setVisible(false);
 			leftSuperSubPanel[i].setBackground(ColorScheme.DEFAULT_SECONDARY);						
 			
 			leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, leftSuperSubPanel[i],
@@ -213,11 +236,31 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		}
 
 		
-		for(int i=0;i<scoreButtonRight.length;i++)
-			for(int j=0;j<scoreButtonRight[0].length;j++){
-				scoreButtonRight[i][j] = new AlyButton((j+1)*10+"");
-				leftSuperSubPanel[i].add(scoreButtonRight[i][j]);
-			}			
+		for(int i=0;i<scoreButtonLeft.length;i++)
+			for(int j=0;j<scoreButtonLeft[0].length;j++){
+				scoreButtonLeft[i][j] = new AlyButton((j+1)*10+"");
+				leftSuperSubPanel[i].add(scoreButtonLeft[i][j]);
+			}	
+		
+		//add the "+" buttons
+		plusButtonRight = new AlyButton[4];
+		for(int i=0;i<plusButtonRight.length;i++){
+			 plusButtonRight[i] = new AlyButton("+");
+			 plusButtonRight[i].flipColors();
+			 plusButtonRight[i].setFont(new Font("Mangal",Font.PLAIN,40));
+			 
+			 leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, plusButtonRight[i],
+					0, SpringLayout.NORTH,leftSubPanel[i+1]);
+			 leftSubLayout[i+1].putConstraint(SpringLayout.WEST, plusButtonRight[i],
+					15, SpringLayout.WEST,leftSubPanel[i+1]);
+			 leftSubLayout[i+1].putConstraint(SpringLayout.EAST, plusButtonRight[i],
+					-15, SpringLayout.EAST,leftSubPanel[i+1]);
+			 leftSubLayout[i+1].putConstraint(SpringLayout.SOUTH,plusButtonRight[i],
+					0, SpringLayout.SOUTH,leftSubPanel[i+1]);
+			 
+			 leftSubPanel[i+1].add(plusButtonRight[i]);
+		}
+		
 	}
 
 	public void actionPerformed(ActionEvent ev) {
