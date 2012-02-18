@@ -18,7 +18,7 @@ public class DefaultFrame extends JFrame{
 		setMinimumSize(new Dimension(750,500));
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setBackground(new Color(181,45,45));
+		getContentPane().setBackground(ColorScheme.DEFAULT_MAIN);
 		
 	}
 

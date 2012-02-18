@@ -28,8 +28,10 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		
 		createLeftPanel();
 		
-		AlyButton a = new AlyButton("hhh");
-		add(a);
+		JPanel centerPanel = new JPanel();
+		centerPanel.setBackground(ColorScheme.DEFAULT_MAIN);
+		add(centerPanel);
+		
 		/*
 		 *
 		 * 
