@@ -43,7 +43,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		JLabel teamOneLabel = new JLabel("TEAM ONE!");
 		teamOneLabel.setBackground(ColorScheme.DEFAULT_SECONDARY);
 		teamOneLabel.setForeground(ColorScheme.DEFAULT_MAIN);
-		teamOneLabel.setFont(new Font("Mangal",Font.BOLD,20));
+		teamOneLabel.setFont(new Font("Mangal",Font.BOLD,24));
 		teamOneLabel.setHorizontalAlignment(JLabel.CENTER);
 		teamOneLabel.setVerticalAlignment(JLabel.CENTER);
 		teamOneLabel.setOpaque(true);
@@ -55,7 +55,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		leftSubLayout[0].putConstraint(SpringLayout.EAST, teamOneLabel,
 				-15, SpringLayout.EAST,leftSubPanel[0]);
 		leftSubLayout[0].putConstraint(SpringLayout.SOUTH, teamOneLabel,
-				-15, SpringLayout.SOUTH,leftSubPanel[0]);
+				-10, SpringLayout.SOUTH,leftSubPanel[0]);
 	
 		leftSubPanel[0].add(teamOneLabel);
 		
@@ -69,29 +69,44 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			playerNames[i].setBackground(ColorScheme.DEFAULT_SECONDARY);
 			playerNames[i].setForeground(ColorScheme.DEFAULT_MAIN);
 			playerNames[i].setOpaque(true);
+			playerNames[i].setVerticalAlignment(JLabel.TOP);
 			playerNames[i].setFont(new Font("Mangal",Font.PLAIN,16));
 			
-			leftSubLayout[i].putConstraint(SpringLayout.NORTH, playerNames[i],
-					0, SpringLayout.NORTH,leftSubPanel[i]);
-			leftSubLayout[i].putConstraint(SpringLayout.WEST, playerNames[i],
-					15, SpringLayout.WEST,leftSubPanel[i]);
-			leftSubLayout[i].putConstraint(SpringLayout.EAST, playerNames[i],
-					-15, SpringLayout.EAST,leftSubPanel[i]);
-			leftSubPanel[i].add(playerNames[i]);
-			
+			leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, playerNames[i],
+					0, SpringLayout.NORTH,leftSubPanel[i+1]);
+			leftSubLayout[i+1].putConstraint(SpringLayout.WEST, playerNames[i],
+					15, SpringLayout.WEST,leftSubPanel[i+1]);
+			leftSubLayout[i+1].putConstraint(SpringLayout.EAST, playerNames[i],
+					-15, SpringLayout.EAST,leftSubPanel[i+1]);
+			leftSubLayout[i+1].putConstraint(SpringLayout.SOUTH, playerNames[i],
+					0, SpringLayout.SOUTH,leftSubPanel[i+1]);
+						
 			
 			leftSuperSubPanel[i] = new JPanel();
-			leftSuperSubPanel[i].setBackground(ColorScheme.DEFAULT_MAIN);						
+			GridLayout g = new GridLayout(1,4);
+			g.setHgap(5);
+			leftSuperSubPanel[i].setLayout(g);
+			leftSuperSubPanel[i].setBackground(ColorScheme.DEFAULT_SECONDARY);						
 			
-			leftSubLayout[i].putConstraint(SpringLayout.SOUTH, teamOneLabel,
-				20, SpringLayout.SOUTH,leftSubPanel[0]);
+			leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, leftSuperSubPanel[i],
+				30, SpringLayout.NORTH,leftSubPanel[i+1]);
+			leftSubLayout[i+1].putConstraint(SpringLayout.SOUTH, leftSuperSubPanel[i],
+					-15, SpringLayout.SOUTH,leftSubPanel[i+1]);
+			leftSubLayout[i+1].putConstraint(SpringLayout.WEST, leftSuperSubPanel[i],
+					10, SpringLayout.WEST,playerNames[i]);
+			leftSubLayout[i+1].putConstraint(SpringLayout.EAST, leftSuperSubPanel[i],
+					-10, SpringLayout.EAST,playerNames[i]);
+			
+			leftSubPanel[i+1].add(leftSuperSubPanel[i]);
+			leftSubPanel[i+1].add(playerNames[i]);
 		}
 
 		
 		for(int i=0;i<scoreButtonLeft.length;i++)
 			for(int j=0;j<scoreButtonLeft[0].length;j++){
 				scoreButtonLeft[i][j] = new AlyButton((j+1)*10+"");
-				
+		//		scoreButtonLeft[i][j].flipColors();
+				leftSuperSubPanel[i].add(scoreButtonLeft[i][j]);
 			}
 			
 		
