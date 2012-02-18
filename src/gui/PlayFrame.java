@@ -1,5 +1,9 @@
 package gui;
 
-public class PlayFrame {
+public class PlayFrame extends DefaultFrame{
+	public PlayFrame(){
+		super("Game Time!");
+		
+	}
 
 }

@@ -3,7 +3,7 @@ package gui;
 
 public class Launcher {
 	public static void main(String args[]){
-		new MainMenu();
+		new PlayFrame();
 		System.out.println("Launched");
 	}
 }
