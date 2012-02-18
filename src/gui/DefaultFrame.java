@@ -6,6 +6,10 @@ import java.util.Calendar;
 
 import javax.swing.JFrame;
 
+/**
+ * @author Aly
+ *
+ */
 public class DefaultFrame extends JFrame{
 	
 	public DefaultFrame(String title){
