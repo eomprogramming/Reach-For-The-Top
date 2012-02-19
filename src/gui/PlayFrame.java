@@ -269,11 +269,9 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		AlyButton pressed = new AlyButton();
 		if(ev.getSource() instanceof AlyButton){
 			pressed = (AlyButton) ev.getSource();
-			System.out.println("df");
 		}
 		
 		if(pressed.getText().equals("+")){
-			System.out.println("d");
 			Player player = new PlayerFrame(getLocation()).getPlayer();
 		}
 	}

@@ -4,7 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import reachForTheTop.Player;
+import reachForTheTop.*;
 
 public class PlayerFrame extends DefaultFrame{
 	
@@ -13,7 +13,13 @@ public class PlayerFrame extends DefaultFrame{
 	public PlayerFrame(Point d){
 		super("Choose a Player");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setLocation((int)d.getX()+30,(int)d.getY()+30);
+		setLocation((int)d.getX()+20,(int)d.getY()+20);
+		setMinimumSize(new Dimension(400,400));
+		pack();
+		
+		System.out.println("Players Found: ");
+		for(String s : PlayerIO.getAllPlayers())
+			System.out.println(s);
 	}
 	
 	public Player getPlayer(){
