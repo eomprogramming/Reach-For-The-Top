@@ -17,7 +17,7 @@ import reachForTheTop.PlayerIO;
  */
 public class PlayFrame extends DefaultFrame implements ActionListener{
 	
-	private AlyButton scoreButtonRight[][],scoreButtonLeft[][], plusButtonRight[], plusButtonLeft[];
+	private AlyButton scoreButtonRight[][],scoreButtonLeft[][], plusButtonRight[], plusButtonLeft[], removeButtonRight[], removeButtonLeft[];
 	private GridLayout mainLayout = new GridLayout(6,1);
 	private JLabel playerNamesLeft[], playerNamesRight[], leftTeam, rightTeam;
 	private JPanel rightSuperSubPanel[], leftSuperSubPanel[];
@@ -90,6 +90,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		scoreButtonRight = new AlyButton[4][4];
 		playerNamesRight = new JLabel[4];
 		rightSuperSubPanel = new JPanel[4];		
+		removeButtonRight = new AlyButton[4];
 		
 		for(int i=0;i<scoreButtonRight.length;i++){
 						
@@ -126,6 +127,20 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 					10, SpringLayout.WEST,playerNamesRight[i]);
 			rightSubLayout[i+1].putConstraint(SpringLayout.EAST, rightSuperSubPanel[i],
 					-10, SpringLayout.EAST,playerNamesRight[i]);
+			
+			removeButtonRight[i] = new AlyButton("X",false);
+			removeButtonRight[i].setActionCommand(i+"xr");
+			removeButtonRight[i].setVisible(false);
+			removeButtonRight[i].addActionListener(this);
+			removeButtonRight[i].flipColors();
+			rightSubLayout[i+1].putConstraint(SpringLayout.NORTH, removeButtonRight[i],
+					0, SpringLayout.NORTH,playerNamesRight[i]);
+			rightSubLayout[i+1].putConstraint(SpringLayout.SOUTH, removeButtonRight[i],
+					0, SpringLayout.NORTH,rightSuperSubPanel[i]);
+			rightSubLayout[i+1].putConstraint(SpringLayout.EAST, removeButtonRight[i],
+					-10, SpringLayout.EAST,playerNamesRight[i]);
+				
+			rightSubPanel[i+1].add(removeButtonRight[i]);
 			
 			rightSubPanel[i+1].add(rightSuperSubPanel[i]);
 			rightSubPanel[i+1].add(playerNamesRight[i]);
@@ -211,6 +226,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		scoreButtonLeft = new AlyButton[4][4];
 		playerNamesLeft = new JLabel[4];
 		leftSuperSubPanel = new JPanel[4];		
+		removeButtonLeft = new AlyButton[4];
 		
 		for(int i=0;i<scoreButtonLeft.length;i++){
 						
@@ -247,6 +263,20 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 					10, SpringLayout.WEST,playerNamesLeft[i]);
 			leftSubLayout[i+1].putConstraint(SpringLayout.EAST, leftSuperSubPanel[i],
 					-10, SpringLayout.EAST,playerNamesLeft[i]);
+			
+			removeButtonLeft[i] = new AlyButton("X",false);
+			removeButtonLeft[i].setActionCommand(i+"xl");
+			removeButtonLeft[i].setVisible(false);
+			removeButtonLeft[i].addActionListener(this);
+			removeButtonLeft[i].flipColors();
+			leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, removeButtonLeft[i],
+					0, SpringLayout.NORTH,playerNamesLeft[i]);
+			leftSubLayout[i+1].putConstraint(SpringLayout.SOUTH, removeButtonLeft[i],
+					0, SpringLayout.NORTH,leftSuperSubPanel[i]);
+			leftSubLayout[i+1].putConstraint(SpringLayout.EAST, removeButtonLeft[i],
+					-10, SpringLayout.EAST,playerNamesLeft[i]);
+				
+			leftSubPanel[i+1].add(removeButtonLeft[i]);			
 			
 			leftSubPanel[i+1].add(leftSuperSubPanel[i]);
 			leftSubPanel[i+1].add(playerNamesLeft[i]);
@@ -296,7 +326,6 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 
 	public void actionPerformed(ActionEvent ev) {
 		String ac = ev.getActionCommand();
-		System.out.println(ac);
 		
 		if(ac.contains("+")){
 			Player p = chosenPlayer();
@@ -305,6 +334,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 					plusButtonLeft[Integer.parseInt(ac.substring(0,1))].setVisible(false);
 					leftSuperSubPanel[Integer.parseInt(ac.substring(0,1))].setVisible(true);
 					playerNamesLeft[Integer.parseInt(ac.substring(0,1))].setVisible(true);
+					removeButtonLeft[Integer.parseInt(ac.substring(0,1))].setVisible(true);
 					playerNamesLeft[Integer.parseInt(ac.substring(0,1))].setText("   "+p.getName());
 					players[0][Integer.parseInt(ac.substring(0,1))] = p;
 							
@@ -312,6 +342,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 					plusButtonRight[Integer.parseInt(ac.substring(0,1))].setVisible(false);
 					rightSuperSubPanel[Integer.parseInt(ac.substring(0,1))].setVisible(true);
 					playerNamesRight[Integer.parseInt(ac.substring(0,1))].setVisible(true);
+					removeButtonRight[Integer.parseInt(ac.substring(0,1))].setVisible(true);
 					playerNamesRight[Integer.parseInt(ac.substring(0,1))].setText("   "+p.getName());
 					players[1][Integer.parseInt(ac.substring(0,1))] = p;
 				}					
@@ -331,6 +362,20 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			}else{
 				totalRight+=score;
 				rightTeam.setText("SCORE: "+totalRight);							
+			}
+		}else if(ac.contains("x")){
+			System.out.println("Player removed");
+			int player = Integer.parseInt(ac.substring(0,1));
+			if(ac.endsWith("l")){
+				plusButtonLeft[player].setVisible(true);
+				leftSuperSubPanel[player].setVisible(false);
+				playerNamesLeft[player].setVisible(false);
+				removeButtonLeft[player].setVisible(false);
+			}else{
+				plusButtonRight[player].setVisible(true);
+				rightSuperSubPanel[player].setVisible(false);
+				playerNamesRight[player].setVisible(false);
+				removeButtonRight[player].setVisible(false);
 			}
 		}
 	}

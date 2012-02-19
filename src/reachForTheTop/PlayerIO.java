@@ -46,5 +46,12 @@ public class PlayerIO {
 		IO.println(name);
 		IO.closeOutputFile();
 	}
+	
+	public static void savePlayer(Player player){
+		IO.createOutputFile("Scores\\"+player.getName()+".reach");
+		IO.println("times played: "+player.getTimesPlayed());
+		IO.println("total: "+player.getScore());
+		IO.closeOutputFile();
+	}
 
 }
