@@ -4,6 +4,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.LinkedList;
 
 import javax.swing.*;
@@ -97,11 +100,19 @@ public class PlayerFrame extends DefaultFrame{
 		layout.putConstraint(SpringLayout.SOUTH, scroll,
 				-20, SpringLayout.SOUTH,getContentPane());
 		
+		addWindowListener(this.closeMonitor);		
 		
 	}
 
 	public Player getPlayer(){
 		return player;
 	}
+	
+	public WindowListener closeMonitor = new WindowAdapter() {
+        public void windowClosing(WindowEvent e) {
+        	if(playerList.getSelectedIndex()>0)
+        		player = players[playerList.getSelectedIndex()];
+        }
+    };
 
 }

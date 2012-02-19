@@ -3,10 +3,12 @@ package gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 import javax.swing.*;
 
 import reachForTheTop.Player;
+import reachForTheTop.PlayerIO;
 
 /**
  * @author Aly
@@ -272,7 +274,31 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		}
 		
 		if(pressed.getText().equals("+")){
-			Player player = new PlayerFrame(getLocation()).getPlayer();
+			LinkedList<String> temp = PlayerIO.getAllPlayers();
+			Player players[] = new Player[temp.size()];
+			for(int i=0;i<players.length;i++)
+				players[i] = PlayerIO.getPlayer(temp.get(i));
+			
+			String list[] = new String[temp.size()]; 
+			for(int i=0;i<list.length;i++)
+				list[i] = temp.get(i);
+					
+			JList playerList = new JList(list); 
+			playerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			playerList.setLayoutOrientation(JList.VERTICAL);
+			playerList.setSelectedIndex(-1);
+			playerList.setForeground(ColorScheme.DEFAULT_MAIN);
+			playerList.setBackground(ColorScheme.DEFAULT_SECONDARY);
+			playerList.setFont(new Font("Mangal",Font.PLAIN,20));
+			playerList.setSelectionBackground(ColorScheme.DEFAULT_ROLLOVER);
+			playerList.setSelectionForeground(ColorScheme.DEFAULT_ROLLOVER_TEXT);
+			playerList.setBorder(null);
+			System.out.println(JOptionPane.showInputDialog(this.getContentPane(),null,
+					"Choose Player",JOptionPane.PLAIN_MESSAGE,null,temp.toArray(),0));
+			
+		//	Player player = new Player("");
+			//PlayerFrame choosePlayer = new PlayerFrame(getLocation());
+		//	System.out.println(player);
 		}
 	}
 
