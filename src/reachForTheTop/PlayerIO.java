@@ -20,5 +20,10 @@ public class PlayerIO {
 		}
 		return names;
 	}
+	
+	public static Player getPlayer(String name){
+		IO.openInputFile("Scores\\"+name+".reach");		
+		return new Player(name);
+	}
 
 }

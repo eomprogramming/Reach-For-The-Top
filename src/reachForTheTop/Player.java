@@ -2,7 +2,7 @@ package reachForTheTop;
 
 public class Player {
 	private String name;
-	private int score;
+	private int score, timesPlayed;
 	
 	public Player(String name)
 	{
@@ -35,6 +35,14 @@ public class Player {
 		return score;
 	}
 	
+	public void addPlay(){
+		timesPlayed++;
+		
+	}
+	
+	public int getTimesPlayed(){
+		return timesPlayed;		
+	}
 	/**
 	 * if file with student name does not exist
 	 * {
