@@ -324,8 +324,14 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 				label.setText("Already Exists");
 				JOptionPane.showMessageDialog(this.getContentPane(),label,"Not so fast",JOptionPane.PLAIN_MESSAGE,null);
 				return PlayerIO.getPlayer(list[check].trim());	
+			}else if(s.isEmpty()){
+				label.setText("Invalid Name");
+				JOptionPane.showMessageDialog(this.getContentPane(),label,"Not so fast",JOptionPane.PLAIN_MESSAGE,null);
+				return null;
 			}
+				
 			PlayerIO.addPlayer(s);
+			
 			return PlayerIO.getPlayer(s);
 		}else
 			return PlayerIO.getPlayer(list[chosen].trim());			
