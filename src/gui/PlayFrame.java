@@ -22,6 +22,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	private JLabel playerNamesLeft[], playerNamesRight[], leftTeam, rightTeam;
 	private JPanel rightSuperSubPanel[], leftSuperSubPanel[];
 	private Player players[][];
+	private int totalLeft=0,totalRight=0;
 	
 	public PlayFrame(){
 		super("Game Time!");
@@ -159,6 +160,17 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			 
 			 rightSubPanel[i+1].add(plusButtonRight[i]);
 		}
+		rightTeam = new JLabel("SCORE: 0");
+		rightTeam.setBackground(ColorScheme.DEFAULT_MAIN);
+		rightTeam.setForeground(ColorScheme.DEFAULT_SECONDARY);
+		rightTeam.setFont(new Font("Mangal",Font.BOLD,23));
+		rightSubLayout[5].putConstraint(SpringLayout.NORTH, rightTeam,
+			0, SpringLayout.NORTH,rightSubPanel[5]);
+		rightSubLayout[5].putConstraint(SpringLayout.HORIZONTAL_CENTER, rightTeam,
+			0, SpringLayout.HORIZONTAL_CENTER,rightSubPanel[5]);
+		rightSubLayout[5].putConstraint(SpringLayout.SOUTH,rightTeam,
+			0, SpringLayout.SOUTH,rightSubPanel[5]);
+		rightSubPanel[5].add(rightTeam);		
 	}
 
 	private void createLeftPanel(){
@@ -313,6 +325,13 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			int team = ac.endsWith("l")?0:1;
 			players[team][player].increaseScore(score);
 			
+			if(team == 0){
+				totalLeft+=score;
+				leftTeam.setText("SCORE: "+totalLeft);				
+			}else{
+				totalRight+=score;
+				rightTeam.setText("SCORE: "+totalRight);							
+			}
 		}
 	}
 
