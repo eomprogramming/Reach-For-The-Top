@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import reachForTheTop.Player;
+
 /**
  * @author Aly
  *
@@ -35,17 +37,9 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		add(centerPanel);
 		
 		/*
-		 *
 		 * 
-		 * 
-		 * LOOK AWAY!
-		 * PLEASE
+		 * LOOK AWAY! PLEASE!
 		 * THIS WAS HAO'S IDEA!
-		 * 
-		 * 
-		 * Yes, it was copy pasted :(
-		 * 
-		 * 
 		 * 
 		 */
 		createRightPanel();
@@ -135,6 +129,8 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		for(int i=0;i<scoreButtonRight.length;i++)
 			for(int j=0;j<scoreButtonRight[0].length;j++){
 				scoreButtonRight[i][j] = new AlyButton((j+1)*10+"");
+				scoreButtonRight[i][j].addActionListener(this);
+				scoreButtonRight[i][j].setActionCommand("right");
 				rightSuperSubPanel[i].add(scoreButtonRight[i][j]);
 			}			
 		
@@ -143,6 +139,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		for(int i=0;i<plusButtonRight.length;i++){
 			 plusButtonRight[i] = new AlyButton("+");
 			 plusButtonRight[i].flipColors();
+			 plusButtonRight[i].addActionListener(this);
 			 plusButtonRight[i].setFont(new Font("Mangal",Font.PLAIN,40));
 			 
 			 rightSubLayout[i+1].putConstraint(SpringLayout.NORTH, plusButtonRight[i],
@@ -240,7 +237,9 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		
 		for(int i=0;i<scoreButtonLeft.length;i++)
 			for(int j=0;j<scoreButtonLeft[0].length;j++){
-				scoreButtonLeft[i][j] = new AlyButton((j+1)*10+"");
+				scoreButtonLeft[i][j] = new AlyButton((j+1)*10+"");				
+				scoreButtonLeft[i][j].addActionListener(this);
+				scoreButtonLeft[i][j].setActionCommand("right");
 				leftSuperSubPanel[i].add(scoreButtonLeft[i][j]);
 			}	
 		
@@ -249,6 +248,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		for(int i=0;i<plusButtonRight.length;i++){
 			 plusButtonRight[i] = new AlyButton("+");
 			 plusButtonRight[i].flipColors();
+			 plusButtonRight[i].addActionListener(this);
 			 plusButtonRight[i].setFont(new Font("Mangal",Font.PLAIN,40));
 			 
 			 leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, plusButtonRight[i],
@@ -266,7 +266,16 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent ev) {
+		AlyButton pressed = new AlyButton();
+		if(ev.getSource() instanceof AlyButton){
+			pressed = (AlyButton) ev.getSource();
+			System.out.println("df");
+		}
 		
+		if(pressed.getText().equals("+")){
+			System.out.println("d");
+			Player player = new PlayerFrame(getLocation()).getPlayer();
+		}
 	}
 
 }
