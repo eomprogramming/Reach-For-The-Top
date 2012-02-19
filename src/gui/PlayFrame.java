@@ -273,8 +273,14 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		if(ev.getSource() instanceof AlyButton)
 			pressed = (AlyButton) ev.getSource();
 		
-		if(pressed.getText().equals("+"))
-			System.out.println(chosenPlayer().getScore());			
+		if(pressed.getText().equals("+")){
+			Player p = chosenPlayer();
+			if(p!=null)
+				System.out.println(p.getScore());
+			else
+				System.out.println("Cancelled");
+			
+		}
 	}
 
 	private Player chosenPlayer() {
@@ -289,7 +295,8 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		list[list.length-1] = " Create a new player!"; 
 									
 		String result = (String) JOptionPane.showInputDialog(this.getContentPane(),null,"Choose Player",JOptionPane.PLAIN_MESSAGE,null,list,0);
-		
+		if(result==null)
+			return null;
 		int chosen = Arrays.binarySearch(list, result);
 				
 		if(chosen < 0){
