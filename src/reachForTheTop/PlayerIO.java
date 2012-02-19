@@ -43,7 +43,6 @@ public class PlayerIO {
 		IO.println("total: 0");
 		IO.closeOutputFile();
 		IO.createOutputFile("Scores\\names.txt",true);
-		IO.print("");
 		IO.println(name);
 		IO.closeOutputFile();
 	}

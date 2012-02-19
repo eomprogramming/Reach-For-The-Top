@@ -19,7 +19,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	
 	private AlyButton scoreButtonRight[][],scoreButtonLeft[][], plusButtonRight[], plusButtonLeft[];
 	private GridLayout mainLayout = new GridLayout(6,1);
-	private JLabel playerNamesR[], playerNamesL[];
+	private JLabel playerNamesLeft[], playerNamesRight[];
 	private JPanel rightSuperSubPanel[], leftSuperSubPanel[];
 	
 	public PlayFrame(){
@@ -85,26 +85,26 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		rightSubPanel[0].add(teamTwoLabel);
 		
 		scoreButtonRight = new AlyButton[4][4];
-		playerNamesL = new JLabel[4];
+		playerNamesRight = new JLabel[4];
 		rightSuperSubPanel = new JPanel[4];		
 		
 		for(int i=0;i<scoreButtonRight.length;i++){
 						
-			playerNamesL[i] = new JLabel("   Player");
-			playerNamesL[i].setBackground(ColorScheme.DEFAULT_SECONDARY);
-			playerNamesL[i].setForeground(ColorScheme.DEFAULT_MAIN);
-			playerNamesL[i].setOpaque(true);
-			playerNamesL[i].setVisible(false);
-			playerNamesL[i].setVerticalAlignment(JLabel.TOP);
-			playerNamesL[i].setFont(new Font("Mangal",Font.PLAIN,16));
+			playerNamesRight[i] = new JLabel("   Player");
+			playerNamesRight[i].setBackground(ColorScheme.DEFAULT_SECONDARY);
+			playerNamesRight[i].setForeground(ColorScheme.DEFAULT_MAIN);
+			playerNamesRight[i].setOpaque(true);
+			playerNamesRight[i].setVisible(false);
+			playerNamesRight[i].setVerticalAlignment(JLabel.TOP);
+			playerNamesRight[i].setFont(new Font("Mangal",Font.PLAIN,16));
 			
-			rightSubLayout[i+1].putConstraint(SpringLayout.NORTH, playerNamesL[i],
+			rightSubLayout[i+1].putConstraint(SpringLayout.NORTH, playerNamesRight[i],
 					0, SpringLayout.NORTH,rightSubPanel[i+1]);
-			rightSubLayout[i+1].putConstraint(SpringLayout.WEST, playerNamesL[i],
+			rightSubLayout[i+1].putConstraint(SpringLayout.WEST, playerNamesRight[i],
 					15, SpringLayout.WEST,rightSubPanel[i+1]);
-			rightSubLayout[i+1].putConstraint(SpringLayout.EAST, playerNamesL[i],
+			rightSubLayout[i+1].putConstraint(SpringLayout.EAST, playerNamesRight[i],
 					-15, SpringLayout.EAST,rightSubPanel[i+1]);
-			rightSubLayout[i+1].putConstraint(SpringLayout.SOUTH, playerNamesL[i],
+			rightSubLayout[i+1].putConstraint(SpringLayout.SOUTH, playerNamesRight[i],
 					0, SpringLayout.SOUTH,rightSubPanel[i+1]);
 						
 			
@@ -120,12 +120,12 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			rightSubLayout[i+1].putConstraint(SpringLayout.SOUTH, rightSuperSubPanel[i],
 					-15, SpringLayout.SOUTH,rightSubPanel[i+1]);
 			rightSubLayout[i+1].putConstraint(SpringLayout.WEST, rightSuperSubPanel[i],
-					10, SpringLayout.WEST,playerNamesL[i]);
+					10, SpringLayout.WEST,playerNamesRight[i]);
 			rightSubLayout[i+1].putConstraint(SpringLayout.EAST, rightSuperSubPanel[i],
-					-10, SpringLayout.EAST,playerNamesL[i]);
+					-10, SpringLayout.EAST,playerNamesRight[i]);
 			
 			rightSubPanel[i+1].add(rightSuperSubPanel[i]);
-			rightSubPanel[i+1].add(playerNamesL[i]);
+			rightSubPanel[i+1].add(playerNamesRight[i]);
 		}
 
 		
@@ -133,7 +133,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			for(int j=0;j<scoreButtonRight[0].length;j++){
 				scoreButtonRight[i][j] = new AlyButton((j+1)*10+"");
 				scoreButtonRight[i][j].addActionListener(this);
-				scoreButtonRight[i][j].setActionCommand("right");
+				scoreButtonRight[i][j].setActionCommand(i+","+j+"right");
 				rightSuperSubPanel[i].add(scoreButtonRight[i][j]);
 			}			
 		
@@ -141,6 +141,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		plusButtonRight = new AlyButton[4];
 		for(int i=0;i<plusButtonRight.length;i++){
 			 plusButtonRight[i] = new AlyButton("+");
+			 plusButtonRight[i].setActionCommand(i+"r+");
 			 plusButtonRight[i].flipColors();
 			 plusButtonRight[i].addActionListener(this);
 			 plusButtonRight[i].setFont(new Font("Mangal",Font.PLAIN,40));
@@ -194,26 +195,26 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		leftSubPanel[0].add(teamOneLabel);
 		
 		scoreButtonLeft = new AlyButton[4][4];
-		playerNamesR = new JLabel[4];
+		playerNamesLeft = new JLabel[4];
 		leftSuperSubPanel = new JPanel[4];		
 		
 		for(int i=0;i<scoreButtonLeft.length;i++){
 						
-			playerNamesR[i] = new JLabel("   Player");
-			playerNamesR[i].setBackground(ColorScheme.DEFAULT_SECONDARY);
-			playerNamesR[i].setForeground(ColorScheme.DEFAULT_MAIN);
-			playerNamesR[i].setOpaque(true);
-			playerNamesR[i].setVisible(false);
-			playerNamesR[i].setVerticalAlignment(JLabel.TOP);
-			playerNamesR[i].setFont(new Font("Mangal",Font.PLAIN,16));
+			playerNamesLeft[i] = new JLabel("   Player");
+			playerNamesLeft[i].setBackground(ColorScheme.DEFAULT_SECONDARY);
+			playerNamesLeft[i].setForeground(ColorScheme.DEFAULT_MAIN);
+			playerNamesLeft[i].setOpaque(true);
+			playerNamesLeft[i].setVisible(false);
+			playerNamesLeft[i].setVerticalAlignment(JLabel.TOP);
+			playerNamesLeft[i].setFont(new Font("Mangal",Font.PLAIN,16));
 			
-			leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, playerNamesR[i],
+			leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, playerNamesLeft[i],
 					0, SpringLayout.NORTH,leftSubPanel[i+1]);
-			leftSubLayout[i+1].putConstraint(SpringLayout.WEST, playerNamesR[i],
+			leftSubLayout[i+1].putConstraint(SpringLayout.WEST, playerNamesLeft[i],
 					15, SpringLayout.WEST,leftSubPanel[i+1]);
-			leftSubLayout[i+1].putConstraint(SpringLayout.EAST, playerNamesR[i],
+			leftSubLayout[i+1].putConstraint(SpringLayout.EAST, playerNamesLeft[i],
 					-15, SpringLayout.EAST,leftSubPanel[i+1]);
-			leftSubLayout[i+1].putConstraint(SpringLayout.SOUTH, playerNamesR[i],
+			leftSubLayout[i+1].putConstraint(SpringLayout.SOUTH, playerNamesLeft[i],
 					0, SpringLayout.SOUTH,leftSubPanel[i+1]);
 						
 			
@@ -229,12 +230,12 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			leftSubLayout[i+1].putConstraint(SpringLayout.SOUTH, leftSuperSubPanel[i],
 					-15, SpringLayout.SOUTH,leftSubPanel[i+1]);
 			leftSubLayout[i+1].putConstraint(SpringLayout.WEST, leftSuperSubPanel[i],
-					10, SpringLayout.WEST,playerNamesR[i]);
+					10, SpringLayout.WEST,playerNamesLeft[i]);
 			leftSubLayout[i+1].putConstraint(SpringLayout.EAST, leftSuperSubPanel[i],
-					-10, SpringLayout.EAST,playerNamesR[i]);
+					-10, SpringLayout.EAST,playerNamesLeft[i]);
 			
 			leftSubPanel[i+1].add(leftSuperSubPanel[i]);
-			leftSubPanel[i+1].add(playerNamesR[i]);
+			leftSubPanel[i+1].add(playerNamesLeft[i]);
 		}
 
 		
@@ -242,7 +243,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			for(int j=0;j<scoreButtonLeft[0].length;j++){
 				scoreButtonLeft[i][j] = new AlyButton((j+1)*10+"");				
 				scoreButtonLeft[i][j].addActionListener(this);
-				scoreButtonLeft[i][j].setActionCommand("right");
+				scoreButtonLeft[i][j].setActionCommand(i+","+j+"left");
 				leftSuperSubPanel[i].add(scoreButtonLeft[i][j]);
 			}	
 		
@@ -250,6 +251,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		plusButtonRight = new AlyButton[4];
 		for(int i=0;i<plusButtonRight.length;i++){
 			 plusButtonRight[i] = new AlyButton("+");
+			 plusButtonRight[i].setActionCommand(i+"l+");
 			 plusButtonRight[i].flipColors();
 			 plusButtonRight[i].addActionListener(this);
 			 plusButtonRight[i].setFont(new Font("Mangal",Font.PLAIN,40));
@@ -269,15 +271,14 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent ev) {
-		AlyButton pressed = new AlyButton();
-		if(ev.getSource() instanceof AlyButton)
-			pressed = (AlyButton) ev.getSource();
+		String ac = ev.getActionCommand();
+		System.out.println(ac);
 		
-		if(pressed.getText().equals("+")){
+		if(ac.contains("+")){
 			Player p = chosenPlayer();
-			if(p!=null)
+			if(p!=null){
 				System.out.println(p.getScore());
-			else
+			}else
 				System.out.println("Cancelled");
 			
 		}
