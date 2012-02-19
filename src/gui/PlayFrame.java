@@ -3,6 +3,7 @@ package gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import javax.swing.*;
@@ -269,37 +270,34 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 
 	public void actionPerformed(ActionEvent ev) {
 		AlyButton pressed = new AlyButton();
-		if(ev.getSource() instanceof AlyButton){
+		if(ev.getSource() instanceof AlyButton)
 			pressed = (AlyButton) ev.getSource();
-		}
 		
-		if(pressed.getText().equals("+")){
-			LinkedList<String> temp = PlayerIO.getAllPlayers();
-			Player players[] = new Player[temp.size()];
-			for(int i=0;i<players.length;i++)
-				players[i] = PlayerIO.getPlayer(temp.get(i));
-			
-			String list[] = new String[temp.size()]; 
-			for(int i=0;i<list.length;i++)
-				list[i] = temp.get(i);
-					
-			JList playerList = new JList(list); 
-			playerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			playerList.setLayoutOrientation(JList.VERTICAL);
-			playerList.setSelectedIndex(-1);
-			playerList.setForeground(ColorScheme.DEFAULT_MAIN);
-			playerList.setBackground(ColorScheme.DEFAULT_SECONDARY);
-			playerList.setFont(new Font("Mangal",Font.PLAIN,20));
-			playerList.setSelectionBackground(ColorScheme.DEFAULT_ROLLOVER);
-			playerList.setSelectionForeground(ColorScheme.DEFAULT_ROLLOVER_TEXT);
-			playerList.setBorder(null);
-			System.out.println(JOptionPane.showInputDialog(this.getContentPane(),null,
-					"Choose Player",JOptionPane.PLAIN_MESSAGE,null,temp.toArray(),0));
-			
-		//	Player player = new Player("");
-			//PlayerFrame choosePlayer = new PlayerFrame(getLocation());
-		//	System.out.println(player);
-		}
+		if(pressed.getText().equals("+"))
+			System.out.println(chosenPlayer().getScore());			
+	}
+
+	private Player chosenPlayer() {
+		LinkedList<String> temp = PlayerIO.getAllPlayers();
+		String list[];
+		
+		list = new String[temp.size()+1];
+		for(int i=0;i<list.length-1;i++)
+			list[i] = " "+temp.get(i);
+		list[list.length-1] = "zzzzzzzzzzzzzzzz";
+		Arrays.sort(list);
+		list[list.length-1] = " Create a new player!"; 
+									
+		String result = (String) JOptionPane.showInputDialog(this.getContentPane(),null,"Choose Player",JOptionPane.PLAIN_MESSAGE,null,list,0);
+		
+		int chosen = Arrays.binarySearch(list, result);
+				
+		if(chosen < 0){
+			String s = JOptionPane.showInputDialog(this.getContentPane(),"Who's the new player?");
+			PlayerIO.addPlayer(s);
+			return PlayerIO.getPlayer(s);
+		}else
+			return PlayerIO.getPlayer(list[chosen].trim());			
 	}
 
 }

@@ -14,6 +14,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import reachForTheTop.*;
 
+@Deprecated
 public class PlayerFrame extends DefaultFrame{
 	
 	private Player player;
@@ -104,6 +105,8 @@ public class PlayerFrame extends DefaultFrame{
 		
 	}
 
+
+	@Deprecated
 	public Player getPlayer(){
 		return player;
 	}

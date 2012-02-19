@@ -36,5 +36,16 @@ public class PlayerIO {
 		} catch (IOException e) {}
 		return p;
 	}
+	
+	public static void addPlayer(String name){
+		IO.createOutputFile("Scores\\"+name+".reach");
+		IO.println("times played: 0");
+		IO.println("total: 0");
+		IO.closeOutputFile();
+		IO.createOutputFile("Scores\\names.txt",true);
+		IO.print("");
+		IO.println(name);
+		IO.closeOutputFile();
+	}
 
 }
