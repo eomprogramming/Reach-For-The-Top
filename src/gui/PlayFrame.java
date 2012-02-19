@@ -293,7 +293,19 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		int chosen = Arrays.binarySearch(list, result);
 				
 		if(chosen < 0){
-			String s = JOptionPane.showInputDialog(this.getContentPane(),"Who's the new player?");
+			
+			JLabel label = new JLabel("Who's the new player?");
+			label.setFont(new Font("Mangal",Font.BOLD,16));
+			label.setHorizontalAlignment(JLabel.CENTER);
+			
+			String s = (String) JOptionPane.showInputDialog(this.getContentPane(),label,"Add Player",JOptionPane.PLAIN_MESSAGE,null,null,null);
+			int check = Arrays.binarySearch(list, " "+s);
+	
+			if(check>=0){
+				label.setText("Already Exists");
+				JOptionPane.showMessageDialog(this.getContentPane(),label,"Not so fast",JOptionPane.PLAIN_MESSAGE,null);
+				return PlayerIO.getPlayer(list[check].trim());	
+			}
 			PlayerIO.addPlayer(s);
 			return PlayerIO.getPlayer(s);
 		}else
