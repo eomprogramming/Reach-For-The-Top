@@ -248,24 +248,24 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			}	
 		
 		//add the "+" buttons
-		plusButtonRight = new AlyButton[4];
-		for(int i=0;i<plusButtonRight.length;i++){
-			 plusButtonRight[i] = new AlyButton("+");
-			 plusButtonRight[i].setActionCommand(i+"l+");
-			 plusButtonRight[i].flipColors();
-			 plusButtonRight[i].addActionListener(this);
-			 plusButtonRight[i].setFont(new Font("Mangal",Font.PLAIN,40));
+		plusButtonLeft = new AlyButton[4];
+		for(int i=0;i<plusButtonLeft.length;i++){
+			plusButtonLeft[i] = new AlyButton("+");
+			 plusButtonLeft[i].setActionCommand(i+"l+");
+			 plusButtonLeft[i].flipColors();
+			 plusButtonLeft[i].addActionListener(this);
+			 plusButtonLeft[i].setFont(new Font("Mangal",Font.PLAIN,40));
 			 
-			 leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, plusButtonRight[i],
+			 leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, plusButtonLeft[i],
 					0, SpringLayout.NORTH,leftSubPanel[i+1]);
-			 leftSubLayout[i+1].putConstraint(SpringLayout.WEST, plusButtonRight[i],
+			 leftSubLayout[i+1].putConstraint(SpringLayout.WEST, plusButtonLeft[i],
 					15, SpringLayout.WEST,leftSubPanel[i+1]);
-			 leftSubLayout[i+1].putConstraint(SpringLayout.EAST, plusButtonRight[i],
+			 leftSubLayout[i+1].putConstraint(SpringLayout.EAST, plusButtonLeft[i],
 					-15, SpringLayout.EAST,leftSubPanel[i+1]);
-			 leftSubLayout[i+1].putConstraint(SpringLayout.SOUTH,plusButtonRight[i],
+			 leftSubLayout[i+1].putConstraint(SpringLayout.SOUTH,plusButtonLeft[i],
 					0, SpringLayout.SOUTH,leftSubPanel[i+1]);
 			 
-			 leftSubPanel[i+1].add(plusButtonRight[i]);
+			 leftSubPanel[i+1].add(plusButtonLeft[i]);
 		}
 		
 	}
@@ -277,7 +277,18 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		if(ac.contains("+")){
 			Player p = chosenPlayer();
 			if(p!=null){
-				System.out.println(p.getScore());
+				if(ac.contains("l")){
+					plusButtonLeft[Integer.parseInt(ac.substring(0,1))].setVisible(false);
+					leftSuperSubPanel[Integer.parseInt(ac.substring(0,1))].setVisible(true);
+					playerNamesLeft[Integer.parseInt(ac.substring(0,1))].setVisible(true);
+					playerNamesLeft[Integer.parseInt(ac.substring(0,1))].setText("   "+p.getName());
+							
+				}else{
+					plusButtonRight[Integer.parseInt(ac.substring(0,1))].setVisible(false);
+					rightSuperSubPanel[Integer.parseInt(ac.substring(0,1))].setVisible(true);
+					playerNamesRight[Integer.parseInt(ac.substring(0,1))].setVisible(true);
+					playerNamesRight[Integer.parseInt(ac.substring(0,1))].setText("   "+p.getName());
+				}					
 			}else
 				System.out.println("Cancelled");
 			
