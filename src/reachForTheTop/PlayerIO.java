@@ -22,8 +22,19 @@ public class PlayerIO {
 	}
 	
 	public static Player getPlayer(String name){
-		IO.openInputFile("Scores\\"+name+".reach");		
-		return new Player(name);
+		IO.openInputFile("Scores\\"+name+".reach");	
+		Player p = new Player(name);
+		try {
+			String s = IO.readLine();		
+			int times = Integer.parseInt(s.substring(s.indexOf(":")+1,s.length()).trim());
+			for(int i=0;i<times;i++)
+				p.addPlay();
+			s = IO.readLine();
+			int score = Integer.parseInt(s.substring(s.indexOf(":")+1,s.length()).trim());
+			p.increaseScore(score);
+			
+		} catch (IOException e) {}
+		return p;
 	}
 
 }
