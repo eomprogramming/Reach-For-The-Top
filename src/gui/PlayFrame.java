@@ -34,9 +34,10 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	}
 
 	private void createComponents() {
-		
+		Long time = System.currentTimeMillis();
 		createLeftPanel();
-		
+
+		System.out.println(System.currentTimeMillis()-time);
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(ColorScheme.DEFAULT_MAIN);
 		add(centerPanel);
@@ -48,7 +49,10 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		 * 
 		 */
 		createRightPanel();
+
+		System.out.println(System.currentTimeMillis()-time);
 		players = new Player[2][4];
+		System.out.println("Loaded in "+(System.currentTimeMillis()-time)+"ms!");
 		
 	}
 	
@@ -158,7 +162,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		//add the "+" buttons
 		plusButtonRight = new AlyButton[4];
 		for(int i=0;i<plusButtonRight.length;i++){
-			 plusButtonRight[i] = new AlyButton("+");
+			 plusButtonRight[i] = new AlyButton("+",false);
 			 plusButtonRight[i].setActionCommand(i+"r+");
 			 plusButtonRight[i].flipColors();
 			 plusButtonRight[i].addActionListener(this);
@@ -294,7 +298,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		//add the "+" buttons
 		plusButtonLeft = new AlyButton[4];
 		for(int i=0;i<plusButtonLeft.length;i++){
-			plusButtonLeft[i] = new AlyButton("+");
+			plusButtonLeft[i] = new AlyButton("+",false);
 			 plusButtonLeft[i].setActionCommand(i+"l+");
 			 plusButtonLeft[i].flipColors();
 			 plusButtonLeft[i].addActionListener(this);
