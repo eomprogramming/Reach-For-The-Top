@@ -403,7 +403,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			return null;
 		int chosen = Arrays.binarySearch(list, result);
 				
-		if(chosen < 0){
+		if(chosen < 0 || chosen == list.length-1){
 			
 			JLabel label = new JLabel("Who's the new player?");
 			label.setFont(new Font("Mangal",Font.BOLD,16));
@@ -416,7 +416,9 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 				label.setText("Already Exists");
 				JOptionPane.showMessageDialog(this.getContentPane(),label,"Not so fast",JOptionPane.PLAIN_MESSAGE,null);
 				return PlayerIO.getPlayer(list[check].trim());	
-			}else if(s.isEmpty()){
+			}else if(s==null)
+				return null;
+			else if(s.isEmpty()){
 				label.setText("Invalid Name");
 				JOptionPane.showMessageDialog(this.getContentPane(),label,"Not so fast",JOptionPane.PLAIN_MESSAGE,null);
 				return null;
