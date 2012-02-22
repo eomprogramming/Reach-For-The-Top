@@ -19,18 +19,18 @@ import reachForTheTop.PlayerIO;
  */
 public class PlayFrame extends DefaultFrame implements ActionListener{
 	
-	private AlyButton scoreButtonRight[][],scoreButtonLeft[][], plusButtonRight[], plusButtonLeft[], removeButtonRight[], removeButtonLeft[];
+	private AlyButton scoreButtonRight[][],startTimer,scoreButtonLeft[][], plusButtonRight[], plusButtonLeft[], removeButtonRight[], removeButtonLeft[];
 	private GridLayout mainLayout = new GridLayout(6,1);
 	private JLabel playerNamesLeft[], playerNamesRight[], leftTeam, rightTeam, timeLeft;
 	private JPanel rightSuperSubPanel[], leftSuperSubPanel[];
 	private Player players[][];
 	private int totalLeft=0,totalRight=0, time = 4000;
-	private JButton startTimer;
 	private Timer mainTimer;
 	
 	public PlayFrame(){
 		super("Game Time!");
 		setLayout(new GridLayout(1,3));
+		time = 4000;
 		createComponents();
 		pack();
 		repaint();	
@@ -45,12 +45,33 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(ColorScheme.DEFAULT_MAIN);
 		
-		add(centerPanel);
+		SpringLayout layout = new SpringLayout();
 		
-		startTimer = new JButton("Start");
+		centerPanel.setLayout(layout);
+		
+		
+		startTimer = new AlyButton("Start");
 		startTimer.addActionListener(this);
+		startTimer.setFont(new Font("Mangal",Font.PLAIN,28));
+		startTimer.flipColors();
+		centerPanel.add(startTimer);
 		
-		timeLeft = new JLabel("4.000");
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, startTimer,0, SpringLayout.HORIZONTAL_CENTER,centerPanel);
+		layout.putConstraint(SpringLayout.VERTICAL_CENTER, startTimer,50, SpringLayout.VERTICAL_CENTER,centerPanel);		
+		
+		timeLeft = new JLabel("Press start!");
+		timeLeft.setForeground(ColorScheme.DEFAULT_SECONDARY);
+		timeLeft.setBackground(ColorScheme.DEFAULT_MAIN);	
+		timeLeft.setFont(new Font("Mangal",Font.BOLD,40));
+		centerPanel.add(timeLeft);
+		
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, timeLeft,0, SpringLayout.HORIZONTAL_CENTER,centerPanel);
+		layout.putConstraint(SpringLayout.VERTICAL_CENTER, timeLeft,-50, SpringLayout.VERTICAL_CENTER,centerPanel);		
+
+		layout.putConstraint(SpringLayout.EAST, startTimer,-50, SpringLayout.EAST,centerPanel);
+		layout.putConstraint(SpringLayout.WEST, startTimer,50, SpringLayout.WEST,centerPanel);
+		
+		add(centerPanel);
 		
 		/*
 		 * 
