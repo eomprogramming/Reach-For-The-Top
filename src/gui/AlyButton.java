@@ -18,7 +18,7 @@ public class AlyButton extends JButton{
 		setBackground(ColorScheme.DEFAULT_MAIN);
 		setForeground(ColorScheme.DEFAULT_SECONDARY);
 		setFocusable(false);
-		setFont(new Font("Mangal",Font.PLAIN,20));
+		setFont(new Font("Verdana",Font.PLAIN,20));
 		setBorder(null);
 		if(rollover){
 			addMouseListener(new java.awt.event.MouseAdapter() {
@@ -44,12 +44,12 @@ public class AlyButton extends JButton{
 			    public void mouseEntered(java.awt.event.MouseEvent evt) {
 			    	int size = getFont().getSize();
 			    	int tenp = (int) (size*0.1);
-			        setFont(new Font("Mangal",Font.BOLD,size+tenp));
+			        setFont(new Font("Verdana",Font.BOLD,size+tenp));
 			    }
 			    public void mouseExited(java.awt.event.MouseEvent evt) {
 			    	int size = getFont().getSize();
 			    	int tenp = (int)(size*0.1);
-			    	setFont(new Font("Mangal",Font.PLAIN,size-tenp));
+			    	setFont(new Font("Verdana",Font.PLAIN,size-tenp));
 			    }		   
 			});
 		}

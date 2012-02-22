@@ -52,7 +52,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		
 		startTimer = new AlyButton("Start");
 		startTimer.addActionListener(this);
-		startTimer.setFont(new Font("Mangal",Font.PLAIN,28));
+		startTimer.setFont(new Font("Verdana",Font.PLAIN,28));
 		startTimer.flipColors();
 		centerPanel.add(startTimer);
 		
@@ -62,7 +62,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		timeLeft = new JLabel("Press start!");
 		timeLeft.setForeground(ColorScheme.DEFAULT_SECONDARY);
 		timeLeft.setBackground(ColorScheme.DEFAULT_MAIN);	
-		timeLeft.setFont(new Font("Mangal",Font.BOLD,40));
+		timeLeft.setFont(new Font("Verdana",Font.BOLD,35));
 		centerPanel.add(timeLeft);
 		
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, timeLeft,0, SpringLayout.HORIZONTAL_CENTER,centerPanel);
@@ -106,7 +106,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		JLabel teamTwoLabel = new JLabel("TEAM TWO!");
 		teamTwoLabel.setBackground(ColorScheme.DEFAULT_SECONDARY);
 		teamTwoLabel.setForeground(ColorScheme.DEFAULT_MAIN);
-		teamTwoLabel.setFont(new Font("Mangal",Font.BOLD,24));
+		teamTwoLabel.setFont(new Font("Verdana",Font.BOLD,24));
 		teamTwoLabel.setHorizontalAlignment(JLabel.CENTER);
 		teamTwoLabel.setVerticalAlignment(JLabel.CENTER);
 		teamTwoLabel.setOpaque(true);
@@ -135,7 +135,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			playerNamesRight[i].setOpaque(true);
 			playerNamesRight[i].setVisible(false);
 			playerNamesRight[i].setVerticalAlignment(JLabel.TOP);
-			playerNamesRight[i].setFont(new Font("Mangal",Font.PLAIN,16));
+			playerNamesRight[i].setFont(new Font("Verdana",Font.PLAIN,16));
 			
 			rightSubLayout[i+1].putConstraint(SpringLayout.NORTH, playerNamesRight[i],
 					0, SpringLayout.NORTH,rightSubPanel[i+1]);
@@ -197,7 +197,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			 plusButtonRight[i].setActionCommand(i+"r+");
 			 plusButtonRight[i].flipColors();
 			 plusButtonRight[i].addActionListener(this);
-			 plusButtonRight[i].setFont(new Font("Mangal",Font.PLAIN,40));
+			 plusButtonRight[i].setFont(new Font("Verdana",Font.PLAIN,40));
 			 
 			 rightSubLayout[i+1].putConstraint(SpringLayout.NORTH, plusButtonRight[i],
 					0, SpringLayout.NORTH,rightSubPanel[i+1]);
@@ -213,7 +213,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		rightTeam = new JLabel("SCORE: 0");
 		rightTeam.setBackground(ColorScheme.DEFAULT_MAIN);
 		rightTeam.setForeground(ColorScheme.DEFAULT_SECONDARY);
-		rightTeam.setFont(new Font("Mangal",Font.BOLD,23));
+		rightTeam.setFont(new Font("Verdana",Font.BOLD,23));
 		rightSubLayout[5].putConstraint(SpringLayout.NORTH, rightTeam,
 			0, SpringLayout.NORTH,rightSubPanel[5]);
 		rightSubLayout[5].putConstraint(SpringLayout.HORIZONTAL_CENTER, rightTeam,
@@ -242,7 +242,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		JLabel teamOneLabel = new JLabel("TEAM ONE!");
 		teamOneLabel.setBackground(ColorScheme.DEFAULT_SECONDARY);
 		teamOneLabel.setForeground(ColorScheme.DEFAULT_MAIN);
-		teamOneLabel.setFont(new Font("Mangal",Font.BOLD,24));
+		teamOneLabel.setFont(new Font("Verdana",Font.BOLD,24));
 		teamOneLabel.setHorizontalAlignment(JLabel.CENTER);
 		teamOneLabel.setVerticalAlignment(JLabel.CENTER);
 		teamOneLabel.setOpaque(true);
@@ -271,7 +271,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			playerNamesLeft[i].setOpaque(true);
 			playerNamesLeft[i].setVisible(false);
 			playerNamesLeft[i].setVerticalAlignment(JLabel.TOP);
-			playerNamesLeft[i].setFont(new Font("Mangal",Font.PLAIN,16));
+			playerNamesLeft[i].setFont(new Font("Verdana",Font.PLAIN,16));
 			
 			leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, playerNamesLeft[i],
 					0, SpringLayout.NORTH,leftSubPanel[i+1]);
@@ -333,7 +333,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			 plusButtonLeft[i].setActionCommand(i+"l+");
 			 plusButtonLeft[i].flipColors();
 			 plusButtonLeft[i].addActionListener(this);
-			 plusButtonLeft[i].setFont(new Font("Mangal",Font.PLAIN,40));
+			 plusButtonLeft[i].setFont(new Font("Verdana",Font.PLAIN,40));
 			 
 			 leftSubLayout[i+1].putConstraint(SpringLayout.NORTH, plusButtonLeft[i],
 					0, SpringLayout.NORTH,leftSubPanel[i+1]);
@@ -349,7 +349,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		leftTeam = new JLabel("SCORE: 0");
 		leftTeam.setBackground(ColorScheme.DEFAULT_MAIN);
 		leftTeam.setForeground(ColorScheme.DEFAULT_SECONDARY);
-		leftTeam.setFont(new Font("Mangal",Font.BOLD,23));
+		leftTeam.setFont(new Font("Verdana",Font.BOLD,23));
 		leftSubLayout[5].putConstraint(SpringLayout.NORTH, leftTeam,
 			0, SpringLayout.NORTH,leftSubPanel[5]);
 		leftSubLayout[5].putConstraint(SpringLayout.HORIZONTAL_CENTER, leftTeam,
@@ -464,7 +464,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		if(chosen < 0 || chosen == list.length-1){
 			
 			JLabel label = new JLabel("Who's the new player?");
-			label.setFont(new Font("Mangal",Font.BOLD,16));
+			label.setFont(new Font("Verdana",Font.BOLD,16));
 			label.setHorizontalAlignment(JLabel.CENTER);
 			
 			String s = (String) JOptionPane.showInputDialog(this.getContentPane(),label,"Add Player",JOptionPane.PLAIN_MESSAGE,null,null,null);
