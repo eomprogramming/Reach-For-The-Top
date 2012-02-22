@@ -30,7 +30,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	public PlayFrame(){
 		super("Game Time!");
 		setLayout(new GridLayout(1,3));
-		time = 40;
+		time = 50;
 		createComponents();
 		pack();
 		repaint();	
@@ -383,9 +383,9 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			}
 			else
 			{
-				timeLeft.setText("4");
+				timeLeft.setText("5");
 				startTimer.setText("Start");
-				time = 40;
+				time = 50;
 				mainTimer.cancel();
 			}
 		}
