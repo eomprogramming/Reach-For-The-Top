@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.*;
 
@@ -19,10 +21,12 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	
 	private AlyButton scoreButtonRight[][],scoreButtonLeft[][], plusButtonRight[], plusButtonLeft[], removeButtonRight[], removeButtonLeft[];
 	private GridLayout mainLayout = new GridLayout(6,1);
-	private JLabel playerNamesLeft[], playerNamesRight[], leftTeam, rightTeam;
+	private JLabel playerNamesLeft[], playerNamesRight[], leftTeam, rightTeam, timeLeft;
 	private JPanel rightSuperSubPanel[], leftSuperSubPanel[];
 	private Player players[][];
-	private int totalLeft=0,totalRight=0;
+	private int totalLeft=0,totalRight=0, time = 4000;
+	private JButton startTimer;
+	private Timer mainTimer;
 	
 	public PlayFrame(){
 		super("Game Time!");
@@ -40,7 +44,13 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		System.out.println(System.currentTimeMillis()-time);
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(ColorScheme.DEFAULT_MAIN);
+		
 		add(centerPanel);
+		
+		startTimer = new JButton("Start");
+		startTimer.addActionListener(this);
+		
+		timeLeft = new JLabel("4.000");
 		
 		/*
 		 * 
@@ -331,6 +341,33 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	public void actionPerformed(ActionEvent ev) {
 		String ac = ev.getActionCommand();
 		
+		if(ev.getSource() == startTimer)
+		{
+			if(startTimer.getText().equals("Start"))
+			{
+				startTimer.setText("Reset");
+				mainTimer = new Timer();
+				mainTimer.scheduleAtFixedRate(new TimerTask() {
+					public void run()
+					{
+						if(time > 0)
+							time--;
+						else
+						{
+							this.cancel();
+						}
+						timeLeft.setText(time/1000.0 + "");
+					}
+				}, 1, 1);
+			}
+			else
+			{
+				timeLeft.setText("4.000");
+				startTimer.setText("Start");
+				time = 4000;
+				mainTimer.cancel();
+			}
+		}
 		if(ac.contains("+")){
 			Player p = chosenPlayer();
 			System.out.println(Integer.parseInt(ac.substring(0,1)));
