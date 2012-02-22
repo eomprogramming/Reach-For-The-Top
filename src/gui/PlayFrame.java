@@ -24,13 +24,13 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	private JLabel playerNamesLeft[], playerNamesRight[], leftTeam, rightTeam, timeLeft;
 	private JPanel rightSuperSubPanel[], leftSuperSubPanel[];
 	private Player players[][];
-	private int totalLeft=0,totalRight=0, time = 4000;
+	private int totalLeft=0,totalRight=0, time;
 	private Timer mainTimer;
 	
 	public PlayFrame(){
 		super("Game Time!");
 		setLayout(new GridLayout(1,3));
-		time = 4000;
+		time = 40;
 		createComponents();
 		pack();
 		repaint();	
@@ -377,15 +377,15 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 						{
 							this.cancel();
 						}
-						timeLeft.setText(time/1000.0 + "");
+						timeLeft.setText(time/10.0 + "");
 					}
-				}, 1, 1);
+				}, 100, 100);
 			}
 			else
 			{
-				timeLeft.setText("4.000");
+				timeLeft.setText("4");
 				startTimer.setText("Start");
-				time = 4000;
+				time = 40;
 				mainTimer.cancel();
 			}
 		}
