@@ -27,7 +27,7 @@ public class DefaultFrame extends JFrame{
 		UIManager.put("ComboBox.selectionBackground", ColorScheme.DEFAULT_ROLLOVER);  
 		UIManager.put("OptionPane.opaque",false);  
 		UIManager.put("ComboBox.font",new Font("Verdana",Font.BOLD,16)); 
-		UIManager.put("Button.select", new Color(249,166,166));
+		UIManager.put("Button.select", ColorScheme.DEFAULT_SECONDARY);
 		UIManager.put("Button.background", ColorScheme.DEFAULT_MAIN);
 		UIManager.put("Button.focusable", false);
 		UIManager.put("Button.foreground", ColorScheme.DEFAULT_SECONDARY);

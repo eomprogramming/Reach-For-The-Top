@@ -50,8 +50,10 @@ public class AlyButton extends JButton{
 			    	int size = getFont().getSize();
 			    	int tenp = (int)(size*0.1);
 			    	setFont(new Font("Verdana",Font.PLAIN,size-tenp));
-			    }		   
+			    }	
+			    
 			});
+			
 		}
 	}
 	
