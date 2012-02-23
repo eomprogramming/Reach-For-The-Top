@@ -1,5 +1,6 @@
 package reachForTheTop;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -8,6 +9,7 @@ public class PlayerIO {
 	
 	public static LinkedList<String> getAllPlayers(){
 		LinkedList<String> names = new LinkedList<String>();
+		new File("Scores").mkdirs();
 		IO.openInputFile("Scores\\names.txt");
 		while(true){
 			try {
@@ -16,15 +18,21 @@ public class PlayerIO {
 					names.offer(s);
 				else
 					break;
-			} catch (IOException e) {}				
+			} catch (IOException e) {
+				
+			} catch (NullPointerException e){
+				IO.createOutputFile("Scores\\names.txt");
+				IO.closeOutputFile();
+				break;
+			}
 		}
 		return names;
 	}
 	
-	public static Player getPlayer(String name){
-		IO.openInputFile("Scores\\"+name+".reach");	
-		Player p = new Player(name);
+	public static Player getPlayer(String name){		
 		try {
+			IO.openInputFile("Scores\\"+name+".reach");	
+			Player p = new Player(name);
 			String s = IO.readLine();		
 			int times = Integer.parseInt(s.substring(s.indexOf(":")+1,s.length()).trim());
 			for(int i=0;i<times;i++)
@@ -32,9 +40,15 @@ public class PlayerIO {
 			s = IO.readLine();
 			int score = Integer.parseInt(s.substring(s.indexOf(":")+1,s.length()).trim());
 			p.increaseScore(score);
+			return p;
 			
-		} catch (IOException e) {}
-		return p;
+		} catch (IOException e) {
+		} catch(NullPointerException e){
+		}
+		PlayerIO.addPlayer(name);
+		PlayerIO.savePlayer(new Player(name));
+		return new Player(name);
+		
 	}
 	
 	public static void addPlayer(String name){
