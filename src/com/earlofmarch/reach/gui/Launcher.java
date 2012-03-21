@@ -1,5 +1,5 @@
-package gui;
-import reachForTheTop.PlayerIO;
+package com.earlofmarch.reach.gui;
+import com.earlofmarch.reach.model.PlayerIO;
 /**
  * Launches the game.
  */

@@ -1,4 +1,4 @@
-package gui;
+package com.earlofmarch.reach.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;

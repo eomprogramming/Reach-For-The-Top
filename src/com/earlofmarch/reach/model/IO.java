@@ -1,4 +1,4 @@
-package reachForTheTop;
+package com.earlofmarch.reach.model;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

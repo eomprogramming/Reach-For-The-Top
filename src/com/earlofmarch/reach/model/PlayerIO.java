@@ -1,4 +1,4 @@
-package reachForTheTop;
+package com.earlofmarch.reach.model;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +9,7 @@ public class PlayerIO {
 	
 	public static LinkedList<String> getAllPlayers(){
 		LinkedList<String> names = new LinkedList<String>();
-		new File("Scores").mkdirs();
+		//new File("Scores").mkdirs();
 		IO.openInputFile("Scores\\names.txt");
 		while(true){
 			try {

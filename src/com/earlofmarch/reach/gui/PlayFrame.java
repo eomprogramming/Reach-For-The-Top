@@ -1,4 +1,4 @@
-package gui;
+package com.earlofmarch.reach.gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,8 +10,9 @@ import java.util.TimerTask;
 
 import javax.swing.*;
 
-import reachForTheTop.Player;
-import reachForTheTop.PlayerIO;
+import com.earlofmarch.reach.model.Player;
+import com.earlofmarch.reach.model.PlayerIO;
+
 
 /**
  * @author Aly
@@ -72,10 +73,11 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		layout.putConstraint(SpringLayout.EAST, startTimer,-50, SpringLayout.EAST,centerPanel);
 		layout.putConstraint(SpringLayout.WEST, startTimer,50, SpringLayout.WEST,centerPanel);
 		
-		save = new JCheckBox("Save Player Scores");
+		save = new JCheckBox("Save player scores when removed");
 		save.setBackground(null);
-		save.setFont(new Font("Verdana",Font.PLAIN,16));
+		save.setFont(new Font("Verdana",Font.PLAIN,12));
 		save.setForeground(ColorScheme.DEFAULT_SECONDARY);
+		save.setFocusable(false);
 		
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, save,0, SpringLayout.HORIZONTAL_CENTER,centerPanel);
 		layout.putConstraint(SpringLayout.SOUTH, save,-30, SpringLayout.SOUTH,centerPanel);		

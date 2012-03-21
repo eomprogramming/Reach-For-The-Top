@@ -1,4 +1,4 @@
-package reachForTheTop;
+package com.earlofmarch.reach.model;
 
 public class Player {
 	private String name;

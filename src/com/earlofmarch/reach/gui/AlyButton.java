@@ -1,4 +1,4 @@
-package gui;
+package com.earlofmarch.reach.gui;
 
 import javax.swing.JButton;
 import javax.swing.UIManager;
