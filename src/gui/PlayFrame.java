@@ -391,6 +391,11 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 		}
 		if(ac.contains("+")){
 			Player p = chosenPlayer();
+			
+			
+			/* Resets score every time for now */
+			p.resetScore();			
+			
 			System.out.println(Integer.parseInt(ac.substring(0,1)));
 			if(p!=null){
 				if(ac.contains("l")){
@@ -398,7 +403,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 					leftSuperSubPanel[Integer.parseInt(ac.substring(0,1))].setVisible(true);
 					playerNamesLeft[Integer.parseInt(ac.substring(0,1))].setVisible(true);
 					removeButtonLeft[Integer.parseInt(ac.substring(0,1))].setVisible(true);
-					playerNamesLeft[Integer.parseInt(ac.substring(0,1))].setText("   "+p.getName());
+					playerNamesLeft[Integer.parseInt(ac.substring(0,1))].setText("   "+p.getName()+" - "+p.getScore());
 					players[0][Integer.parseInt(ac.substring(0,1))] = p;
 						
 				}else{
@@ -406,7 +411,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 					rightSuperSubPanel[Integer.parseInt(ac.substring(0,1))].setVisible(true);
 					playerNamesRight[Integer.parseInt(ac.substring(0,1))].setVisible(true);
 					removeButtonRight[Integer.parseInt(ac.substring(0,1))].setVisible(true);
-					playerNamesRight[Integer.parseInt(ac.substring(0,1))].setText("   "+p.getName());
+					playerNamesRight[Integer.parseInt(ac.substring(0,1))].setText("   "+p.getName()+" - "+p.getScore());
 					players[1][Integer.parseInt(ac.substring(0,1))] = p;
 				}					
 			}else
@@ -421,11 +426,15 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			
 			if(team == 0){
 				totalLeft+=score;
-				leftTeam.setText("SCORE: "+totalLeft);				
+				leftTeam.setText("SCORE: "+totalLeft);	
+				playerNamesLeft[player].setText("   "+players[team][player].getName()+" - "+players[team][player].getScore());
 			}else{
 				totalRight+=score;
-				rightTeam.setText("SCORE: "+totalRight);							
-			}
+				rightTeam.setText("SCORE: "+totalRight);
+				playerNamesRight[player].setText("   "+players[team][player].getName()+" - "+players[team][player].getScore());
+				
+			}repaint();
+			
 		}else if(ac.contains("x")){
 			System.out.println("Player removed");
 			int player = Integer.parseInt(ac.substring(0,1));
@@ -435,6 +444,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 				leftSuperSubPanel[player].setVisible(false);
 				playerNamesLeft[player].setVisible(false);
 				removeButtonLeft[player].setVisible(false);
+				
 			}else{
 				plusButtonRight[player].setVisible(true);
 				rightSuperSubPanel[player].setVisible(false);
