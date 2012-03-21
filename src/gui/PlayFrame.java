@@ -24,6 +24,7 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 	private JLabel playerNamesLeft[], playerNamesRight[], leftTeam, rightTeam, timeLeft;
 	private JPanel rightSuperSubPanel[], leftSuperSubPanel[];
 	private Player players[][];
+	private JCheckBox save;
 	private int totalLeft=0,totalRight=0, time;
 	private Timer mainTimer;
 	
@@ -70,6 +71,17 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 
 		layout.putConstraint(SpringLayout.EAST, startTimer,-50, SpringLayout.EAST,centerPanel);
 		layout.putConstraint(SpringLayout.WEST, startTimer,50, SpringLayout.WEST,centerPanel);
+		
+		save = new JCheckBox("Save Player Scores");
+		save.setBackground(null);
+		save.setFont(new Font("Verdana",Font.PLAIN,16));
+		save.setForeground(ColorScheme.DEFAULT_SECONDARY);
+		
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, save,0, SpringLayout.HORIZONTAL_CENTER,centerPanel);
+		layout.putConstraint(SpringLayout.SOUTH, save,-30, SpringLayout.SOUTH,centerPanel);		
+
+		
+		centerPanel.add(save);
 		
 		add(centerPanel);
 		
@@ -390,14 +402,11 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 			}
 		}
 		if(ac.contains("+")){
-			Player p = chosenPlayer();
-			
-			
-			/* Resets score every time for now */
-			p.resetScore();			
-			
+			Player p = chosenPlayer();		
+						
 			System.out.println(Integer.parseInt(ac.substring(0,1)));
 			if(p!=null){
+
 				if(ac.contains("l")){
 					plusButtonLeft[Integer.parseInt(ac.substring(0,1))].setVisible(false);
 					leftSuperSubPanel[Integer.parseInt(ac.substring(0,1))].setVisible(true);
@@ -451,7 +460,9 @@ public class PlayFrame extends DefaultFrame implements ActionListener{
 				playerNamesRight[player].setVisible(false);
 				removeButtonRight[player].setVisible(false);
 			}
-			PlayerIO.savePlayer(players[team][player]);
+			
+			if(save.isSelected())
+				PlayerIO.savePlayer(players[team][player]);
 		}
 	}
 
