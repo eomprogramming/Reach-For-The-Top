@@ -71,14 +71,14 @@ public class PlayerIO {
 	public static void makeScoreFolder(){
 		File f = new File("Scores");
 		f.mkdirs();
-		Process p;
-		try {
-			p = Runtime.getRuntime().exec("attrib +h " + f.getPath());
-			p.waitFor();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		Process p;
+//		try {
+//			p = Runtime.getRuntime().exec("attrib +h " + f.getPath());
+//			p.waitFor();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 	}
 }
