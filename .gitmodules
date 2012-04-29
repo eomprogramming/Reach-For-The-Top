@@ -1,0 +1,3 @@
+[submodule "windows/BuzzIO"]
+	path = windows/BuzzIO
+	url = http://github.com/bbeardsley/BuzzIO
