@@ -1,0 +1,23 @@
+diff -rN BuzzIO/Makefile BuzzIO2/Makefile
+0a1,21
+> base_dir = .
+> nuget = $(base_dir)/packages/Nuget.CommandLine.1.5.21005.9019/tools/Nuget.exe
+> msbuild = xbuild
+> config = Release
+> platform = AnyCPU
+> build_dir = $(base_dir)/bin/$(config)/
+> release_dir = $(base_dir)/release/
+> project = $(base_dir)/BuzzIO.csproj
+> dll_file = $(build_dir)/BuzzIO.dll
+> nuspec_file = $(base_dir)/BuzzIO.nuspec
+> 
+> build: init
+> 	$(msbuild) $(project) /p:OutDir=$(build_dir) /p:Configuration=$(config) /p:Platform=$(platform)
+> 
+> clean:
+> 	-rm -rf $(build_dir)
+> 	-rm -rf $(release_dir)
+> 
+> init: clean
+> 	mkdir $(build_dir)
+> 	mkdir $(release_dir)
