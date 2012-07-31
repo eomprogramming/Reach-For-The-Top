@@ -30,7 +30,32 @@ namespace com.earlofmarch.reach {
 		}
 		
 		private void buzzerInput(CallbackArgs a) {
-			;
+			switch (a.eventType) {
+				case CallbackType.UNPLUGGED:
+					w.WriteLine("unplugged " + a.handsetId);
+					break;
+				case CallbackType.BUTTON_PRESS:
+					w.WriteLine("press " + a.handsetId + ":" + a.buzzerId + ":" + ButtonToString(a.button));
+					break;
+				default:
+					w.WriteLine("error internal \"Unknown CallbackType\"");
+			}
+		}
+		
+		public static string ButtonToString(Button b) {
+			switch (b) {
+			case RED:
+				return "red";
+			case BLUE:
+				return "blue";
+			case ORANGE:
+				return "orange";
+			case GREEN:
+				return "green";
+			case YELLOW:
+				return "yellow";
+			default:
+				return "invalid-button";
 		}
 	}
 }

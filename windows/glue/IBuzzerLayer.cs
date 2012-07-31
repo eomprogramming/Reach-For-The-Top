@@ -6,10 +6,15 @@ namespace com.earlofmarch.reach {
 		public CallbackType eventType;
 		public int handsetId;
 		public int buzzerId;
+		public Button button;
 	}
 	
 	internal enum CallbackType {
-		UNPLUGGED
+		UNPLUGGED, BUTTON_PRESS
+	}
+	
+	internal enum Button {
+		RED, BLUE, ORANGE, GREEN, YELLOW
 	}
 	
 	internal interface IBuzzerLayer {
