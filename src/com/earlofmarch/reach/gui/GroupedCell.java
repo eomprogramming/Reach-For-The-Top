@@ -47,7 +47,7 @@ public class GroupedCell extends JPanel{
 		cells.add(new PlayerCell());
 		
 		score = new ScoreCell(this);
-		score.setShowing(false);
+		score.setShowing(false,false);
 		cells.add(score);
 		
 		add(cells);
@@ -64,11 +64,11 @@ public class GroupedCell extends JPanel{
 		timer.cancel();
 		parent.giveScore(score,playerTeam);
 		time = TIMER_LENGTH*10;
-		this.score.setShowing(false);
+		this.score.setShowing(false,true);
 		timeLabel.setText((score>0?"+":"")+score);
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
-			int labeltime = 15;
+			int labeltime = 12;
 			public void run()
 			{
 				if(labeltime > 0)
@@ -83,7 +83,7 @@ public class GroupedCell extends JPanel{
 	
 	public void trigger(){
 		timer = new Timer();
-		score.setShowing(true);
+		score.setShowing(true,true);
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run()
 			{
@@ -93,7 +93,7 @@ public class GroupedCell extends JPanel{
 				{
 					this.cancel();
 					time = TIMER_LENGTH*10;
-					score.setShowing(false);
+					score.setShowing(false,true);
 				}
 				
 				if(time == (TIMER_LENGTH*10))

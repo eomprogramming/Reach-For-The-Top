@@ -3,6 +3,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -20,7 +22,7 @@ public class ScoreCell extends JPanel implements ActionListener{
 	
 	public ScoreCell(GroupedCell g){
 		super();
-		setBackground(UI.colour.MAIN);	
+		setBackground(UI.colour.BACKGROUND);	
 		
 		mainPanel = new JPanel();
 		mainPanel.setBackground(null);
@@ -28,7 +30,7 @@ public class ScoreCell extends JPanel implements ActionListener{
 		int[] scores = {5,10,20,40,-5,-10,-20,-40};
 		button = new UIButton[scores.length];
 		
-		GridLayout grid = new GridLayout(scores.length/2,2,5,15);
+		GridLayout grid = new GridLayout(scores.length/2,2,0,0);
 		mainPanel.setLayout(grid);
 		
 		for(int i=0;i<button.length;i++){
@@ -44,10 +46,10 @@ public class ScoreCell extends JPanel implements ActionListener{
 		parent = g;
 		
 		SpringLayout layout = new SpringLayout();
-		layout.putConstraint(SpringLayout.EAST, mainPanel, -15, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.NORTH, mainPanel, 15, SpringLayout.NORTH, this);
-		layout.putConstraint(SpringLayout.WEST, mainPanel, 15, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.SOUTH, mainPanel, -15, SpringLayout.SOUTH, this);
+		layout.putConstraint(SpringLayout.EAST, mainPanel, 0, SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.NORTH, mainPanel, 0, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.WEST, mainPanel, 0, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.SOUTH, mainPanel, 0, SpringLayout.SOUTH, this);
 		setLayout(layout);
 		
 		add(mainPanel);
@@ -58,10 +60,32 @@ public class ScoreCell extends JPanel implements ActionListener{
 		parent.giveScore(Integer.parseInt(e.getActionCommand()));
 	}
 	
-	public void setShowing(boolean visible){
-		setBackground(visible?UI.colour.MAIN:UI.colour.BACKGROUND);
-		for(int i=0;i<button.length;i++){			
-			button[i].setVisible(visible);
+	public void setShowing(final boolean visible, boolean animate){	
+		if(animate){
+			//System.out.println("Animate");
+			Timer timer = new Timer();			
+			timer.scheduleAtFixedRate(new TimerTask() {
+				int time = 4;
+				public void run()
+				{					
+					if(time > 0){
+						//System.out.println(visible?(4-time)+" set and "+(4-(time-1))+" set":(time-1)+" set");
+						if(visible){
+							button[(8-(time*2))].setVisible(visible);
+							button[(8-(time*2))+1].setVisible(visible);
+						}else{
+							button[(time*2)-1].setVisible(visible);
+							button[(time*2)-2].setVisible(visible);
+						}
+						time--;					
+					}else{
+						this.cancel();
+					}				
+				}
+			}, 100, 100);				
+		}else{
+			for(int i=0;i<button.length;i++)
+				button[i].setVisible(visible);
 		}
 	}
 
