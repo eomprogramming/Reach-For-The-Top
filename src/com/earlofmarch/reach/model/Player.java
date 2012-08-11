@@ -1,66 +1,87 @@
 package com.earlofmarch.reach.model;
 
+import java.util.LinkedList;
+/**
+ * A reach for the top player!
+ * @author Aly
+ *
+ */
 public class Player {
-	private String name;
-	private int score, timesPlayed;
 	
+	private String name;
+	private LinkedList<Integer> scoreHistory;
+	private int score;
+	
+	/**
+	 * Creates a new Player with the name provided, default score is 0.
+	 * @param name	The player's name
+	 */
 	public Player(String name)
 	{
+		scoreHistory = new LinkedList<Integer>();
+		score = 0;
 		setName(name);
-		resetScore();
 	}
 	
+	/**
+	 * Returns the player's name
+	 * @return The name
+	 */
 	public String getName()
 	{
 		return name;
 	}
 	
+	/**
+	 * Sets the player's name
+	 * @param name	The player's new name
+	 */
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 	
-	public void resetScore()
-	{
-		score = 0;
+	/**
+	 * Adds points to the player's current score. 
+	 * To add to a player's history of scores, use the {@link #addToHistory(int s) addToHistory} method.
+	 * @param s	The points to be added to a player's score.
+	 */
+	public void addScore(int s){
+		score += s;
 	}
 	
-	public void increaseScore(int a)
-	{
-		score += a;
-	}
-	
-	public int getScore()
-	{
+	/**
+	 * Returns the player's current score
+	 * @return	The player's score
+	 */
+	public int getScore(){
 		return score;
 	}
 	
-	public void addPlay(){
-		timesPlayed++;
-		
+	/**
+	 * Adds a score to a player's history of scores.
+	 * @param s	The score to be added
+	 */
+	public void addToHistory(int s)
+	{
+		scoreHistory.add(s);
 	}
 	
-	public int getTimesPlayed(){
-		return timesPlayed;		
-	}
 	/**
-	 * if file with student name does not exist
-	 * {
-	 * 		create a new name.reach files and open it
-	 * }
-	 * else
-	 * {
-	 * 		open existing name.reach files
-	 * }
-	 * 
-	 * write out the score and update the number or rounds played and the total score for the student
-	 * include the data
-	 * 
-	 * follow the format in the example .reach files
-	 * close file
+	 * Returns the player's full history of scores.
+	 * @return	LinkedList of scores
 	 */
-	public void saveScore()
+	public LinkedList<Integer> getScoreHistory()
 	{
-		
+		return scoreHistory;
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Player){
+			Player p = (Player) o;
+			return this.name.equalsIgnoreCase(p.getName());
+		}
+		return false;
 	}
 }

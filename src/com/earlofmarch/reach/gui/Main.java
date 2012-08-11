@@ -2,6 +2,7 @@ package com.earlofmarch.reach.gui;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,6 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
+import javax.swing.UIManager;
+
+import com.earlofmarch.reach.model.Player;
+import com.earlofmarch.reach.model.PlayerIO;
 /**
  * The Main class... Manages the GroupedCells and triggers
  * @author Aly
@@ -22,6 +27,7 @@ public class Main extends JFrame{
 	private JLabel scoreLabel;
 	private int rightScore = 0, leftScore = 0;
 	private static final int RIGHT = 1, LEFT = 2;
+	public static LinkedList<Player> players;
 	
 	public Main(){
 		super("Reach for the Top");		
@@ -36,7 +42,17 @@ public class Main extends JFrame{
 		
 		pack();
 		setSize(1050,500);	
-		//trigger(3);		
+		players = PlayerIO.getAllPlayers(false);
+		if(players == null)
+			players = new LinkedList<Player>();
+		
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+		        public void run() {
+		        	System.out.println(players.get(0).getScore()+""+players.get(0).getName());
+		        	if(players!=null && players.size()!=0)
+		        		PlayerIO.updateAll(players);
+		        }
+		    }, "Shutdown-thread"));
 	}
 	
 	private void createComponents(){
@@ -111,6 +127,11 @@ public class Main extends JFrame{
 	 */
 	public void trigger(int cell){
 		//Buzzer sound to come!
+		
+		for(GroupedCell gc : cells)
+			if(gc.isTriggered())
+				return;
+		
 		cells[cell].trigger();
 	}
 	
@@ -128,6 +149,13 @@ public class Main extends JFrame{
 		Scanner s = new Scanner(System.in);
 		System.out.println("||Animation Testing||\nTrigger from 1 to 8. Type 'exit' to quit.");
 		
+		UIManager.put("OptionPane.background",UI.colour.MAIN);
+		UIManager.put("Panel.background", UI.colour.MAIN);
+		UIManager.put("ComboBox.background", UI.colour.MAIN);
+		UIManager.put("ComboBox.selectionBackground", UI.colour.ROLLOVER);  
+		UIManager.put("OptionPane.opaque",false);  
+		UIManager.put("ComboBox.font",UI.getFont(15)); 
+		
 		while(true){
 			String input = s.nextLine().trim();
 			if(!input.isEmpty() && input.charAt(0) >= '1' && input.charAt(0) <= '8'){
@@ -137,6 +165,6 @@ public class Main extends JFrame{
 			}else{
 				System.out.println("Invalid, trigger from 1 to 8. Type 'exit' to quit.");
 			}
-		}
+		}		
 	}
 }
