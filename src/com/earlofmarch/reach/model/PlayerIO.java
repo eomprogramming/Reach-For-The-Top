@@ -26,6 +26,9 @@ public class PlayerIO {
 				break;
 			}
 		}
+		try {
+			IO.closeInputFile();
+		} catch (IOException e) {}
 		return names;
 	}
 	
