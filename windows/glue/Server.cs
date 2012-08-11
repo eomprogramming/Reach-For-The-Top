@@ -37,6 +37,9 @@ namespace com.earlofmarch.reach {
 				case CallbackType.BUTTON_PRESS:
 					w.WriteLine("press " + a.handsetId + ":" + a.buzzerId + ":" + ButtonToString(a.button));
 					break;
+				case CallbackType.BUTTON_RELEASE:
+					w.WriteLine("release " + a.handsetId + ":" + a.buzzerId + ":" + ButtonToString(a.button));
+					break;
 				default:
 					w.WriteLine("error internal \"Unknown CallbackType\"");
 			}

@@ -9,8 +9,13 @@ namespace com.earlofmarch.reach {
 		public Button button;
 	}
 	
+	internal struct Pair<T> {
+		public T First;
+		public T Second;
+	}
+	
 	internal enum CallbackType {
-		UNPLUGGED, BUTTON_PRESS
+		UNPLUGGED, BUTTON_PRESS, BUTTON_RELEASE
 	}
 	
 	internal enum Button {
