@@ -40,14 +40,13 @@ public class PlayerIO {
 				return null;
 			}
 			
+			clean();
+			
 			for(File pfile :  playerFiles){
-				if(pfile.getName().endsWith(SUFFIX)){
-					if(fullHistory)
-						players.add(getPlayerFull(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
-					else
-						players.add(new Player(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
-					
-				}
+				if(fullHistory)
+					players.add(getPlayerFull(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
+				else
+					players.add(new Player(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
 			}	
 			
 			return players.size()>0?players:null;
@@ -95,4 +94,18 @@ public class PlayerIO {
 		IO.closeOutputFile();
 		
 	}	
+	
+	public static void clean(){		
+		File root = new File(ROOT);
+		if(!root.isDirectory())
+			return;
+		
+		File[] playerFiles = root.listFiles();
+		if(playerFiles == null || playerFiles.length == 0)
+			return;
+		
+		for(File f : playerFiles)
+			if(!f.getName().endsWith(SUFFIX) || f.getName().equals(SUFFIX))
+				f.delete();
+	}
 }
