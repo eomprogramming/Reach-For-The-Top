@@ -6,82 +6,106 @@ import java.util.LinkedList;
 
 public class PlayerIO {
 	
+	private static final String ROOT = "Reach Scores";
+	private static final String SUFFIX = ".txt";
 	
-	public static LinkedList<String> getAllPlayers(){
-		LinkedList<String> names = new LinkedList<String>();
-		//new File("Scores").mkdirs();
-		IO.openInputFile("Scores\\names.txt");
-		while(true){
-			try {
-				String s = IO.readLine();
-				if(s!=null)
-					names.offer(s);
-				else
-					break;
-			} catch (IOException e) {
-				
-			} catch (NullPointerException e){
-				IO.createOutputFile("Scores\\names.txt");
-				IO.closeOutputFile();
-				break;
+	/*
+	 *  Reach Scores
+	 *  	<name>.txt
+	 *  
+	 *  name.txt contents:
+	 *  <score 1>
+	 *  <score 2>
+	 *  etc.	
+	 */
+	
+	/**
+	 * Returns a LinkedList with all players saved in the "Reach Scores", 
+	 * returns null if none exist.
+	 * @return LinkedList of Players
+	 * @param fullHistory Adds the player's score history
+	 */
+	public static LinkedList<Player> getAllPlayers(boolean fullHistory){
+		
+		File root = new File(ROOT);
+		LinkedList<Player> players = new LinkedList<Player>();
+		
+		//Check if the folder exists
+		if(root.isDirectory()){
+			
+			File[] playerFiles = root.listFiles();
+			//Check if the folder contains any files
+			if(playerFiles == null || playerFiles.length == 0){
+				System.err.println("No player files exist!");
+				return null;
 			}
+			
+			clean();
+			
+			for(File pfile :  playerFiles){
+				if(fullHistory)
+					players.add(getPlayerFull(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
+				else
+					players.add(new Player(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
+			}	
+			
+			return players.size()>0?players:null;
+			
+		}else{
+			System.err.println("Folder not found! Creating one now...");
+			root.mkdir();
+			return null;
 		}
+	}
+	
+	/**
+	 * Reads a <player name>.txt file and adds all the scores inside to the player's score history.
+	 * @param name	The player's name
+	 * @return	Player	The player with the their full score history.
+	 */
+	public static Player getPlayerFull(String name){
+		Player player = new Player(name);
+		IO.openInputFile(ROOT+"\\"+name+SUFFIX);
 		try {
+			String score = IO.readLine();
+			while(score!=null){
+				player.addToHistory(Integer.parseInt(score));
+				score = IO.readLine();
+			}
 			IO.closeInputFile();
 		} catch (IOException e) {}
-		return names;
-	}
-	
-	public static Player getPlayer(String name){		
-		try {
-			IO.openInputFile("Scores\\"+name+".reach");	
-			Player p = new Player(name);
-			String s = IO.readLine();		
-			int times = Integer.parseInt(s.substring(s.indexOf(":")+1,s.length()).trim());
-			for(int i=0;i<times;i++)
-				p.addPlay();
-			s = IO.readLine();
-			int score = Integer.parseInt(s.substring(s.indexOf(":")+1,s.length()).trim());
-			p.increaseScore(score);
-			return p;
-			
-		} catch (IOException e) {
-		} catch(NullPointerException e){
-		}
-		PlayerIO.addPlayer(name);
-		PlayerIO.savePlayer(new Player(name));
-		return new Player(name);
 		
+		return player;
+	}
+		
+	public static void updateAll(LinkedList<Player> players){
+		for(Player p : players)
+			updatePlayer(p);
 	}
 	
-	public static void addPlayer(String name){
-		IO.createOutputFile("Scores\\"+name+".reach");
-		IO.println("times played: 0");
-		IO.println("total: 0");
+	public static void updatePlayer(Player p){
+		if(!new File(ROOT).isDirectory())
+			return;
+		
+		File f = new File(ROOT+"\\"+p.getName()+SUFFIX);
+		
+		IO.createOutputFile(f.getPath(), f.isFile());
+		IO.println(p.getScore()+"");
 		IO.closeOutputFile();
-		IO.createOutputFile("Scores\\names.txt",true);
-		IO.println(name);
-		IO.closeOutputFile();
-	}
+		
+	}	
 	
-	public static void savePlayer(Player player){
-		IO.createOutputFile("Scores\\"+player.getName()+".reach");
-		IO.println("times played: "+player.getTimesPlayed());
-		IO.println("total: "+player.getScore());
-		IO.closeOutputFile();
-	}
-
-	public static void makeScoreFolder(){
-		File f = new File("Scores");
-		f.mkdirs();
-//		Process p;
-//		try {
-//			p = Runtime.getRuntime().exec("attrib +h " + f.getPath());
-//			p.waitFor();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+	public static void clean(){		
+		File root = new File(ROOT);
+		if(!root.isDirectory())
+			return;
+		
+		File[] playerFiles = root.listFiles();
+		if(playerFiles == null || playerFiles.length == 0)
+			return;
+		
+		for(File f : playerFiles)
+			if(!f.getName().endsWith(SUFFIX) || f.getName().equals(SUFFIX))
+				f.delete();
 	}
 }

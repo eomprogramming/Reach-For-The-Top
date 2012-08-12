@@ -2,8 +2,6 @@ package com.earlofmarch.reach.gui;
 import java.awt.GridLayout;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -22,6 +20,8 @@ public class GroupedCell extends JPanel{
 	private ScoreCell score;
 	private JLabel timeLabel;
 	private int playerTeam;
+	private boolean triggered = false;
+	private PlayerCell playerCell;
 	
 	public GroupedCell(Main f, int side){
 		parent = f;
@@ -44,7 +44,8 @@ public class GroupedCell extends JPanel{
 		timeLabel.setForeground(UI.colour.SECONDARY);
 		add(timeLabel);
 		
-		cells.add(new PlayerCell());
+		playerCell = new PlayerCell(f);
+		cells.add(playerCell);
 		
 		score = new ScoreCell(this);
 		score.setShowing(false,false);
@@ -61,11 +62,15 @@ public class GroupedCell extends JPanel{
 	}
 	
 	public void giveScore(int score){
-		timer.cancel();
+		triggered = false;
+		
 		parent.giveScore(score,playerTeam);
-		time = TIMER_LENGTH*10;
-		this.score.setShowing(false,true);
+		Main.players.get(Main.players.indexOf(playerCell.getPlayer())).addScore(score);
+		this.score.setShowing(false,true);		
 		timeLabel.setText((score>0?"+":"")+score);
+		
+		time = TIMER_LENGTH*10;
+		timer.cancel();
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			int labeltime = 12;
@@ -82,6 +87,7 @@ public class GroupedCell extends JPanel{
 	}
 	
 	public void trigger(){
+		triggered = true;
 		timer = new Timer();
 		score.setShowing(true,true);
 		timer.scheduleAtFixedRate(new TimerTask() {
@@ -94,6 +100,7 @@ public class GroupedCell extends JPanel{
 					this.cancel();
 					time = TIMER_LENGTH*10;
 					score.setShowing(false,true);
+					triggered = false;
 				}
 				
 				if(time == (TIMER_LENGTH*10))
@@ -104,5 +111,9 @@ public class GroupedCell extends JPanel{
 					timeLabel.setText("0.0s");
 			}
 		}, 100, 100);
+	}
+	
+	public boolean isTriggered(){
+		return triggered;
 	}
 }
