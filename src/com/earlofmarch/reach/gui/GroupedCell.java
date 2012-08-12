@@ -65,7 +65,8 @@ public class GroupedCell extends JPanel{
 		triggered = false;
 		
 		parent.giveScore(score,playerTeam);
-		Main.players.get(Main.players.indexOf(playerCell.getPlayer())).addScore(score);
+		if(playerCell.getPlayer() != null)
+			Main.players.get(Main.players.indexOf(playerCell.getPlayer())).addScore(score);
 		this.score.setShowing(false,true);		
 		timeLabel.setText((score>0?"+":"")+score);
 		

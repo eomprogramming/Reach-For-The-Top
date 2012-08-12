@@ -90,7 +90,8 @@ public class PlayerIO {
 		File f = new File(ROOT+"\\"+p.getName()+SUFFIX);
 		
 		IO.createOutputFile(f.getPath(), f.isFile());
-		IO.println(p.getScore()+"");
+		if(p.getScore() != 0)
+			IO.println(p.getScore()+"");
 		IO.closeOutputFile();
 		
 	}	
