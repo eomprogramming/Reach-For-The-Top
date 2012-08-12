@@ -23,10 +23,26 @@ namespace com.earlofmarch.reach {
 			w = new StreamWriter(s);
 			source = b;
 			source.setCallback(new Callback(buzzerInput));
+			
+			listen();
 		}
 		
 		public void listen() {
-			;
+			String input;
+			String[] parts;
+			String[] subparts;
+			while (true) {
+				input = r.ReadLine();
+				parts = input.Split(' ', '\t');
+				
+				if (parts[0].Equals("light")) {
+					subparts = parts[1].Split(':');
+					source.lightUp(Int32.Parse(subparts[0]), Int32.Parse(subparts[1]));
+				} else if (parts[0].Equals("unlight")) {
+					subparts = parts[1].Split(':');
+					source.putOut(Int32.Parse(subparts[0]), Int32.Parse(subparts[1]));
+				}
+			}
 		}
 		
 		private void buzzerInput(CallbackArgs a) {

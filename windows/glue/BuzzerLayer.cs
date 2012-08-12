@@ -6,12 +6,17 @@ namespace com.earlofmarch.reach {
 	internal class BuzzerLayer : IBuzzerLayer {		
 		private List<IBuzzHandsetDevice> devices;
 		private ButtonStates[] states;
+		private Boolean[][] lights;
 		private Callback cb;
 		
 		public BuzzerLayer() {
 			devices = BuzzHandsetDevice.FindBuzzHandset();
 			
 			states = new ButtonStates[devices.Count * 4];
+			
+			lights = new Boolean[devices.Count][];
+			for (int i = 0; i < lights.Length; i++)
+				lights[i] = new Boolean[] {false, false, false, false};
 			
 			foreach (IBuzzHandsetDevice d in devices) {
 				d.DeviceRemoved += unplugged;
@@ -21,6 +26,21 @@ namespace com.earlofmarch.reach {
 		
 		override void setCallback(Callback c) {
 			cb = c;
+		}
+		
+		override void lightUp (int handset, int buzzer) {
+			lights[handset][buzzer] = true;
+			updateLights(handset);
+		}
+		
+		override void putOut(int handset, int buzzer) {
+			lights[handset][buzzer] = false;
+			updateLights(handset);
+		}
+		
+		private void updateLights(int h) {
+			devices[h].SetLights(lights[h][0], lights[h][1],
+			                     lights[h][2], lights[h][3]);
 		}
 		
 		private void unplugged(Object sender, EventArgs e) {
