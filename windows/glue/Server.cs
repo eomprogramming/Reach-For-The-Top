@@ -23,8 +23,6 @@ namespace com.earlofmarch.reach {
 			w = new StreamWriter(s);
 			source = b;
 			source.setCallback(new Callback(buzzerInput));
-			
-			listen();
 		}
 		
 		public void listen() {
@@ -58,23 +56,25 @@ namespace com.earlofmarch.reach {
 					break;
 				default:
 					w.WriteLine("error internal \"Unknown CallbackType\"");
+					break;
 			}
 		}
 		
 		public static string ButtonToString(Button b) {
 			switch (b) {
-			case RED:
-				return "red";
-			case BLUE:
-				return "blue";
-			case ORANGE:
-				return "orange";
-			case GREEN:
-				return "green";
-			case YELLOW:
-				return "yellow";
-			default:
-				return "invalid-button";
+				case Button.RED:
+					return "red";
+				case Button.BLUE:
+					return "blue";
+				case Button.ORANGE:
+					return "orange";
+				case Button.GREEN:
+					return "green";
+				case Button.YELLOW:
+					return "yellow";
+				default:
+					return "invalid-button";
+			}
 		}
 	}
 }

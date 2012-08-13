@@ -10,7 +10,7 @@ namespace com.earlofmarch.reach {
 		private Callback cb;
 		
 		public BuzzerLayer() {
-			devices = BuzzHandsetDevice.FindBuzzHandset();
+			devices = BuzzHandsetDevice.FindBuzzHandsets();
 			
 			states = new ButtonStates[devices.Count * 4];
 			
@@ -24,16 +24,16 @@ namespace com.earlofmarch.reach {
 			}
 		}
 		
-		override void setCallback(Callback c) {
+		public void setCallback(Callback c) {
 			cb = c;
 		}
 		
-		override void lightUp (int handset, int buzzer) {
+		public void lightUp (int handset, int buzzer) {
 			lights[handset][buzzer] = true;
 			updateLights(handset);
 		}
 		
-		override void putOut(int handset, int buzzer) {
+		public void putOut(int handset, int buzzer) {
 			lights[handset][buzzer] = false;
 			updateLights(handset);
 		}
@@ -44,7 +44,7 @@ namespace com.earlofmarch.reach {
 		}
 		
 		private void unplugged(Object sender, EventArgs e) {
-			CallbackArgs result;
+			CallbackArgs result = new CallbackArgs();
 			
 			result.eventType = CallbackType.UNPLUGGED;
 			result.buzzerId = -1;

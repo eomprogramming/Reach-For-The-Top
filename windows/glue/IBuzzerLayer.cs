@@ -23,9 +23,9 @@ namespace com.earlofmarch.reach {
 	}
 	
 	internal interface IBuzzerLayer {
-		void setCallback(Callback c);
-		void lightUp(int handset, int buzzer);
-		void putOut(int handset, int buzzer);
+		public void setCallback(Callback c);
+		public void lightUp(int handset, int buzzer);
+		public void putOut(int handset, int buzzer);
 	}
 }
 
