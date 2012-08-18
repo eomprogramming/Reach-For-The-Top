@@ -1,5 +1,6 @@
 package com.earlofmarch.reach.input;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
@@ -13,20 +14,21 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 	private static final String PIPENAME = "eomreachpipe";
 	
 	private HashMap<String, Boolean> sensitivities = new HashMap<String, Boolean>();
-	private Pair<Integer, Integer> currBuzz = null;
-	private Process glue;
+	private volatile Pair<Integer, Integer> currBuzz = null;
 	private RandomAccessFile pipe;
+	private PipeReader pr;
 	
 	public WindowsBuzzerBinding() throws IOException {
-		glue = Runtime.getRuntime().exec("./glue.exe");
-		
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable () {
-			public void run() { glue.destroy(); }
-		}));
-		
 		pipe = new RandomAccessFile("\\\\.\\pipe\\" + PIPENAME, "rw");
+		try {
+			pipe.writeChars("reload");
+		} catch (IOException e) {
+			Logger.getAnonymousLogger().log(Level.WARNING, "Unable to reload buzzer",
+					e);
+		}
 		
-		new PipeReader().start();
+		pr = new PipeReader();
+		pr.start();
 	}
 	
 	@Override
@@ -41,6 +43,7 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 	
 	@Override
 	public void clear() {
+		pr.unlight(currBuzz.getFirst(), currBuzz.getSecond());
 		currBuzz = null;
 	}
 	
@@ -92,12 +95,30 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 		
 		private synchronized void buzz(int h, int b, String button) {
 			if (sensitivities.containsKey(button) &&
-					sensitivities.get(button).equals(true)) {
+					sensitivities.get(button).equals(true) &&
+					currBuzz == null) {
+				try {
+					pipe.writeChars("light " + h + ":" + b);
+				} catch (IOException e) {
+					Logger.getAnonymousLogger().log(Level.WARNING,
+							"Unable to light buzzer light", e);
+				}
 				currBuzz = new Pair<Integer, Integer>(h, b);
 				WindowsBuzzerBinding.this.buzz();
 			}
 		}
 		
+		public void unlight(Integer h, Integer b) {
+			try {
+				pipe.writeChars("unlight " + h + ":" + b);
+			} catch (IOException e) {
+				Logger.getAnonymousLogger().log(Level.WARNING,
+						"Unable to unlight buzzer light", e);
+			}
+		}
 	}
 	
+	public static boolean serverIsRunning() {
+		return new File("\\\\.\\pipe\\" + PIPENAME).exists();
+	}
 }

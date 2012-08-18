@@ -10,9 +10,13 @@ namespace com.earlofmarch.reach {
 			else
 				pname = args[0];
 			
-			Server serv = new Server(new NamedPipeServerStream(pname, PipeDirection.InOut), new BuzzerLayer());
+			Server serv = new Server(new NamedPipeServerStream(pname, PipeDirection.InOut), builder);
 
 			serv.listen();
+		}
+		
+		private static IBuzzerLayer builder() {
+			return new BuzzerLayer();
 		}
 	}
 }

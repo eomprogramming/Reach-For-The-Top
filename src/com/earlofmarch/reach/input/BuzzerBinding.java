@@ -20,7 +20,7 @@ public interface BuzzerBinding {
 			boolean orange, boolean yellow);
 	
 	/**
-	 * Clear the current buzzed status.
+	 * Clear the current buzzed status. Idempotent.
 	 */
 	public void clear();
 	
@@ -31,7 +31,9 @@ public interface BuzzerBinding {
 	public Pair<Integer, Integer> getCurrentBuzzed();
 	
 	/**
-	 * Register a handler to be called if a buzz occurs.
+	 * Register a handler to be called if a buzz occurs. The handler will only be called
+	 * if a buzz occurs <b>and</b> the current buzz status is clear (i.e.
+	 * {@link #getCurrentBuzzed()} will return <code>null</code>).
 	 * If the same handler is added twice the result is undefined.
 	 * Handlers may be run in separate threads: they should be thread safe.
 	 * @param r The runnable to be run.

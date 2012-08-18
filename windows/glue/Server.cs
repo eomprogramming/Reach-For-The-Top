@@ -10,6 +10,7 @@ namespace com.earlofmarch.reach {
 	internal class Server {
 		private StreamReader r;
 		private StreamWriter w;
+		private BuzzerLayerBuilder sourceSource;
 		private IBuzzerLayer source;
 		
 		/**
@@ -18,10 +19,11 @@ namespace com.earlofmarch.reach {
 		 * @param s the stream to work on
 		 * @param b the interface to the buzzers
 		 */
-		public Server(Stream s, IBuzzerLayer b) {
+		public Server(Stream s, BuzzerLayerBuilder b) {
 			r = new StreamReader(s);
 			w = new StreamWriter(s);
-			source = b;
+			sourceSource = b;
+			source = sourceSource();
 			source.setCallback(new Callback(buzzerInput));
 		}
 		
@@ -39,6 +41,9 @@ namespace com.earlofmarch.reach {
 				} else if (parts[0].Equals("unlight")) {
 					subparts = parts[1].Split(':');
 					source.putOut(Int32.Parse(subparts[0]), Int32.Parse(subparts[1]));
+				} else if (parts[0].Equals("reload")) {
+					source = sourceSource();
+					source.setCallback(new Callback(buzzerInput));
 				}
 			}
 		}
@@ -77,5 +82,7 @@ namespace com.earlofmarch.reach {
 			}
 		}
 	}
+	
+	internal delegate IBuzzerLayer BuzzerLayerBuilder();
 }
 
