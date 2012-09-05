@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 
+import com.earlofmarch.reach.model.Music;
 import com.earlofmarch.reach.model.Player;
 import com.earlofmarch.reach.model.PlayerIO;
 /**
@@ -126,16 +127,22 @@ public class Main extends JFrame{
 	 *  0 to 3 is the left side, 4-7 is the right side.
 	 */
 	public void trigger(int cell){
-		//Buzzer sound to come!
-		
+			
 		for(GroupedCell gc : cells)
 			if(gc.isTriggered())
 				return;
-		
+
+		Music.playMusic(getClass().getClassLoader().getResource("assets/buzz.wav"));
 		cells[cell].trigger();
 	}
 	
 	public void giveScore(int score,int side){
+		//Play music depending on score
+		if(score > 0)
+			Music.playMusic(getClass().getClassLoader().getResource("assets/good.wav"));
+		else if (score < 0)
+			Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
+		
 		if(side == RIGHT)
 			rightScore += score;
 		else
