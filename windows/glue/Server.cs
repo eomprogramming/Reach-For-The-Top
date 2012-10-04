@@ -1,5 +1,8 @@
 using System;
 using System.IO;
+using System.IO.Pipes;
+using System.Threading;
+using System.Diagnostics;
 
 namespace com.earlofmarch.reach {
 	/**
@@ -8,6 +11,7 @@ namespace com.earlofmarch.reach {
 	 * and a Buzz buzzer.
 	 */
 	internal class Server {
+		private NamedPipeServerStream pipe;
 		private StreamReader r;
 		private StreamWriter w;
 		private BuzzerLayerBuilder sourceSource;
@@ -19,7 +23,9 @@ namespace com.earlofmarch.reach {
 		 * @param s the stream to work on
 		 * @param b the interface to the buzzers
 		 */
-		public Server(Stream s, BuzzerLayerBuilder b) {
+		public Server(NamedPipeServerStream s, BuzzerLayerBuilder b) {
+			Debug.WriteLine("Server.Server()\t(constructor)\tCalled with" + s + " & " + b);
+			pipe = s;
 			r = new StreamReader(s);
 			w = new StreamWriter(s);
 			sourceSource = b;
@@ -27,13 +33,22 @@ namespace com.earlofmarch.reach {
 			source.setCallback(new Callback(buzzerInput));
 		}
 		
+		public void start() {
+			while (true) {
+				pipe.WaitForConnection();
+				listen();
+			}
+		}
+		
 		public void listen() {
+			Debug.WriteLine("Server.listen()\t"+this+"\tListening...");
 			String input;
 			String[] parts;
 			String[] subparts;
-			while (true) {
-				input = r.ReadLine();
+			while ((input = r.ReadLine()) != null) {
+				Debug.WriteLine("Server.listen()\t"+this+"\tGot line:" + input);
 				parts = input.Split(' ', '\t');
+				Debug.WriteLine("Server.listen()\t"+this+"\tSplit into" + parts);
 				
 				if (parts[0].Equals("light")) {
 					subparts = parts[1].Split(':');
@@ -46,26 +61,38 @@ namespace com.earlofmarch.reach {
 					source.setCallback(new Callback(buzzerInput));
 				}
 			}
+			Debug.WriteLine("Server.listen()\t"+this+"\tDone listening...");
 		}
 		
 		private void buzzerInput(CallbackArgs a) {
+			Debug.WriteLine("Server.buzzerInput(CallbackArgs)\t"+this+"\tCalled with" + a);
+			if (!pipe.IsConnected) {
+				Debug.WriteLine("Server.buzzerInput()\t"+this+"\tNo pipe connection.");
+				return;
+			}
+			
 			switch (a.eventType) {
 				case CallbackType.UNPLUGGED:
+					Debug.WriteLine("Server.buzzerInput(CallbackArgs)\t"+this+"\tWriting unplugged");
 					w.WriteLine("unplugged " + a.handsetId);
 					break;
 				case CallbackType.BUTTON_PRESS:
+					Debug.WriteLine("Server.buzzerInput(CallbackArgs)\t"+this+"\tWriting press");
 					w.WriteLine("press " + a.handsetId + ":" + a.buzzerId + ":" + ButtonToString(a.button));
 					break;
 				case CallbackType.BUTTON_RELEASE:
+					Debug.WriteLine("Server.buzzerInput(CallbackArgs)\t"+this+"\tWriting release");
 					w.WriteLine("release " + a.handsetId + ":" + a.buzzerId + ":" + ButtonToString(a.button));
 					break;
 				default:
+					Debug.WriteLine("Server.buzzerInput(CallbackArgs)\t"+this+"\tInvalid callback type:"+a.eventType);
 					w.WriteLine("error internal \"Unknown CallbackType\"");
 					break;
 			}
 		}
 		
 		public static string ButtonToString(Button b) {
+			Debug.WriteLine("Server.ButtonToString(Button)\t(static)\tCalled with" + b);
 			switch (b) {
 				case Button.RED:
 					return "red";

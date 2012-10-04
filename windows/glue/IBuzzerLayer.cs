@@ -7,6 +7,11 @@ namespace com.earlofmarch.reach {
 		public int handsetId;
 		public int buzzerId;
 		public Button button;
+		
+		public override String ToString() {
+			return "{type="+eventType+"; handset="+handsetId+
+				"; buzzer ="+buzzerId+"; button="+button+"}";
+		}
 	}
 	
 	internal struct Pair<T> {

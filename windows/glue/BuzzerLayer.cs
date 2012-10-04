@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BuzzIO;
+using System.Diagnostics;
 
 namespace com.earlofmarch.reach {
 	internal class BuzzerLayer : IBuzzerLayer {		
@@ -10,9 +11,13 @@ namespace com.earlofmarch.reach {
 		private Callback cb;
 		
 		public BuzzerLayer() {
+			Debug.WriteLine("BuzzerLayer.BuzzerLayer()\t(constructor)\tStarting...");
 			devices = BuzzHandsetDevice.FindBuzzHandsets();
+			Debug.WriteLine("BuzzerLayer.BuzzerLayer()\t(constructor)\tGot devices:" + devices);
 			
 			states = new ButtonStates[devices.Count * 4];
+			for (int i = 0; i < states.Length; i++)
+				states[i] = new ButtonStates();
 			
 			lights = new Boolean[devices.Count][];
 			for (int i = 0; i < lights.Length; i++)
@@ -25,25 +30,36 @@ namespace com.earlofmarch.reach {
 		}
 		
 		public void setCallback(Callback c) {
+			Debug.WriteLine("BuzzerLayer.setCallback()\t"+this+"\tSetting callback...");
 			cb = c;
 		}
 		
 		public void lightUp (int handset, int buzzer) {
+			Debug.WriteLine("BuzzerLayer.lightUp()\t"+this+
+			                "\tLighting buzzer ("+handset+", "+buzzer+")");
 			lights[handset][buzzer] = true;
 			updateLights(handset);
 		}
 		
 		public void putOut(int handset, int buzzer) {
+			Debug.WriteLine("BuzzerLayer.putOut()\t"+this+
+			                "\tUnlighting buzzer ("+handset+", "+buzzer+")");
 			lights[handset][buzzer] = false;
 			updateLights(handset);
 		}
 		
 		private void updateLights(int h) {
+			Debug.WriteLine("BuzzerLayer.updateLights()\t"+this+
+			                "\tUpdating buzzer lights on "+h);
 			devices[h].SetLights(lights[h][0], lights[h][1],
 			                     lights[h][2], lights[h][3]);
+			Debug.WriteLine("BuzzerLayer.updateLights()\t"+this+
+			                "\tNow set to "+lights[h]);
 		}
 		
 		private void unplugged(Object sender, EventArgs e) {
+			Debug.WriteLine("BuzzerLayer.unplugged()\t"+this+"\tBuzzer # "+
+			                devices.IndexOf((IBuzzHandsetDevice) sender)+" unplugged");
 			CallbackArgs result = new CallbackArgs();
 			
 			result.eventType = CallbackType.UNPLUGGED;
@@ -54,6 +70,8 @@ namespace com.earlofmarch.reach {
 		}
 		
 		private void somethingHappens(Object sender, BuzzButtonChangedEventArgs e) {
+			Debug.WriteLine("BuzzerLayer.somethingHappens()\t"+this+"\tEvent on buzzer # "+
+			                devices.IndexOf((IBuzzHandsetDevice) sender)+": "+e);
 			lock (states) {
 				CallbackArgs result;
 				result.handsetId = devices.IndexOf((IBuzzHandsetDevice) sender);
@@ -108,7 +126,8 @@ namespace com.earlofmarch.reach {
 			}
 		}
 		
-		private ButtonStates xor(ButtonStates a, ButtonStates b) {
+		private static ButtonStates xor(ButtonStates a, ButtonStates b) {
+			Debug.WriteLine("BuzzerLayer.xor()\t(static)\t{"+a+"} (+) {"+b+"}");
 			ButtonStates result = new ButtonStates();
 			if (xor(a.Red, b.Red))
 				result.Red = true;
@@ -121,10 +140,11 @@ namespace com.earlofmarch.reach {
 			if (xor(a.Yellow, b.Yellow))
 				result.Yellow = true;
 			
+			Debug.WriteLine("BuzzerLayer.xor()\t(static)\treturning {"+result+"}");
 			return result;
 		}
 		
-		private Boolean xor(Boolean a, Boolean b) {
+		private static Boolean xor(Boolean a, Boolean b) {
 			return !((a && b) || (!a && !b));
 		}
 	}

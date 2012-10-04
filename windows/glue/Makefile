@@ -1,5 +1,5 @@
 CSC=mcs
-CSFLAGS=
+CSFLAGS= -debug -d:DEBUG
 CSLIBS= -r:../BuzzIO.dll
 
 #%.exe: %.cs
