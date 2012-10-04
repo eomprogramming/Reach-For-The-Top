@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.logging.*;
 
 /**
+ * Windows access to buzzers through BuzzIO.
  * @author Ian Dewan
  *
  */
@@ -17,6 +18,8 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 	private volatile Pair<Integer, Integer> currBuzz = null;
 	private RandomAccessFile pipe;
 	private PipeReader pr;
+	
+	private Object stateLock = new Object();
 	
 	public WindowsBuzzerBinding() throws IOException {
 		pipe = new RandomAccessFile("\\\\.\\pipe\\" + PIPENAME, "rw");
@@ -34,22 +37,28 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 	@Override
 	public void setButtonSensitivity(boolean red, boolean blue, boolean green,
 			boolean orange, boolean yellow) {
-		sensitivities.put("red", red);
-		sensitivities.put("blue", blue);
-		sensitivities.put("green", green);
-		sensitivities.put("orange", orange);
-		sensitivities.put("yellow", yellow);
+		synchronized(sensitivities) {
+			sensitivities.put("red", red);
+			sensitivities.put("blue", blue);
+			sensitivities.put("green", green);
+			sensitivities.put("orange", orange);
+			sensitivities.put("yellow", yellow);
+		}
 	}
 	
 	@Override
 	public void clear() {
-		pr.unlight(currBuzz.getFirst(), currBuzz.getSecond());
-		currBuzz = null;
+		synchronized (stateLock) {
+			pr.unlight(currBuzz.getFirst(), currBuzz.getSecond());
+			currBuzz = null;
+		}
 	}
 	
 	@Override
 	public Pair<Integer, Integer> getCurrentBuzzed() {
-		return currBuzz;
+		synchronized (stateLock) {
+			return currBuzz;
+		}
 	}
 	
 	private class PipeReader extends Thread {
@@ -94,17 +103,21 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 		}
 		
 		private synchronized void buzz(int h, int b, String button) {
-			if (sensitivities.containsKey(button) &&
-					sensitivities.get(button).equals(true) &&
-					currBuzz == null) {
-				try {
-					pipe.writeChars("light " + h + ":" + b);
-				} catch (IOException e) {
-					Logger.getAnonymousLogger().log(Level.WARNING,
-							"Unable to light buzzer light", e);
+			synchronized (sensitivities) {
+			synchronized (stateLock) {
+				if (sensitivities.containsKey(button) &&
+						sensitivities.get(button).equals(true) &&
+						currBuzz == null) {
+					try {
+						pipe.writeChars("light " + h + ":" + b);
+					} catch (IOException e) {
+						Logger.getAnonymousLogger().log(Level.WARNING,
+								"Unable to light buzzer light", e);
+					}
+					currBuzz = new Pair<Integer, Integer>(h, b);
+					WindowsBuzzerBinding.this.buzz();
 				}
-				currBuzz = new Pair<Integer, Integer>(h, b);
-				WindowsBuzzerBinding.this.buzz();
+			}
 			}
 		}
 		

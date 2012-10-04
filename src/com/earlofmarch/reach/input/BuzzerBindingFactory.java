@@ -5,11 +5,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Return a {@link BuzzerBinding} appropriate to the system.
  * @author Ian Dewan
- *
  */
 public class BuzzerBindingFactory {
 	
+	/**
+ 	* Return a {@link BuzzerBinding} appropriate to the system.
+ 	* @return The BuzzerBinding
+ 	* @throws IOException Something goes horribly wrong.
+ 	*/
 	public static BuzzerBinding getBinding() throws IOException {
 		if (System.getProperty("os.name").contains("Windows")) {
 			return windows();

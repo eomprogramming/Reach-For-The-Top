@@ -15,28 +15,36 @@ abstract class AbstractBuzzerBinding implements BuzzerBinding {
 	
 	@Override
 	public void registerBuzzHandler(Runnable r) {
-		buzzHandlers.add(r);
+		synchronized (buzzHandlers) {
+			buzzHandlers.add(r);
+		}
 	}
 	
 	@Override
 	public void registerUnplugHandler(Runnable r) {
-		unplugHandlers.add(r);
+		synchronized (unplugHandlers) {
+			unplugHandlers.add(r);
+		}
 	}
 	
 	/**
 	 * Indicate a buzz.
 	 */
 	protected void buzz() {
-		for (Runnable r : buzzHandlers)
-			runStuff.execute(r);
+		synchronized (buzzHandlers) {
+			for (Runnable r : buzzHandlers)
+				runStuff.execute(r);
+		}
 	}
 	
 	/**
 	 * Indicate an unplugging.
 	 */
 	protected void unplug() {
-		for (Runnable r: unplugHandlers)
-			runStuff.execute(r);
+		synchronized (unplugHandlers) {
+			for (Runnable r: unplugHandlers)
+				runStuff.execute(r);
+		}
 	}
 	
 }
