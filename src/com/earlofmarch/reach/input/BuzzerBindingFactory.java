@@ -35,6 +35,11 @@ public class BuzzerBindingFactory {
 				throw e;
 			}
 		}
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// continue anyway
+		}
 		return new WindowsBuzzerBinding();
 	}
 	

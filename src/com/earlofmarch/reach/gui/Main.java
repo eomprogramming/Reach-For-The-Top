@@ -2,6 +2,7 @@ package com.earlofmarch.reach.gui;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Timer;
@@ -13,6 +14,9 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 
+import com.earlofmarch.reach.input.BuzzerBinding;
+import com.earlofmarch.reach.input.BuzzerBindingFactory;
+import com.earlofmarch.reach.input.Pair;
 import com.earlofmarch.reach.model.Player;
 import com.earlofmarch.reach.model.PlayerIO;
 /**
@@ -145,7 +149,8 @@ public class Main extends JFrame{
 	}	
 	
 	public static void main(String args[]){
-		Main m = new Main();		
+		Main m = new Main();
+		BuzzerBinding buzzers;
 		Scanner s = new Scanner(System.in);
 		System.out.println("||Animation Testing||\nTrigger from 1 to 8. Type 'exit' to quit.");
 		
@@ -155,6 +160,17 @@ public class Main extends JFrame{
 		UIManager.put("ComboBox.selectionBackground", UI.colour.ROLLOVER);  
 		UIManager.put("OptionPane.opaque",false);  
 		UIManager.put("ComboBox.font",UI.getFont(15)); 
+		
+		try {
+			buzzers = BuzzerBindingFactory.getBinding();
+			buzzers.setButtonSensitivity(true, false, false, false, false);
+			buzzers.registerBuzzHandler(new Handler(buzzers, m));
+		} catch (IOException e) {
+			System.err.println("An error occurred binding to the buzzers:" +
+					e.toString());
+			e.printStackTrace();
+			System.err.println("Buzzers will not function properly.");
+		}
 		
 		while(true){
 			String input = s.nextLine().trim();
@@ -166,5 +182,22 @@ public class Main extends JFrame{
 				System.out.println("Invalid, trigger from 1 to 8. Type 'exit' to quit.");
 			}
 		}		
+	}
+	
+	private static class Handler implements Runnable {
+		private BuzzerBinding buzzers;
+		private Main main;
+		
+		Handler(BuzzerBinding b, Main m) {
+			buzzers = b;
+			main = m;
+		}
+
+		@Override
+		public void run() {
+			Pair<Integer, Integer> result = buzzers.getCurrentBuzzed();
+			main.trigger((4 * result.getFirst()) + result.getSecond());
+		}
+		
 	}
 }
