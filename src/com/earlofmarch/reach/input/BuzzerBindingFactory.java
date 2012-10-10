@@ -1,8 +1,8 @@
 package com.earlofmarch.reach.input;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 
 /**
  * Return a {@link BuzzerBinding} appropriate to the system.
@@ -25,22 +25,24 @@ public class BuzzerBindingFactory {
 	}
 	
 	private static WindowsBuzzerBinding windows() throws IOException {
-		if (!WindowsBuzzerBinding.serverIsRunning()) {
-			try {
-				Runtime.getRuntime().exec("./glue.exe");
-			} catch (IOException e) {
-				//TODO: logging policy
-				Logger.getAnonymousLogger().log(Level.SEVERE,
-						"Unable to start glue.exe", e);
-				throw e;
-			}
-		}
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			// continue anyway
-		}
-		return new WindowsBuzzerBinding();
+		//if (!WindowsBuzzerBinding.serverIsRunning()) {
+			//try {
+				//Runtime.getRuntime().exec("./glue.exe");
+			//} catch (IOException e) {
+				////TODO: logging policy
+				//Logger.getAnonymousLogger().log(Level.SEVERE,
+						//"Unable to start glue.exe", e);
+				//throw e;
+			//}
+		//}
+		//try {
+			//Thread.sleep(500);
+		//} catch (InterruptedException e) {
+			//// continue anyway
+		//}
+		Process server = Runtime.getRuntime().exec("./glue.exe");
+		return new WindowsBuzzerBinding(server.getInputStream(),
+				server.getOutputStream());
 	}
 	
 }

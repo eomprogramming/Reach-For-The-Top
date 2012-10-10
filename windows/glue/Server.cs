@@ -11,9 +11,9 @@ namespace com.earlofmarch.reach {
 	 * and a Buzz buzzer.
 	 */
 	internal class Server {
-		private NamedPipeServerStream pipe;
-		private StreamReader r;
-		private StreamWriter w;
+		private Stream pipe;
+		private TextReader r;
+		private TextWriter w;
 		private BuzzerLayerBuilder sourceSource;
 		private IBuzzerLayer source;
 		
@@ -23,7 +23,7 @@ namespace com.earlofmarch.reach {
 		 * @param s the stream to work on
 		 * @param b the interface to the buzzers
 		 */
-		public Server(NamedPipeServerStream s, BuzzerLayerBuilder b) {
+		public Server(Stream s, BuzzerLayerBuilder b) {
 			Debug.WriteLine("Server.Server()\t(constructor)\tCalled with" + s + " & " + b);
 			pipe = s;
 			r = new StreamReader(s);
@@ -33,9 +33,21 @@ namespace com.earlofmarch.reach {
 			source.setCallback(new Callback(buzzerInput));
 		}
 		
+		public Server(TextReader tr, TextWriter tw, BuzzerLayerBuilder b) {
+			Debug.WriteLine("Server.Server()\t(constructor)\tCalled with" + tr + " & " + tw + " & " + b);
+			pipe = null;
+			r = tr;
+			w = tw;
+			sourceSource = b;
+			source = sourceSource();
+			source.setCallback(new Callback(buzzerInput));
+		}
+		
 		public void start() {
 			while (true) {
-				pipe.WaitForConnection();
+				if (pipe is NamedPipeServerStream) {
+					((NamedPipeServerStream) pipe).WaitForConnection();
+				}
 				listen();
 			}
 		}
@@ -66,7 +78,7 @@ namespace com.earlofmarch.reach {
 		
 		private void buzzerInput(CallbackArgs a) {
 			Debug.WriteLine("Server.buzzerInput(CallbackArgs)\t"+this+"\tCalled with" + a);
-			if (!pipe.IsConnected) {
+			if ((pipe is NamedPipeServerStream) && (!((NamedPipeServerStream)pipe).IsConnected)) {
 				Debug.WriteLine("Server.buzzerInput()\t"+this+"\tNo pipe connection.");
 				return;
 			}

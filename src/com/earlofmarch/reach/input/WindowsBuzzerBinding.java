@@ -1,8 +1,11 @@
 package com.earlofmarch.reach.input;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.logging.*;
 
@@ -12,23 +15,18 @@ import java.util.logging.*;
  *
  */
 class WindowsBuzzerBinding extends AbstractBuzzerBinding {
-	private static final String PIPENAME = "eomreachpipe";
-	
 	private HashMap<String, Boolean> sensitivities = new HashMap<String, Boolean>();
 	private volatile Pair<Integer, Integer> currBuzz = null;
-	private RandomAccessFile pipe;
+	private BufferedReader in;
+	private PrintWriter out;
 	private PipeReader pr;
 	
 	private Object stateLock = new Object();
 	
-	public WindowsBuzzerBinding() throws IOException {
-		pipe = new RandomAccessFile("\\\\.\\pipe\\" + PIPENAME, "rw");
-		try {
-			pipe.writeChars("reload");
-		} catch (IOException e) {
-			Logger.getAnonymousLogger().log(Level.WARNING, "Unable to reload buzzer",
-					e);
-		}
+	public WindowsBuzzerBinding(InputStream i, OutputStream o) throws IOException {
+		out = new PrintWriter(o, true);
+		in = new BufferedReader(new InputStreamReader(i));
+		out.println("reload");
 		
 		pr = new PipeReader();
 		pr.start();
@@ -68,7 +66,7 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 			String[] parts;
 			String[] subparts;
 			try {
-				input = pipe.readLine();
+				input = in.readLine();
 			} catch (IOException e) {
 				Logger.getAnonymousLogger().log(Level.SEVERE,
 						"IO error getting data from glue.exe.", e);
@@ -93,7 +91,7 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 							"Error occurred parsing glue.exe input.", e);
 				}
 				try {
-					input = pipe.readLine();
+					input = in.readLine();
 				} catch (IOException e) {
 					Logger.getAnonymousLogger().log(Level.SEVERE,
 						"IO error getting data from glue.exe.", e);
@@ -108,12 +106,7 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 				if (sensitivities.containsKey(button) &&
 						sensitivities.get(button).equals(true) &&
 						currBuzz == null) {
-					try {
-						pipe.writeChars("light " + h + ":" + b);
-					} catch (IOException e) {
-						Logger.getAnonymousLogger().log(Level.WARNING,
-								"Unable to light buzzer light", e);
-					}
+					out.println("light " + h + ":" + b);
 					currBuzz = new Pair<Integer, Integer>(h, b);
 					WindowsBuzzerBinding.this.buzz();
 				}
@@ -122,16 +115,7 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 		}
 		
 		public void unlight(Integer h, Integer b) {
-			try {
-				pipe.writeChars("unlight " + h + ":" + b);
-			} catch (IOException e) {
-				Logger.getAnonymousLogger().log(Level.WARNING,
-						"Unable to unlight buzzer light", e);
-			}
+			out.println("unlight " + h + ":" + b);
 		}
-	}
-	
-	public static boolean serverIsRunning() {
-		return new File("\\\\.\\pipe\\" + PIPENAME).exists();
 	}
 }

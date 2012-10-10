@@ -9,14 +9,14 @@ namespace com.earlofmarch.reach {
 			Debug.AutoFlush = true;
 			
 			Debug.WriteLine("MainClass.main()\t(static)\tStarting...");
-			String pname;
-			if (args.Length < 1)
-				pname = "eomreachpipe";
-			else
-				pname = args[0];
-			Debug.WriteLine("MainClass.main()\t(static)\tListening on pipe " + pname);
+			//String pname;
+			//if (args.Length < 1)
+				//pname = "eomreachpipe";
+			//else
+				//pname = args[0];
+			//Debug.WriteLine("MainClass.main()\t(static)\tListening on pipe " + pname);
 			
-			Server serv = new Server(new NamedPipeServerStream(pname, PipeDirection.InOut), builder);
+			Server serv = new Server(Console.In, Console.Out, builder);
 			serv.start();
 		}
 		
