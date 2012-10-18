@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.*;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,6 +34,13 @@ public class Main extends JFrame{
 	private int rightScore = 0, leftScore = 0;
 	private static final int RIGHT = 1, LEFT = 2;
 	public static LinkedList<Player> players;
+	private static Logger log;
+	
+	static {
+		log = Logger.getLogger("reach.gui");
+		log.setLevel(Level.ALL);
+		log.addHandler(new ConsoleHandler());
+	}
 	
 	public Main(){
 		super("Reach for the Top");		
@@ -172,10 +180,9 @@ public class Main extends JFrame{
 			buzzers.setButtonSensitivity(true, false, false, false, false);
 			buzzers.registerBuzzHandler(new Handler(buzzers, m));
 		} catch (IOException e) {
-			System.err.println("An error occurred binding to the buzzers:" +
-					e.toString());
+			log.log(Level.WARNING, "An error occurred binding to the buzzers.", e);
 			e.printStackTrace();
-			System.err.println("Buzzers will not function properly.");
+			log.log(Level.WARNING, "Buzzers will not function properly.");
 		}
 		
 		while(true){
@@ -195,12 +202,14 @@ public class Main extends JFrame{
 		private Main main;
 		
 		Handler(BuzzerBinding b, Main m) {
+			Main.log.log(Level.INFO, "Creating handler");
 			buzzers = b;
 			main = m;
 		}
 
 		@Override
 		public void run() {
+			Main.log.log(Level.INFO, "Triggering buzz.");
 			Pair<Integer, Integer> result = buzzers.getCurrentBuzzed();
 			main.trigger((4 * result.getFirst()) + result.getSecond());
 		}

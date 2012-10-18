@@ -7,21 +7,26 @@ namespace com.earlofmarch.reach {
 	internal class BuzzerLayer : IBuzzerLayer {		
 		private List<IBuzzHandsetDevice> devices;
 		private ButtonStates[] states;
-		private Boolean[][] lights;
+		private Boolean[,] lights;
 		private Callback cb;
 		
 		public BuzzerLayer() {
 			Debug.WriteLine("BuzzerLayer.BuzzerLayer()\t(constructor)\tStarting...");
 			devices = BuzzHandsetDevice.FindBuzzHandsets();
 			Debug.WriteLine("BuzzerLayer.BuzzerLayer()\t(constructor)\tGot devices:" + devices);
+			Debug.WriteLine("BuzzerLayer.BuzzerLayer()\t(constructor)\t# devices:" + devices.Count);
 			
 			states = new ButtonStates[devices.Count * 4];
 			for (int i = 0; i < states.Length; i++)
 				states[i] = new ButtonStates();
 			
-			lights = new Boolean[devices.Count][];
-			for (int i = 0; i < lights.Length; i++)
-				lights[i] = new Boolean[] {false, false, false, false};
+			lights = new Boolean[devices.Count,4];
+			for (int i = 0; i < devices.Count; i++) {
+				lights[i,0] = false;
+				lights[i,1] = false;
+				lights[i,2] = false;
+				lights[i,3] = false;
+			}
 			
 			foreach (IBuzzHandsetDevice d in devices) {
 				d.DeviceRemoved += unplugged;
@@ -37,24 +42,24 @@ namespace com.earlofmarch.reach {
 		public void lightUp (int handset, int buzzer) {
 			Debug.WriteLine("BuzzerLayer.lightUp()\t"+this+
 			                "\tLighting buzzer ("+handset+", "+buzzer+")");
-			lights[handset][buzzer] = true;
+			Debug.WriteLine("BuzzerLayer.lightUp()\t"+this+
+			                "\tCurrent light state: "+lights);
+			lights[handset,buzzer] = true;
 			updateLights(handset);
 		}
 		
 		public void putOut(int handset, int buzzer) {
 			Debug.WriteLine("BuzzerLayer.putOut()\t"+this+
 			                "\tUnlighting buzzer ("+handset+", "+buzzer+")");
-			lights[handset][buzzer] = false;
+			lights[handset,buzzer] = false;
 			updateLights(handset);
 		}
 		
 		private void updateLights(int h) {
 			Debug.WriteLine("BuzzerLayer.updateLights()\t"+this+
 			                "\tUpdating buzzer lights on "+h);
-			devices[h].SetLights(lights[h][0], lights[h][1],
-			                     lights[h][2], lights[h][3]);
-			Debug.WriteLine("BuzzerLayer.updateLights()\t"+this+
-			                "\tNow set to "+lights[h]);
+			devices[h].SetLights(lights[h,0], lights[h,1],
+			                     lights[h,2], lights[h,3]);
 		}
 		
 		private void unplugged(Object sender, EventArgs e) {

@@ -68,9 +68,6 @@ namespace com.earlofmarch.reach {
 				} else if (parts[0].Equals("unlight")) {
 					subparts = parts[1].Split(':');
 					source.putOut(Int32.Parse(subparts[0]), Int32.Parse(subparts[1]));
-				} else if (parts[0].Equals("reload")) {
-					source = sourceSource();
-					source.setCallback(new Callback(buzzerInput));
 				}
 			}
 			Debug.WriteLine("Server.listen()\t"+this+"\tDone listening...");
