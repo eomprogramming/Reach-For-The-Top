@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 public class PlayerIO {
 	
-	private static final String ROOT = "Reach Scores";
+	private static final String ROOT = System.getProperty("user.home") + "/.reach";
 	private static final String SUFFIX = ".txt";
 	
 	/*
@@ -65,7 +65,7 @@ public class PlayerIO {
 	 */
 	public static Player getPlayerFull(String name){
 		Player player = new Player(name);
-		IO.openInputFile(ROOT+"\\"+name+SUFFIX);
+		IO.openInputFile(ROOT+"/"+name+SUFFIX);
 		try {
 			String score = IO.readLine();
 			while(score!=null){
@@ -87,7 +87,7 @@ public class PlayerIO {
 		if(!new File(ROOT).isDirectory())
 			return;
 		
-		File f = new File(ROOT+"\\"+p.getName()+SUFFIX);
+		File f = new File(ROOT+"/"+p.getName()+SUFFIX);
 		
 		IO.createOutputFile(f.getPath(), f.isFile());
 		if(p.getScore() != 0)
