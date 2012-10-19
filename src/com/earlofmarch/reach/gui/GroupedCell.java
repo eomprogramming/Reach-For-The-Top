@@ -85,6 +85,7 @@ public class GroupedCell extends JPanel{
 				}				
 			}
 		}, 100, 100);
+		clear();
 	}
 	
 	public void trigger(){
@@ -102,6 +103,7 @@ public class GroupedCell extends JPanel{
 					time = TIMER_LENGTH*10;
 					score.setShowing(false,true);
 					triggered = false;
+					clear();
 				}
 				
 				if(time == (TIMER_LENGTH*10))
@@ -116,5 +118,13 @@ public class GroupedCell extends JPanel{
 	
 	public boolean isTriggered(){
 		return triggered;
+	}
+	
+
+	private void clear() {
+		/*
+		 *  Clear the button lights here, it will always be called
+		 */
+		System.out.println("Cleared");
 	}
 }
