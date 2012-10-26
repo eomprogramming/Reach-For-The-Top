@@ -67,24 +67,29 @@ public class GroupedCell extends JPanel{
 		parent.giveScore(score,playerTeam);
 		if(playerCell.getPlayer() != null)
 			Main.players.get(Main.players.indexOf(playerCell.getPlayer())).addScore(score);
-		this.score.setShowing(false,true);		
-		timeLabel.setText((score>0?"+":"")+score);
+		this.score.setShowing(false,true);
 		
 		time = TIMER_LENGTH*10;
 		timer.cancel();
-		timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
-			int labeltime = 12;
-			public void run()
-			{
-				if(labeltime > 0)
-					labeltime--;
-				else{
-					this.cancel();
-					timeLabel.setText("");
-				}				
-			}
-		}, 100, 100);
+		timeLabel.setText("");
+		
+		if(score != 0){
+			timeLabel.setText((score>0?"+":"")+score);
+						
+			timer = new Timer();
+			timer.scheduleAtFixedRate(new TimerTask() {
+				int labeltime = 12;
+				public void run()
+				{
+					if(labeltime > 0)
+						labeltime--;
+					else{
+						this.cancel();
+						timeLabel.setText("");
+					}				
+				}
+			}, 100, 100);
+		}
 		clear();
 	}
 	
