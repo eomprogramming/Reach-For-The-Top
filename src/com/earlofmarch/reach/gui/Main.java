@@ -1,5 +1,4 @@
 package com.earlofmarch.reach.gui;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -15,7 +14,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.*;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,7 +47,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		log.addHandler(new ConsoleHandler());
 	}
 	
-	public Main(){
+	public Main(BuzzerBinding b){
 		super("Reach for the Top");		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation((int)(dim.getWidth()/2)-525,(int)(dim.getHeight()/2)-250);
@@ -58,7 +56,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 		
 		getContentPane().setBackground(UI.colour.BACKGROUND);
-		createComponents();
+		createComponents(b);
 		
 		pack();
 		setSize(1050,500);	
@@ -74,7 +72,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		    }, "Shutdown-thread"));
 	}
 	
-	private void createComponents(){
+	private void createComponents(BuzzerBinding b){
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);		
 		
@@ -101,9 +99,9 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		cells = new GroupedCell[8];
 		
 		for(int i=0;i<4;i++){
-			cells[i] = new GroupedCell(this,LEFT);
+			cells[i] = new GroupedCell(this,LEFT, b);
 			cells[i].setVisible(false);
-			cells[i+4] = new GroupedCell(this,RIGHT);
+			cells[i+4] = new GroupedCell(this,RIGHT, b);
 			cells[i+4].setVisible(false);
 			leftPanel.add(cells[i]);
 			rightPanel.add(cells[i+4]);
@@ -200,7 +198,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	}	
 	
 	public static void main(String args[]){
-		Main m = new Main();
+		Main m;
 		BuzzerBinding buzzers;
 		Scanner s = new Scanner(System.in);
 		
@@ -214,11 +212,13 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		try {
 			buzzers = BuzzerBindingFactory.getBinding();
 			buzzers.setButtonSensitivity(true, false, false, false, false);
+			m = new Main(buzzers);
 			buzzers.registerBuzzHandler(new Handler(buzzers, m));
 		} catch (IOException e) {
 			log.log(Level.WARNING, "An error occurred binding to the buzzers.", e);
 			e.printStackTrace();
 			log.log(Level.WARNING, "Buzzers will not function properly.");
+			m = new Main(null);
 		}
 		
 		System.out.println("||Animation Testing||\nTrigger from 1 to 8. Type 'exit' to quit.");		

@@ -5,6 +5,8 @@ import java.util.TimerTask;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
+
+import com.earlofmarch.reach.input.BuzzerBinding;
 /**
  * Groups the {@link ScoreCell} and the {@link PlayerCell} into a single panel and adds the timer.
  * @author Aly
@@ -22,11 +24,13 @@ public class GroupedCell extends JPanel{
 	private int playerTeam;
 	private boolean triggered = false;
 	private PlayerCell playerCell;
+	private BuzzerBinding buzzers;
 	
-	public GroupedCell(Main f, int side){
+	public GroupedCell(Main f, int side, BuzzerBinding b){
 		parent = f;
 		playerTeam = side;
 		time = TIMER_LENGTH*10;
+		buzzers = b;
 		
 		SpringLayout layout = new SpringLayout();
 		
@@ -127,9 +131,8 @@ public class GroupedCell extends JPanel{
 	
 
 	private void clear() {
-		/*
-		 *  Clear the button lights here, it will always be called
-		 */
+		if(buzzers != null)
+			buzzers.clear();
 		System.out.println("Cleared");
 	}
 }
