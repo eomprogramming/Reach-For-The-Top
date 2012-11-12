@@ -7,22 +7,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.*;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
-import javax.swing.UIManager;
 
 import com.earlofmarch.reach.input.BuzzerBinding;
-import com.earlofmarch.reach.input.BuzzerBindingFactory;
-import com.earlofmarch.reach.input.Pair;
 import com.earlofmarch.reach.model.Music;
 import com.earlofmarch.reach.model.Player;
 import com.earlofmarch.reach.model.PlayerIO;
@@ -39,13 +34,6 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	private int rightScore = 0, leftScore = 0;
 	private static final int RIGHT = 1, LEFT = 2;
 	public static LinkedList<Player> players;
-	private static Logger log;
-	
-	static {
-		log = Logger.getLogger("reach.gui");
-		log.setLevel(Level.ALL);
-		log.addHandler(new ConsoleHandler());
-	}
 	
 	public Main(BuzzerBinding b){
 		super("Reach for the Top");		
@@ -69,7 +57,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		        	if(players!=null && players.size()!=0)
 		        		PlayerIO.updateAll(players);
 		        }
-		    }, "Shutdown-thread"));
+		    }, "Shutdown-thread"));		
 	}
 	
 	private void createComponents(BuzzerBinding b){
@@ -196,63 +184,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		
 		scoreLabel.setText(leftScore+"          "+rightScore);
 	}	
-	
-	public static void main(String args[]){
-		Main m;
-		BuzzerBinding buzzers;
-		Scanner s = new Scanner(System.in);
 		
-		UIManager.put("OptionPane.background",UI.colour.MAIN);
-		UIManager.put("Panel.background", UI.colour.MAIN);
-		UIManager.put("ComboBox.background", UI.colour.MAIN);
-		UIManager.put("ComboBox.selectionBackground", UI.colour.ROLLOVER);  
-		UIManager.put("OptionPane.opaque",false);  
-		UIManager.put("ComboBox.font",UI.getFont(15)); 
-		
-		try {
-			buzzers = BuzzerBindingFactory.getBinding();
-			buzzers.setButtonSensitivity(true, false, false, false, false);
-			m = new Main(buzzers);
-			buzzers.registerBuzzHandler(new Handler(buzzers, m));
-		} catch (IOException e) {
-			log.log(Level.WARNING, "An error occurred binding to the buzzers.", e);
-			e.printStackTrace();
-			log.log(Level.WARNING, "Buzzers will not function properly.");
-			m = new Main(null);
-		}
-		
-		System.out.println("||Animation Testing||\nTrigger from 1 to 8. Type 'exit' to quit.");		
-		while(true){
-			String input = s.nextLine().trim();
-			if(!input.isEmpty() && input.charAt(0) >= '1' && input.charAt(0) <= '8'){
-				m.trigger(Integer.parseInt(input.substring(0,1))-1);
-			}else if(input.equalsIgnoreCase("exit")){
-				System.exit(0);
-			}else{
-				System.out.println("Invalid, trigger from 1 to 8. Type 'exit' to quit.");
-			}
-		}		
-	}
-	
-	private static class Handler implements Runnable {
-		private BuzzerBinding buzzers;
-		private Main main;
-		
-		Handler(BuzzerBinding b, Main m) {
-			Main.log.log(Level.INFO, "Creating handler");
-			buzzers = b;
-			main = m;
-		}
-
-		@Override
-		public void run() {
-			Main.log.log(Level.INFO, "Triggering buzz.");
-			Pair<Integer, Integer> result = buzzers.getCurrentBuzzed();
-			main.trigger((4 * result.getFirst()) + result.getSecond());
-		}
-		
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		UIButton in = (UIButton)e.getSource();
@@ -272,5 +204,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 					gc.giveScore(0);
 				}
 		}
+		if(e.getKeyChar()<'9' &&e.getKeyChar()>'0')
+			trigger(e.getKeyChar()-'1');
 	}	
 }
