@@ -158,13 +158,13 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 			}
 		}, 100, 100);
 	}
-
+	
 	/*
 	 *  0 to 3 is the left side, 4-7 is the right side.
 	 */
 	public void trigger(int cell){
 		for(GroupedCell gc : cells)
-			if(gc.isTriggered())
+			if(gc.isTriggered()||gc.isCollapsing())
 				return;
 
 		Music.playMusic(getClass().getClassLoader().getResource("assets/buzz.wav"));
@@ -201,7 +201,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyChar()==' '){
 			for(GroupedCell gc : cells)
-				if(gc.isTriggered()){
+				if(gc.isTriggered()&&!gc.isCollapsing()){
 					gc.giveScore(0);
 				}
 		}
