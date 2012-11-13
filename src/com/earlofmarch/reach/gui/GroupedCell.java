@@ -135,4 +135,8 @@ public class GroupedCell extends JPanel{
 			buzzers.clear();
 		System.out.println("Cleared");
 	}
+	
+	public boolean isCollapsing(){
+		return score.isCollapsing();
+	}
 }

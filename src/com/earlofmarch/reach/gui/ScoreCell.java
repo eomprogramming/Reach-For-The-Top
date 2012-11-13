@@ -19,6 +19,7 @@ public class ScoreCell extends JPanel implements ActionListener{
 	private UIButton[] button;
 	private GroupedCell parent;
 	private JPanel mainPanel;
+	private boolean collapsing;
 	
 	public ScoreCell(GroupedCell g){
 		super();
@@ -61,6 +62,7 @@ public class ScoreCell extends JPanel implements ActionListener{
 	}
 	
 	public void setShowing(final boolean visible, boolean animate){	
+		collapsing = true;
 		if(animate){
 			//System.out.println("Animate");
 			Timer timer = new Timer();			
@@ -80,13 +82,19 @@ public class ScoreCell extends JPanel implements ActionListener{
 						time--;					
 					}else{
 						this.cancel();
+						collapsing = false;
 					}				
 				}
 			}, 100, 100);				
 		}else{
 			for(int i=0;i<button.length;i++)
 				button[i].setVisible(visible);
+			collapsing = false;
 		}
+	}
+	
+	public boolean isCollapsing(){
+		return collapsing;
 	}
 
 }
