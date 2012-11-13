@@ -8,7 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +31,7 @@ public class StartScreen extends JFrame implements ActionListener{
 	private static Logger log;
 	private JPanel panel;
 	public JTextField input;
+	private JLabel label;
 	private JComboBox combo;
 	private UIButton go;
 	
@@ -47,10 +49,48 @@ public class StartScreen extends JFrame implements ActionListener{
 		
 		pack();
 		setSize(480,360);	
+				
+		animateTitle();
 	}
 	
+	private void animateTitle() {
+		Timer timer = new Timer();	
+		timer.scheduleAtFixedRate(new TimerTask() {
+			int time = -2;
+			public void run()
+			{					
+				if(time < 17){
+					if(time < 15 && time > 0)
+						label.setText(getColoredText(time,time+3));
+					else if(time < 17 && time > 0)
+						label.setText(getColoredText(time,time+(time-15)));
+					else
+						label.setText(getColoredText(0,time+3));
+					time++;					
+				}else{
+					time = -2;
+				}				
+			}
+		}, 100, 100);
+	}
+		
+	private String getColoredText(int start, int end){
+		String text = "REACH FOR THE TOP";
+		if(end>text.length())
+			end = text.length();
+		String coloredRegion = text.substring(start,end);
+		System.out.println(coloredRegion+"  "+start+", "+end);
+		if(end == text.length())
+			return "<html><font color=#20B2AA>"+text.subSequence(0, start)+"</font>" +
+					"<font color=#4682B4>"+coloredRegion+"</font></html>";
+		
+		return "<html><font color=#20B2AA>"+text.subSequence(0, start)+"</font>" +
+				"<font color=#4682B4>"+coloredRegion+"</font>" +
+				"<font color=#20B2AA>"+text.subSequence(end, text.length())+"</font></html>";
+	}
+
 	private void createComponents() {
-		JLabel label = new JLabel("REACH FOR THE TOP");
+		label = new JLabel(getColoredText(0,0));
 		label.setFont(UI.getFont(30));
 		label.setForeground(UI.colour.SECONDARY);
 		label.setBounds(20, 40, 440, 30);

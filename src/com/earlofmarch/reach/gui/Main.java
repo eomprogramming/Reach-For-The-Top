@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.LinkedList;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -143,14 +142,16 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	private void animateCells() {
 		Timer timer = new Timer();	
 		timer.scheduleAtFixedRate(new TimerTask() {
-			int time = 4;
+			int time = 6;
 			public void run()
 			{					
-				if(time > 0){
+				if(time < 5){
 					//System.out.println((4-time)+" and "+(time+3));
 					cells[4-time].setVisible(true);
 					cells[time+3].setVisible(true);
 					time--;					
+				}else if(time >- 5){
+					time--;
 				}else{
 					this.cancel();
 				}				
