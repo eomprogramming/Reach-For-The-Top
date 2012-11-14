@@ -79,7 +79,6 @@ public class StartScreen extends JFrame implements ActionListener{
 		if(end>text.length())
 			end = text.length();
 		String coloredRegion = text.substring(start,end);
-		System.out.println(coloredRegion+"  "+start+", "+end);
 		if(end == text.length())
 			return "<html><font color=#20B2AA>"+text.subSequence(0, start)+"</font>" +
 					"<font color=#4682B4>"+coloredRegion+"</font></html>";
@@ -191,7 +190,7 @@ public class StartScreen extends JFrame implements ActionListener{
 		
 	}
 	
-	public void startMain(boolean attemptBuzzers){	
+	public void startMain(boolean attemptBuzzers, String name){	
 		Main m;
 		BuzzerBinding buzzers;
 		
@@ -199,16 +198,16 @@ public class StartScreen extends JFrame implements ActionListener{
 			try {
 				buzzers = BuzzerBindingFactory.getBinding();
 				buzzers.setButtonSensitivity(true, false, false, false, false);
-				m = new Main(buzzers);
+				m = new Main(buzzers, name);
 				buzzers.registerBuzzHandler(new Handler(buzzers, m));
 			} catch (IOException e) {
 				log.log(Level.WARNING, "An error occurred binding to the buzzers.", e);
 				e.printStackTrace();
 				log.log(Level.WARNING, "Buzzers will not function properly.");
-				m = new Main(null);
+				m = new Main(null, name);
 			}
 		}else
-			m = new Main(null);
+			m = new Main(null, name);
 	}
 
 	@Override
@@ -222,7 +221,14 @@ public class StartScreen extends JFrame implements ActionListener{
 			combo.setVisible(true);
 			go.setVisible(true);
 		}else if(e.getActionCommand().equals("go")){
-			startMain(false);
+			if(input.isVisible()&&input.getText().isEmpty()){
+				input.setText("Enter pack name...");
+				label.requestFocus();
+				return;
+			}else if(input.isVisible())
+				startMain(true,input.getText());
+			else if(combo.isVisible())
+				startMain(true,combo.getSelectedItem().toString());
 			dispose();
 		}
 	}

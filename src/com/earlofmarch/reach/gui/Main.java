@@ -34,8 +34,8 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	private static final int RIGHT = 1, LEFT = 2;
 	public static LinkedList<Player> players;
 	
-	public Main(BuzzerBinding b){
-		super("Reach for the Top");		
+	public Main(BuzzerBinding b,String packName){
+		super("Reach for the Top - "+packName);		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation((int)(dim.getWidth()/2)-525,(int)(dim.getHeight()/2)-250);
 		setMinimumSize(new Dimension(800,480));
@@ -145,12 +145,12 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 			int time = 6;
 			public void run()
 			{					
-				if(time < 5){
+				if(time < 5 && time > 0){
 					//System.out.println((4-time)+" and "+(time+3));
 					cells[4-time].setVisible(true);
 					cells[time+3].setVisible(true);
 					time--;					
-				}else if(time >- 5){
+				}else if(time >=5){
 					time--;
 				}else{
 					this.cancel();
