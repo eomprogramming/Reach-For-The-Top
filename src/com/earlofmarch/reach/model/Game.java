@@ -124,4 +124,86 @@ public class Game {
 		return new GregorianCalendar(Integer.parseInt(parts[0]),
 				Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
 	}
+	
+	/**
+	 * Add a score to the team for a question answered by the given player.
+	 * @param team either {@link #TEAMA} or {@link #TEAMB}
+	 * @param player the index of the player who answered (player ∈ [0,3] ∩ ℕ)
+	 * @param score the score recieved
+	 * @throws IndexOutOfBoundsException team or player is an invalid number.
+	 */
+	public void addScore(int team, int player, int score) {
+		if ((team > TEAMB) || (team < TEAMA))
+			throw new IndexOutOfBoundsException("Bad team number");
+		if (team == TEAMA) {
+			scorea += score;
+			teama.get(player).addScore(score);
+		} else {
+			scoreb += score;
+			teamb.get(player).addScore(score);
+		}
+	}
+	
+	/**
+	 * Add a score for a question not answered by a particular player.
+	 * @param team either {@link #TEAMA} or {@link #TEAMB}
+	 * @param score the score recieved
+	 * @throws IndexOutOfBoundsException team is an invalid number.
+	 */
+	public void addScore(int team, int score) {
+		if ((team > TEAMB) || (team < TEAMA))
+			throw new IndexOutOfBoundsException("Bad team number");
+		if (team == TEAMA)
+			scorea += score;
+		else
+			scoreb += score;
+		
+	}
+	
+	/**
+	 * Get the score of team A.
+	 * @return team A's score
+	 */
+	public int getScoreA() {
+		return scorea;
+	}
+	
+	/**
+	 * Get the score of team B.
+	 * @return team B's score
+	 */
+	public int getScoreB() {
+		return scoreb;
+	}
+	
+	/**
+	 * Get the players on team A.
+	 * @return a List of the players on team A.
+	 */
+	public List<Player> getTeamA() {
+		return teama;
+	}
+	
+	/**
+	 * Get the players on team B.
+	 * @return a List of the players on team B.
+	 */
+	public List<Player> getTeamB() {
+		return teamb;
+	}
+	
+	/**
+	 * Set the player at a given position.
+	 * @param team either {@link #TEAMA} or {@link #TEAMB}
+	 * @param player the index of the player who answered (player ∈ [0,3] ∩ ℕ)
+	 * @param p The new player at that position.
+	 */
+	public void setPlayer(int team, int player, Player p) {
+		if ((team > TEAMB) || (team < TEAMA))
+			throw new IndexOutOfBoundsException("Bad team number");
+		if (team == TEAMA)
+			teama.set(player, p);
+		else
+			teamb.set(player, p);
+	}
 }
