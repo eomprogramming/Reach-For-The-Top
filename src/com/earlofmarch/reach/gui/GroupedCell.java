@@ -112,6 +112,7 @@ public class GroupedCell extends JPanel{
 					time = TIMER_LENGTH*10;
 					score.setShowing(false,true);
 					triggered = false;
+					timeLabel.setText("");
 					clear();
 				}
 				
@@ -130,7 +131,7 @@ public class GroupedCell extends JPanel{
 	}
 	
 
-	private void clear() {
+	public void clear() {
 		if(buzzers != null)
 			buzzers.clear();
 		System.out.println("Cleared");
@@ -138,5 +139,9 @@ public class GroupedCell extends JPanel{
 	
 	public boolean isCollapsing(){
 		return score.isCollapsing();
+	}
+	
+	public ScoreCell getScoreCell(){
+		return score;
 	}
 }

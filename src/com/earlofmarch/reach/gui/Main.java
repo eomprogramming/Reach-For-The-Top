@@ -203,6 +203,8 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 			for(GroupedCell gc : cells)
 				if(gc.isTriggered()&&!gc.isCollapsing()){
 					gc.giveScore(0);
+				}else if(gc.isTriggered()){
+					gc.clear();
 				}
 		}
 		if(e.getKeyChar()<'9' &&e.getKeyChar()>'0')
