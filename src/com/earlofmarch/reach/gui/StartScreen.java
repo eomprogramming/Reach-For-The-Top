@@ -14,6 +14,7 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +35,7 @@ public class StartScreen extends JFrame implements ActionListener{
 	private JLabel label;
 	private JComboBox combo;
 	private UIButton go;
+	private JCheckBox debug;
 	
 	public StartScreen(){
 		super("Reach for the Top");		
@@ -115,6 +117,7 @@ public class StartScreen extends JFrame implements ActionListener{
 		panel = new JPanel();
 		panel.setBackground(null);
 		panel.setLayout(null);
+		panel.setVisible(false);
 		panel.setBounds(40, 190, 400, 130);
 		add(panel);
 		
@@ -150,8 +153,15 @@ public class StartScreen extends JFrame implements ActionListener{
 		go.setBounds(330, 80, 60, 40);
 		go.addActionListener(this);
 		go.setActionCommand("go");
-		go.setVisible(false);
 		panel.add(go);
+		
+		debug = new JCheckBox("Debug Mode (No Buzzers)");
+		debug.setBackground(UI.colour.BACKGROUND);
+		debug.setForeground(UI.colour.SECONDARY);
+		debug.setBounds(0, 80, 280, 40);
+		debug.setFont(UI.getFont(14));
+		debug.setFocusable(false);
+		panel.add(debug);
 	}
 
 	static {
@@ -215,20 +225,20 @@ public class StartScreen extends JFrame implements ActionListener{
 		if(e.getActionCommand().equals("new")){
 			input.setVisible(true);
 			combo.setVisible(false);
-			go.setVisible(true);
+			panel.setVisible(true);
 		}else if(e.getActionCommand().equals("cont")){
 			input.setVisible(false);
 			combo.setVisible(true);
-			go.setVisible(true);
+			panel.setVisible(true);
 		}else if(e.getActionCommand().equals("go")){
 			if(input.isVisible()&&input.getText().isEmpty()){
 				input.setText("Enter pack name...");
 				label.requestFocus();
 				return;
 			}else if(input.isVisible())
-				startMain(true,input.getText());
+				startMain(!debug.isSelected(),input.getText());
 			else if(combo.isVisible())
-				startMain(true,combo.getSelectedItem().toString());
+				startMain(!debug.isSelected(),combo.getSelectedItem().toString());
 			dispose();
 		}
 	}
