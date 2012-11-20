@@ -206,4 +206,22 @@ public class Game {
 		else
 			teamb.set(player, p);
 	}
+	
+	/**
+	 * Turn a name in machine format into one in human readable format.
+	 * @param mn machine name
+	 * @return human name
+	 */
+	public static String machineNameToHuman(String mn) {
+		String parts[] = mn.split("\\.");
+		String pack = parts[0];
+		if (pack.contains("\t"))
+			throw new IllegalArgumentException("No tabs in pack names.");
+		GregorianCalendar date = parseISO(parts[1]);
+		return "\"" + pack + "\" (" +
+			date.getDisplayName(Calendar.DAY_OF_MONTH, Calendar.SHORT, Locale.CANADA) +
+			" " +
+			date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CANADA) + " " +
+			date.getDisplayName(Calendar.YEAR, Calendar.SHORT, Locale.CANADA) + ")";
+	}
 }
