@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import com.earlofmarch.reach.input.BuzzerBinding;
+import com.earlofmarch.reach.model.Game;
+import com.earlofmarch.reach.model.GameIO;
 import com.earlofmarch.reach.model.Music;
 import com.earlofmarch.reach.model.Player;
 import com.earlofmarch.reach.model.PlayerIO;
@@ -33,9 +37,11 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	private int rightScore = 0, leftScore = 0;
 	private static final int RIGHT = 1, LEFT = 2;
 	public static LinkedList<Player> players;
+	private Game game;
+	private String packName;
 	
-	public Main(BuzzerBinding b,String packName){
-		super("Reach for the Top - "+packName);		
+	public Main(BuzzerBinding b,String name){
+		super("Reach for the Top - "+name);		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation((int)(dim.getWidth()/2)-525,(int)(dim.getHeight()/2)-250);
 		setMinimumSize(new Dimension(800,480));
@@ -51,12 +57,40 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		if(players == null)
 			players = new LinkedList<Player>();
 		
+		try {
+			this.packName = name;
+			if(GameIO.getGameNames().get(packName)==null)
+				game = null;
+			else
+				game = GameIO.getGameByName(GameIO.getGameNames().get(packName));
+		} catch (IOException e) {}
+		
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 		        public void run() {
+		        	if(game == null)
+		        		game = new Game(packName,new GregorianCalendar(),Main.getPlayers(LEFT),Main.getPlayers(RIGHT),leftScore,rightScore);
+		        	else{
+		        		game.addScore(Game.TEAMA, leftScore);
+		        		game.addScore(Game.TEAMB, rightScore);
+		        	}
+		        	GameIO.saveGame(game);
 		        	if(players!=null && players.size()!=0)
 		        		PlayerIO.updateAll(players);
-		        }
+		        }				
 		    }, "Shutdown-thread"));		
+	}
+	
+	private static LinkedList<Player> getPlayers(int side) {
+		LinkedList<Player> list = new LinkedList<Player>();
+		if(side == RIGHT){
+			for(int i=0;i<4;i++)
+				list.add(Main.players.get(i));
+		}else{
+			for(int i=4;i<8;i++)
+				list.add(Main.players.get(i));
+		}
+		
+		return list;
 	}
 	
 	private void createComponents(BuzzerBinding b){
@@ -188,6 +222,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//For bonuses only...
 		UIButton in = (UIButton)e.getSource();
 		giveScore(Integer.parseInt(in.getText().trim()),e.getActionCommand().startsWith("l")?Main.LEFT:Main.RIGHT);
 	}

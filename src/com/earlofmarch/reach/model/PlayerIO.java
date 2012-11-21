@@ -20,7 +20,7 @@ public class PlayerIO {
 	 */
 	
 	/**
-	 * Returns a LinkedList with all players saved in the "Reach Scores", 
+	 * Returns a LinkedList with all players saved in the .reach
 	 * returns null if none exist.
 	 * @return LinkedList of Players
 	 * @param fullHistory Adds the player's score history
@@ -41,7 +41,7 @@ public class PlayerIO {
 			}
 			
 			clean();
-			
+						
 			for(File pfile :  playerFiles){
 				if(fullHistory)
 					players.add(getPlayerFull(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
@@ -88,7 +88,7 @@ public class PlayerIO {
 			return;
 		
 		File f = new File(ROOT+"/"+p.getName()+SUFFIX);
-		System.out.println(p.getName()+(p.getName().endsWith("s")?"'":"'s"+" score ")+(p.getScore()>0?"+":"")+p.getScore());
+		System.out.println(p.getName()+"'s score : "+(p.getScore()>0?"+":"")+p.getScore());
 		IO.createOutputFile(f.getPath(), f.isFile());
 		if(p.getScore() != 0)
 			IO.println(p.getScore()+"");
@@ -105,8 +105,14 @@ public class PlayerIO {
 		if(playerFiles == null || playerFiles.length == 0)
 			return;
 		
-		for(File f : playerFiles)
-			if(!f.getName().endsWith(SUFFIX) || f.getName().equals(SUFFIX))
+		for(File f : playerFiles){
+			System.out.println(f.getName());
+			if((!f.getName().endsWith(SUFFIX) || f.getName().equals(SUFFIX))&&f.getPath().equals(GameIO.ROOT))
 				f.delete();
+			else if(f.getName().equals("g"+SUFFIX)){
+				System.out.print("Deleting random g.txt file: ");
+				System.out.println(f.delete()?"SUCCESS":" FAILED");
+			}
+		}
 	}
 }

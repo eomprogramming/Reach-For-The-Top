@@ -25,7 +25,7 @@ import java.util.Map;
  *
  */
 public class GameIO {
-	private static final String ROOT = System.getProperty("user.home") +
+	public static final String ROOT = System.getProperty("user.home") +
 			"/.reach/games";
 	
 	/**
@@ -48,6 +48,8 @@ public class GameIO {
 			return names;
 		} else {
 			System.err.println("The games archive " + ROOT + " is not a directory.");
+			//Make the folder...?
+			dir.mkdir();
 			return names; // empty: no files.
 		}
 	}
@@ -58,10 +60,11 @@ public class GameIO {
 	 * @return the game
 	 * @throws IOException Something goes wrong
 	 * @throws ArrayIndexOutOfBoundsException invalid format.
-	 * @throws lotsofotherstuff 
+	 * @throws lotsofotherstuff <--- well done!
 	 */
 	public static Game getGameByName(String name) throws IOException {
-		IO.openInputFile(ROOT + "/" + name);
+		if(!IO.openInputFile(ROOT + "/" + name))
+			return null;
 		String[] parts = IO.readLine().split(":");
 		int scorea = Integer.parseInt(parts[0]);
 		int scoreb = Integer.parseInt(parts[1]);

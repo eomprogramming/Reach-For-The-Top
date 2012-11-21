@@ -25,6 +25,7 @@ import javax.swing.UIManager;
 import com.earlofmarch.reach.input.BuzzerBinding;
 import com.earlofmarch.reach.input.BuzzerBindingFactory;
 import com.earlofmarch.reach.input.Pair;
+import com.earlofmarch.reach.model.GameIO;
 
 @SuppressWarnings("serial")
 public class StartScreen extends JFrame implements ActionListener{
@@ -140,9 +141,16 @@ public class StartScreen extends JFrame implements ActionListener{
 		input.setVisible(false);
 		panel.add(input);
 		
-		String[] temp = {"Sample Game 1","Sample Game 2","BAIOSFAds"};
-		combo = new JComboBox(temp);
+		Object[] temp = GameIO.getGameNames().keySet().toArray();
+		if(temp.length!=0)
+			combo = new JComboBox(temp);
+		else{
+			String[] model = {"No games available"};
+			combo = new JComboBox(model);
+		}
 		combo.setFocusable(false);
+		combo.setForeground(UI.colour.SECONDARY);
+		combo.setFont(input.getFont());
 		combo.setBounds(input.getBounds());
 		combo.setVisible(false);
 		panel.add(combo);
@@ -158,6 +166,7 @@ public class StartScreen extends JFrame implements ActionListener{
 		debug = new JCheckBox("Debug Mode (No Buzzers)");
 		debug.setBackground(UI.colour.BACKGROUND);
 		debug.setForeground(UI.colour.SECONDARY);
+		debug.setSelected(true);
 		debug.setBounds(0, 80, 280, 40);
 		debug.setFont(UI.getFont(14));
 		debug.setFocusable(false);
@@ -235,10 +244,15 @@ public class StartScreen extends JFrame implements ActionListener{
 				input.setText("Enter pack name...");
 				label.requestFocus();
 				return;
-			}else if(input.isVisible())
+			}else if(input.isVisible()){
+				if(input.getText().equals("Enter pack name..."))
+					return;
 				startMain(!debug.isSelected(),input.getText());
-			else if(combo.isVisible())
-				startMain(!debug.isSelected(),combo.getSelectedItem().toString());
+			}else if(combo.isVisible()){
+				if(combo.getSelectedItem().equals("No games available"))
+					return;
+				startMain(!debug.isSelected(),combo.getSelectedItem().toString());				
+			}
 			dispose();
 		}
 	}

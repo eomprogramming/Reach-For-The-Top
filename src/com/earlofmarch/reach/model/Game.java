@@ -42,7 +42,7 @@ public class Game {
 	 * @throws IllegalArgumentException if there's a tab or period in the pack name, or
 	 * not four players in each team.
 	 */
-	protected Game(String pack, GregorianCalendar date, List<Player> teama,
+	public Game(String pack, GregorianCalendar date, List<Player> teama,
 			List<Player> teamb, int scorea, int scoreb) {
 		if (pack.contains("\t") || pack.contains("."))
 			throw new IllegalArgumentException("Invalid character in pack name.");
@@ -68,7 +68,7 @@ public class Game {
 	 * players in each team.
 	 * @throws ArrayIndexOutOfBoundsException malformed String
 	 */
-	protected Game(String s, List<Player> teama, List<Player> teamb, int scorea,
+	public Game(String s, List<Player> teama, List<Player> teamb, int scorea,
 		int scoreb) {
 		String parts[] = s.split("\\.");
 		pack = parts[0];
