@@ -36,7 +36,7 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 	@Override
 	public void setButtonSensitivity(boolean red, boolean blue, boolean green,
 			boolean orange, boolean yellow) {
-		Logger.getLogger("reach.input").log(Level.INFO, "Setting sensitivity: R-" +
+		Logger.getLogger("reach.i  nput").log(Level.INFO, "Setting sensitivity: R-" +
 			red + " B-" + blue + " G-" + green + " O-" + orange + " Y-" + yellow);
 		synchronized(sensitivities) {
 			sensitivities.put("red", red);
@@ -48,12 +48,20 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 	}
 	
 	@Override
-	public void clear() {
+	public boolean clear() {
 		Logger.getLogger("reach.input").log(Level.INFO, "Clear!");
 		synchronized (stateLock) {
-			pr.unlight(currBuzz.getFirst(), currBuzz.getSecond());
+			try{
+				if(currBuzz==null)
+					return false;
+				pr.unlight(currBuzz.getFirst(), currBuzz.getSecond());
+			}catch(NullPointerException e){
+				System.err.println("Error unlighting ");
+				return false;
+			}
 			currBuzz = null;
 		}
+		return true;
 	}
 	
 	@Override

@@ -97,6 +97,14 @@ public class GroupedCell extends JPanel{
 		clear();
 	}
 	
+	public void forceGone(){
+		timeLabel.setVisible(false);
+		timeLabel.setText("");
+		triggered = false;
+		timer.cancel();
+		score.forceGone();
+	}
+	
 	public void trigger(){
 		triggered = true;
 		timer = new Timer();
@@ -131,10 +139,10 @@ public class GroupedCell extends JPanel{
 	}
 	
 
-	public void clear() {
+	public boolean clear() {
 		if(buzzers != null)
-			buzzers.clear();
-		System.out.println("Cleared");
+			return buzzers.clear();
+		return false;
 	}
 	
 	public boolean isCollapsing(){

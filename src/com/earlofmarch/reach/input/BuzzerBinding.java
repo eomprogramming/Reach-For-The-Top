@@ -21,8 +21,9 @@ public interface BuzzerBinding {
 	
 	/**
 	 * Clear the current buzzed status. Idempotent.
+	 * @return 
 	 */
-	public void clear();
+	public boolean clear();
 	
 	/**
 	 * Return the current buzzed buzzer.

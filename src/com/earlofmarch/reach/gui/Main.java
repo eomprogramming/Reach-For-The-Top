@@ -235,12 +235,15 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyChar()==' '){
-			for(GroupedCell gc : cells)
-				if(gc.isTriggered()&&!gc.isCollapsing()){
+			int i = 0;
+			for(GroupedCell gc : cells){
+				if(gc.isTriggered()&&!gc.isCollapsing())
 					gc.giveScore(0);
-				}else if(gc.isTriggered()){
-					gc.clear();
-				}
+				else if(gc.isCollapsing())
+					gc.forceGone();
+				System.out.println((gc.clear()?"Cleared ":"Failed to clear ")+i);
+				i++;
+			}
 		}
 		if(e.getKeyChar()<'9' &&e.getKeyChar()>'0')
 			trigger(e.getKeyChar()-'1');

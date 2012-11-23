@@ -106,7 +106,6 @@ public class PlayerIO {
 			return;
 		
 		for(File f : playerFiles){
-			System.out.println(f.getName());
 			if((!f.getName().endsWith(SUFFIX) || f.getName().equals(SUFFIX))&&f.getPath().equals(GameIO.ROOT))
 				f.delete();
 			else if(f.getName().equals("g"+SUFFIX)){
