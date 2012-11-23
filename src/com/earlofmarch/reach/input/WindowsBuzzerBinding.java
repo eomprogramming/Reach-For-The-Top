@@ -36,7 +36,7 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 	@Override
 	public void setButtonSensitivity(boolean red, boolean blue, boolean green,
 			boolean orange, boolean yellow) {
-		Logger.getLogger("reach.i  nput").log(Level.INFO, "Setting sensitivity: R-" +
+		Logger.getLogger("reach.input").log(Level.INFO, "Setting sensitivity: R-" +
 			red + " B-" + blue + " G-" + green + " O-" + orange + " Y-" + yellow);
 		synchronized(sensitivities) {
 			sensitivities.put("red", red);

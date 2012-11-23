@@ -73,9 +73,7 @@ public class ScoreCell extends JPanel implements ActionListener{
 					if(forcedGone){
 						for(int i=0;i<button.length;i++)
 							button[i].setVisible(false);
-						collapsing = false;
 						time = 0;
-						this.cancel();		
 						forcedGone = false;
 					}
 					
