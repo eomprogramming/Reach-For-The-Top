@@ -34,21 +34,6 @@ public class BuzzerBindingFactory {
 	}
 	
 	private static WindowsBuzzerBinding windows() throws IOException {
-		//if (!WindowsBuzzerBinding.serverIsRunning()) {
-			//try {
-				//Runtime.getRuntime().exec("./glue.exe");
-			//} catch (IOException e) {
-				////TODO: logging policy
-				//Logger.getAnonymousLogger().log(Level.SEVERE,
-						//"Unable to start glue.exe", e);
-				//throw e;
-			//}
-		//}
-		//try {
-			//Thread.sleep(500);
-		//} catch (InterruptedException e) {
-			//// continue anyway
-		//}
 		Process server = null;
 		log.log(Level.INFO, "Entering BuzzerBindingFactory.windows()");
 		try {
@@ -58,6 +43,7 @@ public class BuzzerBindingFactory {
 			throw e;
 		}
 		new Thread(new ErrorEater(server.getErrorStream())).start();
+		Runtime.addShutdownHook(new Thread(new Destroyer(server)));
 		return new WindowsBuzzerBinding(server.getInputStream(),
 				server.getOutputStream());
 	}
@@ -87,6 +73,18 @@ public class BuzzerBindingFactory {
 			}
 		}
 		
+	}
+	
+	private static class Destroyer implements Runnable {
+		private Process p;
+		
+		public Destroyer(Process p) {
+			this.p = p;
+		}
+		
+		public void run() {
+			p.destroy();
+		}
 	}
 	
 }
