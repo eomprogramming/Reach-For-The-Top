@@ -43,7 +43,7 @@ public class BuzzerBindingFactory {
 			throw e;
 		}
 		new Thread(new ErrorEater(server.getErrorStream())).start();
-		Runtime.addShutdownHook(new Thread(new Destroyer(server)));
+		Runtime.getRuntime().addShutdownHook(new Thread(new Destroyer(server)));
 		return new WindowsBuzzerBinding(server.getInputStream(),
 				server.getOutputStream());
 	}
