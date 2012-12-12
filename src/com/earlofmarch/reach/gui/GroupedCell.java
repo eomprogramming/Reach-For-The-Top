@@ -109,6 +109,7 @@ public class GroupedCell extends JPanel{
 		triggered = true;
 		timer = new Timer();
 		score.setShowing(true,true);
+		timeLabel.setVisible(true);
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run()
 			{
