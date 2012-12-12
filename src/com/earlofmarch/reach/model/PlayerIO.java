@@ -88,7 +88,7 @@ public class PlayerIO {
 			return;
 		
 		File f = new File(ROOT+"/"+p.getName()+SUFFIX);
-		System.out.println(p.getName()+"'s score : "+(p.getScore()>0?"+":"")+p.getScore());
+	//	System.out.println(p.getName()+"'s score : "+(p.getScore()>0?"+":"")+p.getScore());
 		IO.createOutputFile(f.getPath(), f.isFile());
 		if(p.getScore() != 0)
 			IO.println(p.getScore()+"");
