@@ -7,8 +7,12 @@
  */
 package com.earlofmarch.reach.model;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -63,22 +67,30 @@ public class GameIO {
 	 * @throws lotsofotherstuff <--- well done!
 	 */
 	public static Game getGameByName(String name) throws IOException {
-		if(!IO.openInputFile(ROOT + "/" + name))
+		BufferedReader in;
+		try {
+			in = new BufferedReader(new FileReader(ROOT + "/" + name));
+		} catch (FileNotFoundException e) {
 			return null;
-		String[] parts = IO.readLine().split(":");
+		}
+		String[] parts = in.readLine().split(":");
 		int scorea = Integer.parseInt(parts[0]);
 		int scoreb = Integer.parseInt(parts[1]);
 		LinkedList<Player> teama = new LinkedList<Player>();
-		parts = IO.readLine().split(",");
+		parts = in.readLine().split(",");
 		for (String player: parts) {
+			if (player.length() == 0)
+				continue;
 			teama.add(PlayerIO.getPlayerFull(player));
 		}
 		LinkedList<Player> teamb = new LinkedList<Player>();
-		parts = IO.readLine().split(",");
+		parts = in.readLine().split(",");
 		for (String player: parts) {
+			if (player.length() == 0)
+				continue;
 			teamb.add(PlayerIO.getPlayerFull(player));
 		}
-		IO.closeInputFile();
+		in.close();
 		return new Game(name, teama, teamb, scorea, scoreb);
 	}
 	
@@ -86,17 +98,20 @@ public class GameIO {
 	 * Record a game.
 	 * @param g the game
 	 */
-	public static void saveGame(Game g) {
-		IO.createOutputFile(ROOT + "/" + g.machineName());
-		IO.println(g.getScoreA() + ":" + g.getScoreB());
+	public static void saveGame(Game g) throws IOException {
+		File f = new File(ROOT + "/" + g.machineName());
+		if(!f.createNewFile())
+			throw new IOException("Unable to create save file.");
+		PrintWriter out = new PrintWriter(f);
+		out.println(g.getScoreA() + ":" + g.getScoreB());
 		for (Player p: g.getTeamA()) {
-			IO.print(p.getName() + ",");
+			out.print(p.getName() + ",");
 		}
-		IO.print("\n");
+		out.print("\n");
 		for (Player p: g.getTeamB()) {
-			IO.print(p.getName() + ",");
+			out.print(p.getName() + ",");
 		}
-		IO.print("\n");
-		IO.closeOutputFile();
+		out.print("\n");
+		out.close();
 	}
 }

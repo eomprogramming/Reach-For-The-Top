@@ -1,6 +1,8 @@
 package com.earlofmarch.reach.model;
 
 import java.util.LinkedList;
+
+import com.earlofmarch.reach.input.Pair;
 /**
  * A reach for the top player!
  * @author Aly
@@ -9,7 +11,7 @@ import java.util.LinkedList;
 public class Player {
 	
 	private String name;
-	private LinkedList<Integer> scoreHistory;
+	private LinkedList<Pair<Integer,String>> scoreHistory;
 	private int score;
 	
 	/**
@@ -18,7 +20,7 @@ public class Player {
 	 */
 	public Player(String name)
 	{
-		scoreHistory = new LinkedList<Integer>();
+		scoreHistory = new LinkedList<Pair<Integer,String>>();
 		score = 0;
 		setName(name);
 	}
@@ -64,7 +66,16 @@ public class Player {
 	 */
 	public void addToHistory(int s)
 	{
-		scoreHistory.add(s);
+		scoreHistory.add(new Pair<Integer,String>(s, null));
+	}
+	
+	/**
+	 * Adds a score received in a given game to a Player's score.
+	 * @param s The score to be added.
+	 * @param g The game in which it was added (machine readable name).
+	 */
+	public void addToHistory(int s, String g) {
+		scoreHistory.add(new Pair<Integer,String>(s, g));
 	}
 	
 	/**
@@ -73,7 +84,10 @@ public class Player {
 	 */
 	public LinkedList<Integer> getScoreHistory()
 	{
-		return scoreHistory;
+		LinkedList<Integer> res = new LinkedList<Integer>();
+		for (Pair<Integer,String> p: scoreHistory)
+			res.add(p.getFirst());
+		return res;
 	}
 	
 	@Override

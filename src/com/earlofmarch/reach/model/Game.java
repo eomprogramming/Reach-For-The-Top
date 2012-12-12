@@ -12,6 +12,7 @@ package com.earlofmarch.reach.model;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -89,10 +90,9 @@ public class Game {
 	 */
 	public String humanName() {
 		return "\"" + pack + "\" (" +
-			date.getDisplayName(Calendar.DAY_OF_MONTH, Calendar.SHORT, Locale.CANADA) +
-			" " +
+			date.get(Calendar.DAY_OF_MONTH) + " " +
 			date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CANADA) + " " +
-			date.getDisplayName(Calendar.YEAR, Calendar.SHORT, Locale.CANADA) + ")";
+			date.get(Calendar.YEAR) + ")";
 	}
 	
 	/**
@@ -137,10 +137,12 @@ public class Game {
 			throw new IndexOutOfBoundsException("Bad team number");
 		if (team == TEAMA) {
 			scorea += score;
-			teama.get(player).addScore(score);
+			if (teama.get(player) != null)
+				teama.get(player).addScore(score);
 		} else {
 			scoreb += score;
-			teamb.get(player).addScore(score);
+			if (teama.get(player) != null)
+				teamb.get(player).addScore(score);
 		}
 	}
 	
@@ -219,9 +221,8 @@ public class Game {
 			throw new IllegalArgumentException("No tabs in pack names.");
 		GregorianCalendar date = parseISO(parts[1]);
 		return "\"" + pack + "\" (" +
-			date.getDisplayName(Calendar.DAY_OF_MONTH, Calendar.SHORT, Locale.CANADA) +
-			" " +
+			date.get(Calendar.DAY_OF_MONTH) + " " +
 			date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.CANADA) + " " +
-			date.getDisplayName(Calendar.YEAR, Calendar.SHORT, Locale.CANADA) + ")";
+			date.get(Calendar.YEAR) + ")";
 	}
 }

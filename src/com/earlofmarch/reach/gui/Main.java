@@ -73,7 +73,11 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		        		game.addScore(Game.TEAMA, leftScore);
 		        		game.addScore(Game.TEAMB, rightScore);
 		        	}
-		        	GameIO.saveGame(game);
+		        	try{
+		        		GameIO.saveGame(game);
+		        	}catch(IOException e){
+		        		//nothing
+		        	}
 		        	if(players!=null && players.size()!=0)
 		        		PlayerIO.updateAll(players);
 		        }				
