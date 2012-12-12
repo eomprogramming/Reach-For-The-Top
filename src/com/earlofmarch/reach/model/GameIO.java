@@ -81,14 +81,14 @@ public class GameIO {
 		for (String player: parts) {
 			if (player.length() == 0)
 				continue;
-			teama.add(PlayerIO.getPlayerFull(player));
+			teama.add(player.equals(Player.PLACEHOLDER)?null:PlayerIO.getPlayerFull(player));
 		}
 		LinkedList<Player> teamb = new LinkedList<Player>();
 		parts = in.readLine().split(",");
 		for (String player: parts) {
 			if (player.length() == 0)
 				continue;
-			teamb.add(PlayerIO.getPlayerFull(player));
+			teamb.add(player.equals(Player.PLACEHOLDER)?null:PlayerIO.getPlayerFull(player));
 		}
 		in.close();
 		return new Game(name, teama, teamb, scorea, scoreb);
@@ -100,16 +100,18 @@ public class GameIO {
 	 */
 	public static void saveGame(Game g) throws IOException {
 		File f = new File(ROOT + "/" + g.machineName());
+		if(f.exists())
+			f.delete();
 		if(!f.createNewFile())
 			throw new IOException("Unable to create save file.");
 		PrintWriter out = new PrintWriter(f);
 		out.println(g.getScoreA() + ":" + g.getScoreB());
 		for (Player p: g.getTeamA()) {
-			out.print(p.getName() + ",");
+			out.print((p==null?Player.PLACEHOLDER:p.getName()) + ",");
 		}
 		out.print("\n");
 		for (Player p: g.getTeamB()) {
-			out.print(p.getName() + ",");
+			out.print((p==null?Player.PLACEHOLDER:p.getName()) + ",");
 		}
 		out.print("\n");
 		out.close();

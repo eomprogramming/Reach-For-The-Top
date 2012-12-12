@@ -13,6 +13,7 @@ public class Player {
 	private String name;
 	private LinkedList<Pair<Integer,String>> scoreHistory;
 	private int score;
+	public static final String PLACEHOLDER = "DAMNBUGGYAPP";
 	
 	/**
 	 * Creates a new Player with the name provided, default score is 0.
@@ -30,7 +31,7 @@ public class Player {
 	 * @return The name
 	 */
 	public String getName()
-	{
+	{		
 		return name;
 	}
 	

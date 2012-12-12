@@ -26,11 +26,14 @@ public class PlayerCell extends JPanel implements ActionListener{
 	private UIButton button;
 	private SpringLayout layout;
 	private Main parent;
+	private int side, position;
 	private Player player;
 		
-	public PlayerCell(Main m){
+	public PlayerCell(Main m, int side, int pos){
 		super();
 		parent = m;
+		this.side = side;
+		this.position = pos;
 		setBackground(UI.colour.SECONDARY);		
 		layout = new SpringLayout();
 		createComponents();	
@@ -112,8 +115,23 @@ public class PlayerCell extends JPanel implements ActionListener{
 			createButton(true);
 			
 		}
+		System.out.println("Pos: "+position+"& Player "+player.getName());
+		if(side == Main.LEFT)
+			Main.teamLEFT.set(position, player);
+		else
+			Main.teamRIGHT.set(position-4, player);
 	}
 	
+	public void setPlayer(Player p){	
+		if(p==null)
+			return;		
+		player = p;
+		button.setVisible(false);
+		playerName.setVisible(true);
+		playerName.setText(p.getName());
+		createButton(false);
+	}
+		
 	private Player getPlayerFromUser() {
 		
 		LinkedList<Player> temp = PlayerIO.getAllPlayers(false);

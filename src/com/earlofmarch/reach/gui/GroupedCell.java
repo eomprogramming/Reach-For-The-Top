@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import com.earlofmarch.reach.input.BuzzerBinding;
+import com.earlofmarch.reach.model.Player;
 /**
  * Groups the {@link ScoreCell} and the {@link PlayerCell} into a single panel and adds the timer.
  * @author Aly
@@ -26,7 +27,7 @@ public class GroupedCell extends JPanel{
 	private PlayerCell playerCell;
 	private BuzzerBinding buzzers;
 	
-	public GroupedCell(Main f, int side, BuzzerBinding b){
+	public GroupedCell(int position, Main f, int side, BuzzerBinding b){
 		parent = f;
 		playerTeam = side;
 		time = TIMER_LENGTH*10;
@@ -48,7 +49,7 @@ public class GroupedCell extends JPanel{
 		timeLabel.setForeground(UI.colour.SECONDARY);
 		add(timeLabel);
 		
-		playerCell = new PlayerCell(f);
+		playerCell = new PlayerCell(f,side,position);
 		cells.add(playerCell);
 		
 		score = new ScoreCell(this);
@@ -152,5 +153,12 @@ public class GroupedCell extends JPanel{
 	
 	public ScoreCell getScoreCell(){
 		return score;
+	}
+	
+	public void givePlayer(Player p){
+		playerCell.setPlayer(p);
+	}
+	public PlayerCell getPlayerCell(){
+		return playerCell;		
 	}
 }

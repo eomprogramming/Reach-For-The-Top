@@ -8,8 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,8 +37,9 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	private GroupedCell[] cells;
 	private JLabel scoreLabel;
 	private int rightScore = 0, leftScore = 0;
-	private static final int RIGHT = 1, LEFT = 2;
+	public static final int RIGHT = 1, LEFT = 2;
 	public static LinkedList<Player> players;
+	public static List<Player> teamLEFT, teamRIGHT;
 	private Game game;
 	private String packName;
 	
@@ -57,44 +60,55 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		if(players == null)
 			players = new LinkedList<Player>();
 		
+		teamLEFT = new ArrayList<Player>();
+		teamRIGHT = new ArrayList<Player>();
+		for(int i=0;i<4;i++){
+			teamLEFT.add(null);
+			teamRIGHT.add(null);
+		}
+		
 		try {
 			this.packName = name;
 			if(GameIO.getGameNames().get(packName)==null)
 				game = null;
-			else
+			else{
+				System.out.print("Reading game...");
 				game = GameIO.getGameByName(GameIO.getGameNames().get(packName));
+				teamLEFT = game.getTeamA();				
+				teamRIGHT = game.getTeamB();
+				for(int i=0;i<8;i++)
+					cells[i].givePlayer(i<4?teamLEFT.get(i):teamRIGHT.get(i-4));
+				leftScore = game.getScoreA();
+				rightScore = game.getScoreB();
+				scoreLabel.setText(leftScore+"          "+rightScore);
+				System.out.println("Success.");
+			}
+			
 		} catch (IOException e) {}
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-		        public void run() {
+		        public void run() {		        	   					
 		        	if(game == null)
-		        		game = new Game(packName,new GregorianCalendar(),Main.getPlayers(LEFT),Main.getPlayers(RIGHT),leftScore,rightScore);
+		        		game = new Game(packName,new GregorianCalendar(),Main.teamLEFT,Main.teamRIGHT,leftScore,rightScore);
 		        	else{
-		        		game.addScore(Game.TEAMA, leftScore);
-		        		game.addScore(Game.TEAMB, rightScore);
+		        		game.addScore(Game.TEAMA, leftScore - game.getScoreA());		        		
+		        		game.addScore(Game.TEAMB, rightScore - game.getScoreB());
+		        		for(int i=0;i<8;i++){
+			        		if(i<4)
+			        			game.setPlayer(Game.TEAMA,i,teamLEFT.get(i));
+			        		else
+			        			game.setPlayer(Game.TEAMB,i-4,teamRIGHT.get(i-4));			        		
+			        	}
 		        	}
 		        	try{
 		        		GameIO.saveGame(game);
 		        	}catch(IOException e){
-		        		//nothing
+		        		e.printStackTrace();
 		        	}
 		        	if(players!=null && players.size()!=0)
 		        		PlayerIO.updateAll(players);
 		        }				
 		    }, "Shutdown-thread"));		
-	}
-	
-	private static LinkedList<Player> getPlayers(int side) {
-		LinkedList<Player> list = new LinkedList<Player>();
-		if(side == RIGHT){
-			for(int i=0;i<4;i++)
-				list.add(Main.players.get(i));
-		}else{
-			for(int i=4;i<8;i++)
-				list.add(Main.players.get(i));
-		}
-		
-		return list;
 	}
 	
 	private void createComponents(BuzzerBinding b){
@@ -124,9 +138,9 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		cells = new GroupedCell[8];
 		
 		for(int i=0;i<4;i++){
-			cells[i] = new GroupedCell(this,LEFT, b);
+			cells[i] = new GroupedCell(i,this,LEFT, b);
 			cells[i].setVisible(false);
-			cells[i+4] = new GroupedCell(this,RIGHT, b);
+			cells[i+4] = new GroupedCell(i+4,this,RIGHT, b);
 			cells[i+4].setVisible(false);
 			leftPanel.add(cells[i]);
 			rightPanel.add(cells[i+4]);
@@ -228,7 +242,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	public void actionPerformed(ActionEvent e) {
 		//For bonuses only...
 		UIButton in = (UIButton)e.getSource();
-		giveScore(Integer.parseInt(in.getText().trim()),e.getActionCommand().startsWith("l")?Main.LEFT:Main.RIGHT);
+		giveScore(Integer.parseInt(in.getText().trim()),e.getActionCommand().startsWith("l")?Main.LEFT:Main.RIGHT);		
 	}
 
 	
@@ -251,5 +265,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		}
 		if(e.getKeyChar()<'9' &&e.getKeyChar()>'0')
 			trigger(e.getKeyChar()-'1');
-	}	
+	}
+
+	
 }
