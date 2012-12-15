@@ -42,6 +42,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	public static List<Player> teamLEFT, teamRIGHT;
 	private Game game;
 	private String packName;
+	public static boolean failSound,timerSound,successSound, autoUp, debug;
 	
 	public Main(BuzzerBinding b,String name){
 		super("Reach for the Top - "+name);		
@@ -59,8 +60,6 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		players = PlayerIO.getAllPlayers(false);
 		if(players == null)
 			players = new LinkedList<Player>();
-		for(Player p:players)
-			System.out.println(p.getName());
 		
 		teamLEFT = new ArrayList<Player>();
 		teamRIGHT = new ArrayList<Player>();
@@ -227,9 +226,9 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	
 	public void giveScore(int score,int side){
 		//Play music depending on score
-		if(score > 0)
+		if(score > 0 && Main.successSound)
 			Music.playMusic(getClass().getClassLoader().getResource("assets/good.wav"));
-		else if (score < 0)
+		else if (score < 0  && Main.failSound)
 			Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
 		
 		if(side == RIGHT)

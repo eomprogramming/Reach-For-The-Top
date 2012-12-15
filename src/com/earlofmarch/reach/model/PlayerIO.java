@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 public class PlayerIO {
 	
-	private static final String ROOT = System.getProperty("user.home") + "/.reach";
+	public static final String ROOT = System.getProperty("user.home") + "/.reach";
 	private static final String SUFFIX = ".txt";
 	
 	/*

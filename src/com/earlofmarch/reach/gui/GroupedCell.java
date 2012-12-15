@@ -72,7 +72,7 @@ public class GroupedCell extends JPanel{
 	
 	public void giveScore(int score){
 		triggered = false;
-		if(score==0)
+		if(score==0 && Main.failSound)
 			Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
 		
 		parent.giveScore(score,playerTeam);
@@ -112,12 +112,14 @@ public class GroupedCell extends JPanel{
 		score.forceGone();
 	}
 	
+	final ExecutorService executor = Executors.newCachedThreadPool();
+	
 	public void trigger(){
 		triggered = true;
 		timer = new Timer();
 		score.setShowing(true,true);
 		timeLabel.setVisible(true);
-		final ExecutorService executor = Executors.newCachedThreadPool();
+		
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run()
 			{
@@ -127,22 +129,26 @@ public class GroupedCell extends JPanel{
 				{
 					this.cancel();
 					time = TIMER_LENGTH*10;
-					score.setShowing(false,true);
-					triggered = false;
-					timeLabel.setText("");
-					clear();
+					if(Main.autoUp){
+						score.setShowing(false,true);
+						triggered = false;
+						timeLabel.setText("");
+						clear();
+					}
 				}
 				
 				if(time == (TIMER_LENGTH*10)){
-					timeLabel.setText("");
-					Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
+					if(Main.autoUp)
+						timeLabel.setText("");
+					if(Main.failSound && Main.autoUp)
+						Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
 				}else if(time>((TIMER_LENGTH*10)-50)){
 					timeLabel.setText((time-50)/10.0 + "s");
-					if((time+1)%10==0&&time<99)
+					if(Main.timerSound &&(time+1)%10==0&&time<99)
 						executor.execute(new Music.RunBeep(500+(100-(time+1)), 400, 1));
 				}else{
 					timeLabel.setText("0.0s");
-					if(time==50)
+					if(Main.timerSound && time==50)
 						Music.playBeep(650, 1500, 1);
 				}
 			}

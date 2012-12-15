@@ -14,7 +14,8 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JCheckBox;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,18 +26,19 @@ import javax.swing.UIManager;
 import com.earlofmarch.reach.input.BuzzerBinding;
 import com.earlofmarch.reach.input.BuzzerBindingFactory;
 import com.earlofmarch.reach.input.Pair;
+import com.earlofmarch.reach.model.CacheIO;
 import com.earlofmarch.reach.model.GameIO;
 
 @SuppressWarnings("serial")
 public class StartScreen extends JFrame implements ActionListener{
 	
 	private static Logger log;
-	private JPanel panel;
+	private JPanel panel, optionsPanel;
 	public JTextField input;
 	private JLabel label;
 	private JComboBox combo;
-	private UIButton go;
-	private JCheckBox debug;
+	private UIButton go, newGame, contGame, options;
+	private UICheckBox debug, failSound, beepSound, successSound, autoUp;
 	
 	public StartScreen(){
 		super("Reach for the Top");		
@@ -99,15 +101,16 @@ public class StartScreen extends JFrame implements ActionListener{
 		label.setHorizontalAlignment(JLabel.CENTER);		
 		add(label);
 		
-		UIButton newGame = new UIButton("NEW GAME", true);
+		newGame = new UIButton("NEW GAME", true);
 		newGame.invertColors();
 		newGame.setFont(UI.getFont(16));
 		newGame.setBounds(40, 110, 190, 60);
 		newGame.addActionListener(this);
 		newGame.setActionCommand("new");
+		newGame.setBorder(BorderFactory.createMatteBorder(0, 0, 8, 0, UI.colour.ROLLOVER));
 		add(newGame);
 		
-		UIButton contGame = new UIButton("CONTINUE GAME", true);
+		contGame = new UIButton("CONTINUE GAME", true);
 		contGame.invertColors();
 		contGame.setFont(UI.getFont(16));
 		contGame.addActionListener(this);
@@ -118,17 +121,17 @@ public class StartScreen extends JFrame implements ActionListener{
 		panel = new JPanel();
 		panel.setBackground(null);
 		panel.setLayout(null);
-		panel.setVisible(false);
 		panel.setBounds(40, 190, 400, 130);
 		add(panel);
 		
 		input = new JTextField();
-		input.setMargin(new Insets(0,20,0,0));
+		input.setMargin(new Insets(0,40,0,0));
 		input.setBackground(UI.colour.MAIN);
 		input.setForeground(UI.colour.SECONDARY);
 		input.setFont(UI.getFont(18));
 		input.setText("Enter pack name...");
 		input.setBounds(0, 10, 390, 60);
+		input.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, UI.colour.SECONDARY),BorderFactory.createMatteBorder(0, 10, 0, 10, UI.colour.MAIN)));
 		input.addFocusListener(new FocusListener() {
 		      public void focusGained(FocusEvent e) {
 		          input.setText("");
@@ -138,7 +141,6 @@ public class StartScreen extends JFrame implements ActionListener{
 		    		  input.setText("Enter pack name...");
 		      }
 		});
-		input.setVisible(false);
 		panel.add(input);
 		
 		Object[] temp = GameIO.getGameNames().keySet().toArray();
@@ -153,24 +155,69 @@ public class StartScreen extends JFrame implements ActionListener{
 		combo.setFont(input.getFont());
 		combo.setBounds(input.getBounds());
 		combo.setVisible(false);
+		combo.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, UI.colour.SECONDARY));
 		panel.add(combo);
 		
 		go = new UIButton("GO",false);
-		go.setBackground(UI.colour.BACKGROUND);
 		go.setFont(UI.getFont(16));
-		go.setBounds(330, 80, 60, 40);
+		go.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, UI.colour.SECONDARY));
+		go.setBounds(195, 80, 195, 40);
 		go.addActionListener(this);
 		go.setActionCommand("go");
 		panel.add(go);
 		
-		debug = new JCheckBox("Debug Mode (No Buzzers)");
-		debug.setBackground(UI.colour.BACKGROUND);
-		debug.setForeground(UI.colour.SECONDARY);
-		debug.setSelected(true);
-		debug.setBounds(0, 80, 280, 40);
+		options = new UIButton("  Options", false);
+		options.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, UI.colour.SECONDARY));
+		options.setHorizontalAlignment(JButton.LEFT);
+		options.setFont(UI.getFont(16));
+		options.addActionListener(this);
+		options.setActionCommand("options");
+		options.setBounds(0, 80, 195, 40);
+		panel.add(options);
+		
+		optionsPanel = new JPanel();
+		optionsPanel.setBackground(UI.colour.BACKGROUND);
+		optionsPanel.setLayout(null);
+		optionsPanel.setVisible(false);
+		optionsPanel.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, UI.colour.SECONDARY));
+		optionsPanel.setBounds(40, 330, 390, 130);
+		add(optionsPanel);
+		
+		debug = new UICheckBox("Debug Mode");
+		System.out.println(Main.debug);
+		debug.setSelected(Main.debug);
+		debug.setBounds(15, 0, 175, 40);
 		debug.setFont(UI.getFont(14));
-		debug.setFocusable(false);
-		panel.add(debug);
+		debug.setFocusable(false);	
+		optionsPanel.add(debug);
+		
+		failSound = new UICheckBox("Fail Sound");
+		failSound.setSelected(Main.failSound);
+		failSound.setBounds(15, 45, 175, 40);
+		failSound.setFont(UI.getFont(14));
+		failSound.setFocusable(false);	
+		optionsPanel.add(failSound);
+		
+		beepSound = new UICheckBox("Timer Sound");
+		beepSound.setSelected(Main.timerSound);
+		beepSound.setBounds(15, 90, 175, 40);
+		beepSound.setFont(UI.getFont(14));
+		beepSound.setFocusable(false);	
+		optionsPanel.add(beepSound);
+		
+		successSound = new UICheckBox("Success Sound");
+		successSound.setSelected(Main.successSound);
+		successSound.setBounds(200, 0, 175, 40);
+		successSound.setFont(UI.getFont(14));
+		successSound.setFocusable(false);	
+		optionsPanel.add(successSound);
+		
+		autoUp = new UICheckBox("Auto Unbuzz");
+		autoUp.setSelected(Main.autoUp);
+		autoUp.setBounds(200, 45, 175, 40);
+		autoUp.setFont(UI.getFont(14));
+		autoUp.setFocusable(false);	
+		optionsPanel.add(autoUp);
 	}
 
 	static {
@@ -186,7 +233,7 @@ public class StartScreen extends JFrame implements ActionListener{
 		UIManager.put("ComboBox.selectionBackground", UI.colour.ROLLOVER);  
 		UIManager.put("OptionPane.opaque",false);  
 		UIManager.put("ComboBox.font",UI.getFont(15)); 
-		
+		CacheIO.loadOptions();
 		new StartScreen();
 	}
 	
@@ -212,6 +259,13 @@ public class StartScreen extends JFrame implements ActionListener{
 	public void startMain(boolean attemptBuzzers, String name){	
 		Main m;
 		BuzzerBinding buzzers;
+		//Save the options
+		Main.debug = debug.isSelected();
+		Main.failSound = failSound.isSelected();
+		Main.timerSound = beepSound.isSelected();
+		Main.successSound = successSound.isSelected();
+		Main.autoUp = autoUp.isSelected();
+		CacheIO.saveOptions();
 		
 		if(attemptBuzzers){			
 			try {
@@ -235,10 +289,14 @@ public class StartScreen extends JFrame implements ActionListener{
 			input.setVisible(true);
 			combo.setVisible(false);
 			panel.setVisible(true);
+			newGame.setBorder(BorderFactory.createMatteBorder(0, 0, 8, 0, UI.colour.ROLLOVER));
+			contGame.setBorder(null);
 		}else if(e.getActionCommand().equals("cont")){
 			input.setVisible(false);
 			combo.setVisible(true);
 			panel.setVisible(true);
+			newGame.setBorder(null);
+			contGame.setBorder(BorderFactory.createMatteBorder(0, 0, 8, 0, UI.colour.ROLLOVER));
 		}else if(e.getActionCommand().equals("go")){
 			if(input.isVisible()&&input.getText().isEmpty()){
 				input.setText("Enter pack name...");
@@ -254,6 +312,14 @@ public class StartScreen extends JFrame implements ActionListener{
 				startMain(!debug.isSelected(),combo.getSelectedItem().toString());				
 			}
 			dispose();
+		}else if(e.getActionCommand().equals("options")){
+			if(this.getHeight()==360){
+				setSize(this.getWidth(),this.getHeight()+150);
+				optionsPanel.setVisible(true);
+			}else{
+				setSize(this.getWidth(),360);
+				optionsPanel.setVisible(false);
+			}
 		}
 	}
 }

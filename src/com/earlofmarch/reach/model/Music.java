@@ -29,7 +29,6 @@ public class Music {
 	 * @param url The name of the audio file
 	 */
 	public static void playMusic(URL url) {
-		System.out.println(url);
 		try {
 			musicClip = AudioSystem.getClip();
 			AudioInputStream stream = AudioSystem.getAudioInputStream(url);
