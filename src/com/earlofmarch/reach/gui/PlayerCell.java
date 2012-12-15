@@ -115,7 +115,6 @@ public class PlayerCell extends JPanel implements ActionListener{
 			createButton(true);
 			
 		}
-		System.out.println("Pos: "+position+"& Player "+player.getName());
 		if(side == Main.LEFT)
 			Main.teamLEFT.set(position, player);
 		else

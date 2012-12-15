@@ -66,7 +66,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 			teamLEFT.add(null);
 			teamRIGHT.add(null);
 		}
-		
+				
 		try {
 			this.packName = name;
 			if(GameIO.getGameNames().get(packName)==null)
@@ -227,8 +227,8 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		//Play music depending on score
 		if(score > 0)
 			Music.playMusic(getClass().getClassLoader().getResource("assets/good.wav"));
-//		else if (score < 0)
-//			Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
+		else if (score < 0)
+			Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
 		
 		if(side == RIGHT)
 			rightScore += score;
@@ -264,8 +264,6 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 			}
 		}
 		if(e.getKeyChar()<'9' &&e.getKeyChar()>'0')
-			trigger(e.getKeyChar()-'1');
+			trigger(e.getKeyChar()-'1');		
 	}
-
-	
 }

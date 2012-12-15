@@ -187,7 +187,8 @@ public class StartScreen extends JFrame implements ActionListener{
 		UIManager.put("OptionPane.opaque",false);  
 		UIManager.put("ComboBox.font",UI.getFont(15)); 
 		
-		new StartScreen();
+		//new StartScreen();
+		new Main(null, "TEST");
 	}
 	
 	private static class Handler implements Runnable {

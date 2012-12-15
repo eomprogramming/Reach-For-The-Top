@@ -12,7 +12,6 @@ package com.earlofmarch.reach.model;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 

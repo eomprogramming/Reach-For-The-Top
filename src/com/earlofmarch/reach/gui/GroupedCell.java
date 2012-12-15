@@ -2,11 +2,15 @@ package com.earlofmarch.reach.gui;
 import java.awt.GridLayout;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import com.earlofmarch.reach.input.BuzzerBinding;
+import com.earlofmarch.reach.model.Music;
 import com.earlofmarch.reach.model.Player;
 /**
  * Groups the {@link ScoreCell} and the {@link PlayerCell} into a single panel and adds the timer.
@@ -111,6 +115,7 @@ public class GroupedCell extends JPanel{
 		timer = new Timer();
 		score.setShowing(true,true);
 		timeLabel.setVisible(true);
+		final ExecutorService executor = Executors.newCachedThreadPool();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run()
 			{
@@ -126,12 +131,18 @@ public class GroupedCell extends JPanel{
 					clear();
 				}
 				
-				if(time == (TIMER_LENGTH*10))
+				if(time == (TIMER_LENGTH*10)){
 					timeLabel.setText("");
-				else if(time>((TIMER_LENGTH*10)-50))
+					Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
+				}else if(time>((TIMER_LENGTH*10)-50)){
 					timeLabel.setText((time-50)/10.0 + "s");
-				else
+					if((time+1)%10==0)
+						executor.execute(new Music.RunBeep(500+(100-(time+1)), 400, 0.5));
+				}else{
 					timeLabel.setText("0.0s");
+					if(time==50)
+						Music.playBeep(650, 1500, 0.75);
+				}
 			}
 		}, 100, 100);
 	}
