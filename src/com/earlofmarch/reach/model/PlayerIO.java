@@ -43,10 +43,12 @@ public class PlayerIO {
 			clean();
 						
 			for(File pfile :  playerFiles){
-				if(fullHistory)
-					players.add(getPlayerFull(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
-				else
-					players.add(new Player(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
+				if(pfile.isFile()){
+					if(fullHistory)
+						players.add(getPlayerFull(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
+					else
+						players.add(new Player(pfile.getName().substring(0,pfile.getName().length()-SUFFIX.length())));
+				}
 			}	
 			
 			return players.size()>0?players:null;
@@ -108,10 +110,6 @@ public class PlayerIO {
 		for(File f : playerFiles){
 			if((!f.getName().endsWith(SUFFIX) || f.getName().equals(SUFFIX))&&f.getPath().equals(GameIO.ROOT))
 				f.delete();
-			else if(f.getName().equals("g"+SUFFIX)){
-				System.out.print("Deleting random g.txt file: ");
-				System.out.println(f.delete()?"SUCCESS":" FAILED");
-			}
 		}
 	}
 }
