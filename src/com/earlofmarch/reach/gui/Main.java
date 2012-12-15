@@ -59,6 +59,8 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		players = PlayerIO.getAllPlayers(false);
 		if(players == null)
 			players = new LinkedList<Player>();
+		for(Player p:players)
+			System.out.println(p.getName());
 		
 		teamLEFT = new ArrayList<Player>();
 		teamRIGHT = new ArrayList<Player>();

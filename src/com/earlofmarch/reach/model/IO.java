@@ -32,8 +32,6 @@ public class IO
 	{
 		try
 		{
-			if(fileName.contains("g"))
-				System.out.println(fileName);
 			fileOut = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
 		}
 		catch(IOException e)

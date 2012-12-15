@@ -72,6 +72,8 @@ public class GroupedCell extends JPanel{
 	
 	public void giveScore(int score){
 		triggered = false;
+		if(score==0)
+			Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
 		
 		parent.giveScore(score,playerTeam);
 		if(playerCell.getPlayer() != null)
@@ -136,12 +138,12 @@ public class GroupedCell extends JPanel{
 					Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
 				}else if(time>((TIMER_LENGTH*10)-50)){
 					timeLabel.setText((time-50)/10.0 + "s");
-					if((time+1)%10==0)
-						executor.execute(new Music.RunBeep(500+(100-(time+1)), 400, 0.5));
+					if((time+1)%10==0&&time<99)
+						executor.execute(new Music.RunBeep(500+(100-(time+1)), 400, 1));
 				}else{
 					timeLabel.setText("0.0s");
 					if(time==50)
-						Music.playBeep(650, 1500, 0.75);
+						Music.playBeep(650, 1500, 1);
 				}
 			}
 		}, 100, 100);
