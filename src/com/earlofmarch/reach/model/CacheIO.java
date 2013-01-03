@@ -16,7 +16,6 @@ public class CacheIO {
 	public static void saveOptions(){
 		File f = new File(PlayerIO.ROOT + "/cache/options.opts");		
 		f.delete();
-		System.out.println("Saving mp as "+Main.mpTheme);
 		PrintWriter out;
 		try {
 			out = new PrintWriter(new BufferedWriter(new FileWriter(f)));		
@@ -46,7 +45,6 @@ public class CacheIO {
 			Main.autoUp = in.readLine().equals("true")?true:false;		
 			Main.debug = in.readLine().equals("true")?true:false;	
 			Main.mpTheme = in.readLine().equals("true")?true:false;
-			System.out.println("mp:"+Main.mpTheme);
 			in.close();
 		}catch(FileNotFoundException e){			
 		}catch (IOException e) {

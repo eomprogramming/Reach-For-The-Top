@@ -7,6 +7,9 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -30,11 +33,19 @@ public class Music {
 	 * @param url The name of the audio file
 	 */
 	public static void playMusic(URL url) {
+		
 		try {
 			musicClip = AudioSystem.getClip();
 			AudioInputStream stream = AudioSystem.getAudioInputStream(url);
 			musicClip.open(stream);
 			musicClip.start();
+			musicClip.addLineListener( new LineListener() {
+			  public void update(LineEvent e) {
+				    if (e.getType() == LineEvent.Type.STOP) {
+				      e.getLine().close();
+				    }
+				  }
+				});
 			
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
@@ -46,7 +57,9 @@ public class Music {
 	}	
 	
 	public static void stopCurrentMusic(){
+		musicClip.flush();
 		musicClip.stop();
+		musicClip.close();
 	}
 	
 	public static float RATE = 8000f;

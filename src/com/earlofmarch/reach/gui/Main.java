@@ -258,7 +258,8 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 					gc.giveScore(0);
 				else if(gc.isCollapsing())
 					gc.forceGone();
-				System.out.println((gc.clear()?"Cleared ":"Failed to clear ")+i);
+				if(!Main.debug)
+					System.out.println((gc.clear()?"Cleared ":"Failed to clear ")+i);
 				i++;
 			}
 		}
