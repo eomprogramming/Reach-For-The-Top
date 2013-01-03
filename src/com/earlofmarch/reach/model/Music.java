@@ -23,6 +23,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class Music {
 	
 	private static Clip musicClip;
+	public static String theme = "";
 	
 	/**
 	 * Creates a new audio Clip with the specified audio file
@@ -43,6 +44,10 @@ public class Music {
 			e.printStackTrace();
 		}
 	}	
+	
+	public static void stopCurrentMusic(){
+		musicClip.stop();
+	}
 	
 	public static float RATE = 8000f;
 	

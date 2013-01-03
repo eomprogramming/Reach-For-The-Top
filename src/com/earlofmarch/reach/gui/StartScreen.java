@@ -28,6 +28,7 @@ import com.earlofmarch.reach.input.BuzzerBindingFactory;
 import com.earlofmarch.reach.input.Pair;
 import com.earlofmarch.reach.model.CacheIO;
 import com.earlofmarch.reach.model.GameIO;
+import com.earlofmarch.reach.model.Music;
 
 @SuppressWarnings("serial")
 public class StartScreen extends JFrame implements ActionListener{
@@ -38,7 +39,7 @@ public class StartScreen extends JFrame implements ActionListener{
 	private JLabel label;
 	private JComboBox combo;
 	private UIButton go, newGame, contGame, options;
-	private UICheckBox debug, failSound, beepSound, successSound, autoUp;
+	private UICheckBox debug, failSound, beepSound, successSound, autoUp, mpTheme;
 	
 	public StartScreen(){
 		super("Reach for the Top");		
@@ -218,6 +219,13 @@ public class StartScreen extends JFrame implements ActionListener{
 		autoUp.setFont(UI.getFont(14));
 		autoUp.setFocusable(false);	
 		optionsPanel.add(autoUp);
+		
+		mpTheme = new UICheckBox("Monty Python");
+		mpTheme.setSelected(Main.mpTheme);
+		mpTheme.setBounds(200, 90, 175, 40);
+		mpTheme.setFont(UI.getFont(14));
+		mpTheme.setFocusable(false);	
+		optionsPanel.add(mpTheme);
 	}
 
 	static {
@@ -265,6 +273,9 @@ public class StartScreen extends JFrame implements ActionListener{
 		Main.timerSound = beepSound.isSelected();
 		Main.successSound = successSound.isSelected();
 		Main.autoUp = autoUp.isSelected();
+		Main.mpTheme = mpTheme.isSelected();
+		if(Main.mpTheme)
+			Music.theme = "monty python/";
 		CacheIO.saveOptions();
 		
 		if(attemptBuzzers){			

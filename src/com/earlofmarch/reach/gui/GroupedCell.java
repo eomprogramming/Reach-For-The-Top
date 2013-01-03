@@ -72,9 +72,7 @@ public class GroupedCell extends JPanel{
 	
 	public void giveScore(int score){
 		triggered = false;
-		if(score==0 && Main.failSound)
-			Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
-		
+
 		parent.giveScore(score,playerTeam);
 		if(playerCell.getPlayer() != null)
 			Main.players.get(Main.players.indexOf(playerCell.getPlayer())).addScore(score);
@@ -140,19 +138,28 @@ public class GroupedCell extends JPanel{
 				if(time == (TIMER_LENGTH*10)){
 					if(Main.autoUp)
 						timeLabel.setText("");
-					if(Main.failSound && Main.autoUp)
-						Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
+					if(Main.failSound && Main.autoUp && !Main.mpTheme)
+						Music.playMusic(getClass().getClassLoader().getResource("assets/"+Music.theme+"fail.wav"));
+					else if(Main.autoUp && Main.failSound)
+						Music.playMusic(getClass().getClassLoader().getResource("assets/"+Music.theme+"late.wav"));
+					
 				}else if(time>((TIMER_LENGTH*10)-50)){
 					timeLabel.setText((time-50)/10.0 + "s");
-					if(Main.timerSound &&(time+1)%10==0&&time<99)
+					if(!Main.mpTheme && Main.timerSound &&(time+1)%10==0&&time<99)
 						executor.execute(new Music.RunBeep(500+(100-(time+1)), 400, 1));
+					
+					if(Main.mpTheme && (time-50)/10.0 == 4.0){
+						Music.playMusic(getClass().getClassLoader().getResource("assets/"+Music.theme+"countdown.wav"));
+						System.out.println("Playing countdown");
+					}
+					
 				}else{
 					timeLabel.setText("0.0s");
-					if(Main.timerSound && time==50)
+					if(!Main.mpTheme && Main.timerSound && time==50)
 						Music.playBeep(650, 1500, 1);
 				}
 			}
-		}, 100, 100);
+		}, 0, 100);
 	}
 	
 	public boolean isTriggered(){

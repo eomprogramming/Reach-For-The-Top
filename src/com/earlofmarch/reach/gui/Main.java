@@ -42,7 +42,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	public static List<Player> teamLEFT, teamRIGHT;
 	private Game game;
 	private String packName;
-	public static boolean failSound,timerSound,successSound, autoUp, debug;
+	public static boolean failSound,timerSound,successSound, autoUp, debug, mpTheme;
 	
 	public Main(BuzzerBinding b,String name){
 		super("Reach for the Top - "+name);		
@@ -209,7 +209,7 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 					this.cancel();
 				}				
 			}
-		}, 100, 100);
+		}, 300, 100);
 	}
 	
 	/*
@@ -225,11 +225,12 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 	}
 	
 	public void giveScore(int score,int side){
+		Music.stopCurrentMusic();
 		//Play music depending on score
 		if(score > 0 && Main.successSound)
-			Music.playMusic(getClass().getClassLoader().getResource("assets/good.wav"));
-		else if (score < 0  && Main.failSound)
-			Music.playMusic(getClass().getClassLoader().getResource("assets/fail.wav"));
+			Music.playMusic(getClass().getClassLoader().getResource("assets/"+Music.theme+"good.wav"));
+		else if (score <= 0  && Main.failSound)
+			Music.playMusic(getClass().getClassLoader().getResource("assets/"+Music.theme+"fail.wav"));
 		
 		if(side == RIGHT)
 			rightScore += score;
@@ -245,12 +246,9 @@ public class Main extends JFrame implements ActionListener, KeyListener{
 		UIButton in = (UIButton)e.getSource();
 		giveScore(Integer.parseInt(in.getText().trim()),e.getActionCommand().startsWith("l")?Main.LEFT:Main.RIGHT);		
 	}
-
 	
 	public void keyTyped(KeyEvent e) {}
 	public void keyReleased(KeyEvent e) {}
-	
-
 	
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyChar()==' '){

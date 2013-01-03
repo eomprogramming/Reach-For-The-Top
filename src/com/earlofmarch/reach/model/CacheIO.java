@@ -16,7 +16,7 @@ public class CacheIO {
 	public static void saveOptions(){
 		File f = new File(PlayerIO.ROOT + "/cache/options.opts");		
 		f.delete();
-		
+		System.out.println("Saving mp as "+Main.mpTheme);
 		PrintWriter out;
 		try {
 			out = new PrintWriter(new BufferedWriter(new FileWriter(f)));		
@@ -25,6 +25,7 @@ public class CacheIO {
 			out.println(Main.timerSound);
 			out.println(Main.autoUp);
 			out.println(Main.debug);
+			out.println(Main.mpTheme);
 			out.close();	
 		} catch (FileNotFoundException e){
 			e.printStackTrace();
@@ -43,10 +44,16 @@ public class CacheIO {
 			Main.successSound = in.readLine().equals("true")?true:false;
 			Main.timerSound = in.readLine().equals("true")?true:false;
 			Main.autoUp = in.readLine().equals("true")?true:false;		
-			Main.debug = in.readLine().equals("true")?true:false;		
+			Main.debug = in.readLine().equals("true")?true:false;	
+			Main.mpTheme = in.readLine().equals("true")?true:false;
+			System.out.println("mp:"+Main.mpTheme);
 			in.close();
 		}catch(FileNotFoundException e){			
-		}catch (IOException e) {}
+		}catch (IOException e) {
+		}catch (NullPointerException e){
+			System.out.println("File Corrupt -- Deleting");
+			new File(PlayerIO.ROOT+"/cache/options.opt").delete();
+		}
 	}
 
 }
