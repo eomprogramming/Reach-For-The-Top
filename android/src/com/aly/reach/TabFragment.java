@@ -1,6 +1,7 @@
 package com.aly.reach;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -74,7 +75,12 @@ public class TabFragment extends Fragment {
 				}else{
 					EditText inputIP = (EditText)((View)v.getParent()).findViewById(R.id.ip);
 					ip = inputIP.getText().toString();
-					st.setIP(ip);
+					try {
+						st.setIP(ip);
+					} catch (UnknownHostException e) {
+						// TODO I have no idea what to do here.
+						e.printStackTrace();
+					}
 					Toast.makeText(getActivity(), "Using IP: "+ip, Toast.LENGTH_SHORT).show();
 					if(st.getStatus()==Status.FINISHED){
 						st = new SocketTask(new MainActivity(),ip);
