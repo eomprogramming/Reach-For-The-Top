@@ -1,11 +1,8 @@
 package com.aly.reach;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import android.app.Activity;
@@ -15,29 +12,30 @@ import android.util.Log;
 public class SocketTask extends AsyncTask<String, Void, String> {
 
     Activity activity;
-    InetAddress ip;
-    private static final int PORT = 6430;
-    private static final int TIMEOUT = 250;
-    private static final int RETRIES = 3;
-    private static final int CONFIRMATION = (byte) 57;
+    NetworkAccess net;
     
-    public SocketTask(Activity a, String ipaddress){
+    public SocketTask(Activity a, String ipaddress) {
     	super();
     	try {
-			this.ip = InetAddress.getAllByName(ipaddress)[0];
-		} catch (UnknownHostException e) {
-			
+			this.net = new NetworkAccess(InetAddress.getAllByName(ipaddress)[0]);
+		} catch (Exception e) {
+			// TODO: Exception handling.
 		}
     	activity = a;
     }
     
-    public void setIP(String newIP) throws UnknownHostException {
-    	ip = InetAddress.getAllByName(newIP)[0];
+    public void setIP(String newIP) throws UnknownHostException, SocketException {
+    	try {
+			net.close();
+		} catch (IOException e) {
+			// Never happens.
+		}
+    	net = new NetworkAccess(InetAddress.getAllByName(newIP)[0]);
     }
 
     protected String doInBackground(String... unused) {
-    	Log.d("reach", "Connecting to "+ip);
-		DatagramSocket mySocket;
+    	Log.d("reach", "Connecting to "+net.getIPAddress());
+		/*DatagramSocket mySocket;
 		while(!this.isCancelled()){
 			try {
 				mySocket = new DatagramSocket();
@@ -51,7 +49,8 @@ public class SocketTask extends AsyncTask<String, Void, String> {
 				return "Error";
 			}
 		}
-		return "Cancelled";
+		return "Cancelled";*/
+    	return "Unimplemented.";
 		
     }
 
@@ -59,42 +58,5 @@ public class SocketTask extends AsyncTask<String, Void, String> {
     	Log.d("reach", "Finished normally");			
     }
     
-    /**
-     * Pack data into a datagram packet to be sent over the network.
-     * Uses utf8 as a string encoding format.
-     * @param data
-     * @return
-     */
-    private DatagramPacket packetize(String data) {
-    	byte[] encodedData = null;
-    	try {
-			encodedData = data.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// This can never happen.
-		}
-    	return new DatagramPacket(encodedData, encodedData.length, ip, PORT);
-    }
-    
-    private boolean send(String data, DatagramSocket sock) throws IOException {
-    	byte[] returnData = {(byte) 0};
-    	DatagramPacket out = packetize(data);
-    	DatagramPacket in = new DatagramPacket(returnData, 1);
-    	boolean success = false;
-    	
-    	for (int i = 0; i < RETRIES; i++) {
-    		sock.send(out);
-    		sock.setSoTimeout(TIMEOUT);
-    		try {
-    			sock.receive(in);
-    		} catch (InterruptedIOException e) {
-    			continue;
-    		}
-    		if (returnData[0] == CONFIRMATION) {
-    			success = true;
-    			break;
-    		}
-    	}
-    	
-    	return success;
-    }
+   
  }
