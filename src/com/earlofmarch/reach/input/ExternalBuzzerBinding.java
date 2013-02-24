@@ -10,11 +10,10 @@ import java.util.HashMap;
 import java.util.logging.*;
 
 /**
- * Windows access to buzzers through BuzzIO.
+ * Access external buzzer control programs.
  * @author Ian Dewan
- *
  */
-class WindowsBuzzerBinding extends AbstractBuzzerBinding {
+class ExternalBuzzerBinding extends AbstractBuzzerBinding {
 	private HashMap<String, Boolean> sensitivities = new HashMap<String, Boolean>();
 	private volatile Pair<Integer, Integer> currBuzz = null;
 	private BufferedReader in;
@@ -23,7 +22,7 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 	
 	private Object stateLock = new Object();
 	
-	public WindowsBuzzerBinding(InputStream i, OutputStream o) throws IOException {
+	public ExternalBuzzerBinding(InputStream i, OutputStream o) throws IOException {
 		Logger.getLogger("reach.input").log(Level.INFO,
 				"Creating windows binding w/ " + i + " " + o);
 		out = new PrintWriter(o, true);
@@ -127,7 +126,7 @@ class WindowsBuzzerBinding extends AbstractBuzzerBinding {
 						currBuzz == null) {
 					out.println("light " + h + ":" + b);
 					currBuzz = new Pair<Integer, Integer>(h, b);
-					WindowsBuzzerBinding.this.buzz();
+					ExternalBuzzerBinding.this.buzz();
 				}
 			}
 			}

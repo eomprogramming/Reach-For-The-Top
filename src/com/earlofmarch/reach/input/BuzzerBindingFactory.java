@@ -26,25 +26,25 @@ public class BuzzerBindingFactory {
 	public static BuzzerBinding getBinding() throws IOException {
 		log.log(Level.INFO, "Entering BuzzerBindingFactory.getBinding()");
 		if (System.getProperty("os.name").contains("Windows")) {
-			return windows();
+			return createBinding("./glue.exe");
 		} else { // assume Linux
 			//TODO
 			return null;
 		}
 	}
 	
-	private static WindowsBuzzerBinding windows() throws IOException {
+	private static ExternalBuzzerBinding createBinding(String exe) throws IOException {
 		Process server = null;
-		log.log(Level.INFO, "Entering BuzzerBindingFactory.windows()");
+		log.log(Level.INFO, "Entering BuzzerBindingFactory.createBinding()");
 		try {
-			server = Runtime.getRuntime().exec("./glue.exe");
+			server = Runtime.getRuntime().exec(exe);
 		} catch (IOException e) {
-			log.log(Level.SEVERE, "Error creating glue.exe", e);
+			log.log(Level.SEVERE, "Error creating "+exe, e);
 			throw e;
 		}
 		new Thread(new ErrorEater(server.getErrorStream())).start();
 		Runtime.getRuntime().addShutdownHook(new Thread(new Destroyer(server)));
-		return new WindowsBuzzerBinding(server.getInputStream(),
+		return new ExternalBuzzerBinding(server.getInputStream(),
 				server.getOutputStream());
 	}
 	
