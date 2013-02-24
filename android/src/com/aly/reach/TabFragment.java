@@ -1,7 +1,6 @@
 package com.aly.reach;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -77,7 +76,7 @@ public class TabFragment extends Fragment {
 					ip = inputIP.getText().toString();
 					try {
 						st.setIP(ip);
-					} catch (UnknownHostException e) {
+					} catch (Exception e) {
 						// TODO I have no idea what to do here.
 						e.printStackTrace();
 					}

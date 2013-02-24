@@ -1,0 +1,143 @@
+\documentclass{article}
+
+\usepackage[bitwidth=auto]{bytefield}
+
+\title{Reach Network Communication Protocol}
+\author{Ian Dewan}
+\date{20 February, \textsc{62 Eliz. II}}
+
+\def\tname{\texttt}
+\def\literal{\texttt}
+\newcommand{\tbb}[2]{\bitbox{#1}{\tname{#2}}}
+\newcommand{\twb}[2]{\wordbox{#1}{\tname{#2}}}
+
+\begin{document}
+\maketitle
+This file describes the format used to communicate between networked buzzers and
+the Reach for the Top program.
+
+All communication is by UDP datagrams; all datagrams are exactly 12 bytes long.
+All multi-byte quantities are in network byte ordering. After a datagram is
+received, the receiving program must immediately send a confirmation datagram
+(see below) to the sender. If confirmation is not received within an arbitrary
+time limit, the sender may retransmit the datagram; this may be repeated any
+number of times.
+
+Every packet has a unique packet ID, a 16 bit number. Odd numbers are reserved
+for the client (buzzer/phone) and even for the server. Packet IDs may never be
+reused except in the following circumstances:
+ \begin{itemize}
+ \item Confirmation datagrams \emph{must} have the same packet ID as the
+  datagram they confirm.
+ \item Retransmitted datagrams \emph{must} have the same ID as the original
+  datagram.
+ \end{itemize}
+If a datagram is received with an already used packet ID, it must be ignored.
+
+In the following datagram descriptions, \tname{RESERVED} means that the bits are
+not currently used, but may be in later versions of the standard:
+implementations \emph{must} ignore the values of these bits. \tname{UNUSED}
+means that the bits will never be used in a future standard.
+
+\section{Datagram Formats}
+
+\subsection{The \tname{CONFIRM} datagrams}
+\begin{bytefield}{32}
+\bitheader{0-31}\\
+\tbb{8}{TYPE} & \tbb{8}{FLAGS} & \tbb{16}{PACKET ID} \\
+\twb{2}{UNUSED}
+\end{bytefield}
+
+Sent by either server or client.
+\begin{description}
+\item[\tname{TYPE}] always \literal{0xC0} for \tname{CONFIRM} datagrams.
+\item[\tname{FLAGS}] see below
+\item[\tname{PACKET ID}] same as the datagram being confirmed.
+\end{description}
+
+\subsection{The \tname{JOIN} datagram}
+\begin{bytefield}{32}
+\bitheader{0-31}\\
+\tbb{8}{TYPE} & \tbb{8}{FLAGS} & \tbb{16}{PACKET ID} \\
+\tbb{8}{TEAM} & \tbb{24}{RESERVED} \\
+\twb{1}{RESERVED}
+\end{bytefield}
+
+Sent by client.
+\begin{description}
+\item[\tname{TYPE}] always \literal{0x07} for \tname{JOIN} datagrams.
+\item[\tname{FLAGS}] see below
+\item[\tname{PACKET ID}] see above discussion
+\item[\tname{TEAM}] the (zero-based) index of the team one wishes to join.
+\end{description}
+The server must respond to the \tname{JOIN} datagram with a
+\tname{JOIN\_RESPONSE} datagram.
+
+\subsection{The \tname{JOIN\_RESPONSE} datagram}
+\begin{bytefield}{32}
+\bitheader{0-31}\\
+\tbb{8}{TYPE} & \tbb{8}{FLAGS} & \tbb{16}{PACKET ID} \\
+\tbb{16}{RESPONSE TO} &\tbb{8}{ERROR} & \tbb{2}{H} & \tbb{6}{RESERVED} \\
+\twb{1}{RESERVED}
+\end{bytefield}
+
+Sent by server.
+\begin{description}
+\item[\tname{TYPE}] always \literal{0x97} for \tname{JOIN\_RESPONSE} datagrams.
+\item[\tname{FLAGS}] see below
+\item[\tname{PACKET ID}] see above discussion
+\item[\tname{RESPONSE TO}] The packet id of the \tname{JOIN} packet this is a
+ response to.
+\item[\tname{ERROR}] The error code, if an error occurred, or zero for success.
+ Valid error codes are:
+ \begin{enumerate}
+ \item Invalid team number
+ \item Team specified is already full.
+ \end{enumerate}
+\item[\tname{H}] The handset number (position) on the joined team, if joining
+ succeeded.
+\end{description}
+
+\subsection{The \tname{BUZZ} datagram}
+\begin{bytefield}{32}
+\bitheader{0-31}\\
+\tbb{8}{TYPE} & \tbb{8}{FLAGS} & \tbb{16}{PACKET ID} \\
+\twb{2}{RESERVED}
+\end{bytefield}
+
+Sent by client.
+\begin{description}
+\item[\tname{TYPE}] always \literal{0xB2} for \tname{JOIN} datagrams.
+\item[\tname{FLAGS}] see below
+\item[\tname{PACKET ID}] see above discussion
+\end{description}
+
+\subsection{The \tname{STATE} datagram}
+\begin{bytefield}{32}
+\bitheader{0-31}\\
+\tbb{8}{TYPE} & \tbb{8}{FLAGS} & \tbb{16}{PACKET ID} \\
+\tbb{1}{L} & \tbb{1}{B} & \tbb{30}{RESERVED} \\
+\twb{1}{RESERVED}
+\end{bytefield}
+
+Sent by server.
+\begin{description}
+\item[\tname{TYPE}] always \literal{0x5A} for \tname{STATE} datagrams.
+\item[\tname{FLAGS}] see below
+\item[\tname{PACKET ID}] see above discussion
+\item[\tname{L}] 1 if the light should be on, 0 for off.
+\item[\tname{B}] 1 if the client should stop sending buzz events, 0 if it may
+ send buzz events.
+\end{description}
+
+\section{The contents of the \tname{FLAGS} byte}
+\begin{bytefield}{8}
+\bitheader{0-7}\\
+\tbb{1}{NC} & \tbb{7}{RESERVED}
+\end{bytefield}
+
+\begin{description}
+\item[\tname{NC}] if this bit is set, the sending of a \tname{CONFIRM} datagram
+ for this datagram is optional.
+\end{description}
+\end{document}

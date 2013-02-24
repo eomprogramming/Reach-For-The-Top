@@ -1,0 +1,138 @@
+Reach Network Communication Protocol
+====================================
+
+This file describes the format used to communicate between networked buzzers and
+the Reach for the Top program.
+
+All communication is by UDP datagrams; all datagrams are exactly 12 bytes long.
+All multi-byte quantities are in network byte ordering. After a datagram is
+received, the receiving program must immediately send a confirmation datagram
+(see below) to the sender. If confirmation is not received within an arbitrary
+time limit, the sender may retransmit the datagram; this may be repeated any
+number of times.
+
+Every packet has a unique packet ID, a 16 bit number. Odd numbers are reserved
+for the client (buzzer/phone) and even for the server. Packet IDs may never be
+reused except in the following circumstances:
+ - Confirmation datagrams MUST have the same packet ID as the datagram they
+   confirm.
+ - Retransmitted datagrams MUST have the same ID as the original datagram
+If a datagram is received with an already used packet ID, it must be ignored.
+
+In the following datagram descriptions, RESERVED means that the bits are not
+currently used, but may be in later versions of the standard: implementations
+MUST ignore the values of these bits. UNUSED means that the bits will never be
+used in a future standard.
+
+CONFIRM datagrams
+-----------------
+
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|     TYPE      |     FLAGS     |          PACKET ID            |
++---------------+---------------+-------------------------------+
+|                            UNUSED                             |
++---------------------------------------------------------------+
+|                            UNUSED                             |
++---------------------------------------------------------------+
+
+Sent by either server or client.
+TYPE      - always 0xC0 for CONFIRM datagrams.
+FLAGS     - see below
+PACKET ID - same as the datagram being confirmed.
+
+JOIN datagram
+-------------
+
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|     TYPE      |     FLAGS     |          PACKET ID            |
++---------------+---------------+-------------------------------+
+|     TEAM      |            RESERVED                           |
++---------------+-----------------------------------------------+
+|                            RESERVED                           |
++---------------------------------------------------------------+
+
+Sent by client.
+TYPE      - always 0x07 for JOIN datagrams.
+FLAGS     - see below
+PACKET ID - see above discussion
+TEAM      - the (zero-based) index of the team one wishes to join.
+The server must respond to the JOIN datagram with a JOIN_RESPONSE datagram.
+
+JOIN_RESPONSE datagram
+----------------------
+
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|     TYPE      |     FLAGS     |          PACKET ID            |
++---------------+---------------+---------------+---+-----------+
+|          RESPONSE TO          |     ERROR     | H |  RESERVED |
++-------------------------------+---------------+---+-----------+
+|                            RESERVED                           |
++---------------------------------------------------------------+
+
+Sent by server.
+TYPE        - always 0x97 for JOIN_RESPONSE datagrams.
+FLAGS       - see below
+PACKET ID   - see above discussion
+RESPONSE TO - the packet id of the JOIN packet this is a response to.
+ERROR       - the error code, if an error occurred, or zero for success. Valid
+              error codes are:
+               + 1 -> Invalid team number
+               + 2 -> Team specified is already full.
+H           - The handset number (position) on the joined team, if joining
+              succeeded.
+
+BUZZ datagram
+-------------
+
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|     TYPE      |     FLAGS     |          PACKET ID            |
++---------------+---------------+-------------------------------+
+|                            RESERVED                           |
++---------------------------------------------------------------+
+|                            RESERVED                           |
++---------------------------------------------------------------+
+
+Sent by client.
+TYPE        - always 0xB2 for JOIN datagrams.
+FLAGS       - see below
+PACKET ID   - see above discussion
+
+STATE datagram
+--------------
+
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|     TYPE      |     FLAGS     |          PACKET ID            |
++-+-+-----------+---------------+-------------------------------+
+|L|B|                        RESERVED                           |
++-+-+-----------------------------------------------------------+
+|                            RESERVED                           |
++---------------------------------------------------------------+
+
+Sent by server.
+TYPE        - always 0x5A for STATE datagrams.
+FLAGS       - see below
+PACKET ID   - see above discussion
+L           - 1 if the light should be on, 0 for off.
+B           - 1 if the client should stop sending buzz events, 0 if it may send
+              buzz events.
+
+The contents of the FLAGS byte
+------------------------------
+
+             0    1    2    3    4    5    6    7
+            +----+----------------------------------+
+            | NC |            RESERVED              |
+            +----+----------------------------------+
+
+NC - if this bit is set, the sending of a CONFIRM datagram for this datagram is
+optional.

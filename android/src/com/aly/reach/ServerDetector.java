@@ -17,7 +17,7 @@ public class ServerDetector {
 	/**
 	 * The service URL prefix for Reach servers.
 	 */
-	private static final String URLPREFIX = "service:game:eomreach";
+	private static final String URLPREFIX = "service:buzzer:eomreach";
 	/**
 	 * The scopes needed by the SLP API.
 	 */
@@ -28,8 +28,8 @@ public class ServerDetector {
 	private static final Vector<String> ATTRS = new Vector<String>();
 	static {
 		SCOPES.add("DEFAULT");
-		ATTRS.add("gameName");
-		ATTRS.add("teamSlots");
+		ATTRS.add("game-name");
+		ATTRS.add("team-slots");
 	}
 	
 	private Locator loc;
